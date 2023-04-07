@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <%- include('../../partials/user-header') %>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/login/font/icomoon/style.css">
+
+    <link rel="stylesheet" href="/login/css/owl.carousel.min.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/login/css/bootstrap.min.css">
+    
+    <!-- Style -->
+    <link rel="stylesheet" href="/login/css/style.css">
+
+    
+
+    <title>Login with otp</title>
+  </head>
+
+
+  <body>
+  
+
+  
+  <div class="content bg-grey" >
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <img src="/login/image/undraw_remotely_2j6y.svg" alt="Image" class="img-fluid">
+        </div>
+        <div class="col-md-6 contents">
+          <div class="row justify-content-center">
+            <div class="col-md-8">
+              <div class="">
+              <h3>OTP verification</h3>
+              
+              <p class="mb-4">We will send you a 4-digit verification code.</p>
+            </div>
+            <form action="/login" method="post">
+             
+              <div class="form-group first">
+                <label for="PhoneNumber">Phone Number</label>
+                <input type="text" class="form-control" id="PhoneNumber">
+
+              </div>
+              <br>
+              <a href="">
+                <button
+                type="submit"
+                class=" btn btn-block btn-primary "
+              >
+                Send OTP
+              </button>
+              </a>
+              <br>
+              
+              <div class="form-group first">
+                <label for="Otp">Enter the 4 Digit</label>
+                <input type="text" class="form-control" id="Otp">
+
+              </div>
+              <!-- <span class="ml-auto"><a href="#" class="forgot-pass">Resend otp</a></span>  -->
+              <br>
+              <a href="">
+                <button
+                type="submit"
+                class=" btn btn-block btn-primary "
+              >
+                Verify
+              </button>
+              </a>
+              <br>
+              <div class="d-flex mb-5 align-items-center">
+                
+                  <div class="control__indicator"></div>
+                </label>
+                <span class="ml-auto align-items-center"><a href="/login" class="forgot-pass">login with email and password?</a></span> 
+              </div>
+
+              <span class="d-block text-left my-4 text-muted">&mdash; or login with &mdash;</span>
+              
+              <div class="social-login">
+                <a href="#" class="facebook">
+                  <span class="icon-facebook mr-3"></span> 
+                </a>
+                <a href="#" class="twitter">
+                  <span class="icon-twitter mr-3"></span> 
+                </a>
+                <a href="#" class="google">
+                  <span class="icon-google mr-3"></span> 
+                </a>
+              </div>
+            </form>
+            </div>
+          </div>
+          
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  
+    <script src="/login/js/jquery-3.3.1.min.js"></script>
+    <script src="/login/js/popper.min.js"></script>
+    <script src="/login/js/bootstrap.min.js"></script>
+    <script src="/login/js/main.js"></script>
+  </body>
+</html>

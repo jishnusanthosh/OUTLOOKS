@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("../../partials/user-head") %>
+  </head>
+  <body class="bg-veryDarkGray">
+    <main class="flex justify-center items-center h-screen w-full">
+      <div
+        class="bg-white w-96 lg:w-2/5 h-min px-5 lg:px-10 xl:px-20 mx-5 py-5 drop-shadow-[8px_8px_rgb(45,212,191)]"
+      >
+        <h1 class="text-turquoise text-center font-bold text-3xl">
+          OTP Verification.
+        </h1>
+        <div class="text-sm text-center mt-1">
+          Enter the OTP sent to
+          <span class="font-semibold">+91 <%= phone %></span>
+        </div>
+        <form action="/verify-otp" method="post">
+          <div class="mt-5 flex flex-col items-center">
+            <input
+              type="number"
+              required
+              id="otp"
+              name="otp"
+              class="bg-white border block w-1/2 p-1 px-3 focus:outline-none"
+            />
+            <input type="hidden" name="phone" value="<%= phone %>" />
+          </div>
+
+          <div class="flex justify-center items-center">
+            <button
+              type="submit"
+              class="bg-turquoise mt-5 px-7 py-2 font-semibold uppercase hover:bg-teal-300 transition-all"
+            >
+              Verify
+            </button>
+          </div>
+          <div class="text-sm text-center mt-4">
+            <a href="/login"
+              >Resend OTP in <span class="text-turquoise">2:29</span></a
+            >
+          </div>
+          <div class="text-sm text-center mt-2">
+            Don't have an account?
+            <a href="/signup" class="text-turquoise hover:underline">Signup</a>
+          </div>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>
