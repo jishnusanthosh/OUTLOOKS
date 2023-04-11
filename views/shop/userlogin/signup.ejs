@@ -1,100 +1,126 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+<%- include('../../partials/user-header') %>
+
   <head>
-    <%- include("../../partials/user-head") %>
-    <script defer src="/js/show-msg.js"></script>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/login/font/icomoon/style.css">
+
+    <link rel="stylesheet" href="/login/css/owl.carousel.min.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/login/css/bootstrap.min.css">
+
+    <!-- Style -->
+    <link rel="stylesheet" href="/login/css/style.css">
+
+    <style>
+      .btn-login {
+        background-color: #6c757d;
+      }
+
+      .btn-login:hover {
+        background-color: rgb(245, 245, 245);
+      }
+      .content {
+        background-image: url('../../../login/image/h1_hero.jpg.webp');
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+    </style>
+
+    <title>Login</title>
   </head>
-  <body class="bg-veryDarkGray">
-    <main class="flex justify-center items-center h-screen w-full">
-      <div
-        class="bg-white w-96 lg:w-2/5 h-min px-5 lg:px-10 xl:px-20 mx-5 py-5 drop-shadow-[8px_8px_rgb(45,212,191)]"
-      >
-        <h1 class="text-turquoise text-center font-bold text-3xl">Signup!</h1>
-        <form action="/verify-phone" method="post" class="mt-5">
-          <div class="mt-2">
-            <label for="name" class="block mb-1">Full name</label>
-            <input
-              type="text"
-              required
-              id="name"
-              name="name"
-              class="bg-white border block w-full p-1 px-3 focus:outline-none"
-            />
+
+  <body>
+    <div class="content">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-md-6 contents">
+            <div class="row justify-content-center">
+              <div class="col-md-8">
+                <div class="mb-4">
+                  <h3>Sign up</h3< /p>
+                </div>
+                <form action="/signup" method="post">
+                  <div class="form-group first">
+                    <label for="username">Username </label>
+                    <input type="text" class="form-control" id="username" name="username">
+
+                  </div>
+                  <br>
+                  <div class="form-group first">
+                    <label for="email">Email</label>
+                    <input type="text" class="form-control" id="email" name="email">
+
+                  </div>
+                  <br>
+                  <div class="form-group last mb-4">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password">
+
+                  </div>
+
+               
+                  
+                  <a href="/signup">
+                    <button type="submit" class="btn btn-block btn-login">REGISTER</button>
+                  </a>
+                  
+                  <br>
+                  <button type="button" class="btn btn-block btn-login">
+                    LOGIN WITH OTP
+                  </button>
+
+
+
+
+
+                  <!-- <div id="login">
+                <button onclick="document.getElementById('login')" class="btn btn--outline-primary btn--large" type="submit">Sign In</button>
+              </div> -->
+                  <!-- <input type="submit" value="Log In" class="btn btn-block btn-primary"> -->
+
+                  <!-- <a href="/otp-login"><input  type="submit"  value="Log in with otp" class="btn btn-block btn-secondary"></a> -->
+                  <!-- <input  type="submit"  value="Log in with otp" class="btn btn-block btn-secondary"> -->
+
+                  <span class="d-block text-left my-4 text-muted">&mdash; or login with &mdash;</span>
+
+                  <div class="social-login">
+                    <a href="#" class="facebook">
+                      <span class="icon-facebook mr-3"></span>
+                    </a>
+                    <a href="#" class="twitter">
+                      <span class="icon-twitter mr-3"></span>
+                    </a>
+                    <a href="#" class="google">
+                      <span class="icon-google mr-3"></span>
+                    </a>
+                  </div>
+                </form>
+              </div>
+            </div>
+
           </div>
-          <div class="mt-2">
-            <label for="email" class="block mb-1">Email</label>
-            <input
-              type="email"
-              required
-              id="email"
-              name="email"
-              class="bg-white border block w-full p-1 px-3 focus:outline-none"
-            />
-          </div>
-          <div class="mt-2">
-            <label for="phone" class="block mb-1">Phone</label>
-            <input
-              type="tel"
-              required
-              id="phone"
-              name="phone"
-              class="bg-white border block w-full p-1 px-3 focus:outline-none"
-            />
-          </div>
-          <div class="mt-2">
-            <label for="password" class="block mb-1">Password</label>
-            <input
-              type="text"
-              required
-              id="password"
-              name="password"
-              class="bg-white border block w-full p-1 px-3 focus:outline-none"
-            />
-          </div>
-          <div class="mt-2">
-            <label for="confirmPassword" class="block mb-1"
-              >Confirm Password</label
-            >
-            <input
-              type="text"
-              required
-              id="confirmPassword"
-              name="confirmPassword"
-              class="bg-white border block w-full p-1 px-3 focus:outline-none"
-            />
-          </div>
-          <div class="text-xs mt-3 text-darkGray">
-            Password should contain Minimum eight characters, at least one
-            uppercase letter, one lowercase letter, one number and one special
-            character
-          </div>
-          <div class="flex justify-center items-center">
-            <button
-              type="submit"
-              class="bg-turquoise mt-5 px-7 py-2 font-semibold uppercase hover:bg-teal-300 transition-all"
-            >
-              SIGNUP
-            </button>
-          </div>
-          <div class="text-sm text-center mt-2">
-            Already have an account?
-            <a href="/login" class="text-turquoise hover:underline">Login</a>
-          </div>
-        </form>
-      </div>
-    </main>
-    <% if(message[0]){ %>
-    <!-- errorMsgBox -->
-    <div
-      id="errorMsgBox"
-      class="animate-slide-down transition-all w-full fixed top-4 left-0 right-0 flex items-center justify-center"
-    >
-      <div
-        class="text-center bg-lightRed rounded-lg text-darkRed lg:text-xl py-5 px-8 mx-10 max-w-lg"
-      >
-        <%= message[0] %>
+
+        </div>
       </div>
     </div>
-    <% } %>
+
+
+    <script src="/login/js/jquery-3.3.1.min.js"></script>
+    <script src="/login/js/popper.min.js"></script>
+    <script src="/login/js/bootstrap.min.js"></script>
+    <script src="/login/js/main.js"></script>
   </body>
+
+<footer>
+  <%- include('../../partials/user-footer.ejs') %>
+</footer>
+
 </html>

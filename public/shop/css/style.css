@@ -87,6 +87,10 @@ p {
 
 img {
 	max-width: 100%;
+	
+}
+.logo {
+	max-width: 10%;
 }
 
 input:focus,
@@ -646,8 +650,8 @@ ol {
 
 .features-box .single-box-item.first-box .box-text {
 	position: absolute;
-	right: 60px;
-	top: 106px;
+	right: 18px;
+	top: 66px;
 }
 
 .features-box .single-box-item.first-box .box-text .trend-alert {
@@ -662,8 +666,9 @@ ol {
 }
 
 .features-box .single-box-item.first-box .box-text .primary-btn {
-	border-color: #D0D7DB;
+	border-color: #000000;
 	color: #1e1e1e;
+	
 }
 
 .features-box .single-box-item.second-box {

@@ -1,9 +1,27 @@
-var express = require('express');
-var router = express.Router();
+import express from 'express';
+const router = express.Router();
+import adminController from '../controllers/adminController';
 
-/* GET home page. */
-router.get('/admin', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
 
-module.exports = router;
+router.get('/',adminController.Adminlogin);
+// router.get('/home',userController.home);
+
+// router.get('/login',userController.login);
+
+// router.get('/otp-login',userController.getOtpLogin);
+
+// router.get('/women',userController.women)
+
+// router.get('/men',userController.men)
+
+export default router;
+
+
+
+
+
+
+
+
+
+

@@ -4,11 +4,12 @@ const router = express.Router();
 import userController from '../controllers/userController';
 
 
+router.get('/', userController.getHome); // Add this route for the home page
 
-router.get('/',userController.home);
+router.get('/signup', userController.getSignup);
+router.post('/signup', userController.DosignUp);
+router.get('/login', userController.getLogin);
+router.post('/login', userController.DologIn);
 
-router.get('/login',userController.login);
-
-router.get('/otp-login',userController.getOtpLogin);
 
 export default router;
