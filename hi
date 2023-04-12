@@ -1,0 +1,50 @@
+[33mcommit 951cbc3953c2a9ed1e3872f29d0cb49c6b686235[m[33m ([m[1;36mHEAD[m[33m)[m
+Merge: f5aea3d d841723
+Author: jishnusanthosh <jishnusanthosh321@gmail.com>
+Date:   Wed Apr 12 21:10:50 2023 +0530
+
+    Merge branch 'master' into HEAD
+
+[33mcommit f5aea3dde4914b00216b480aa557aaf93ac8ec77[m
+Author: jishnusanthosh <jishnusanthosh321@gmail.com>
+Date:   Wed Apr 12 21:09:22 2023 +0530
+
+    hello
+
+[33mcommit d84172329ec2e237b8fb4bd8808ea293078f1ed0[m[33m ([m[1;32mmaster[m[33m)[m
+Author: jishnusanthosh <jishnusanthosh321@gmail.com>
+Date:   Wed Apr 12 21:06:11 2023 +0530
+
+    converted to ES6
+
+[33mcommit 891371aa95f83ce03955785f94c87fea7684ef08[m
+Author: jishnusanthosh <jishnusanthosh321@gmail.com>
+Date:   Wed Apr 12 20:33:16 2023 +0530
+
+    user login and signup done
+
+[33mcommit 676854f97a6a2190622a98c6a7ae9c74f8d0c910[m
+Author: jishnusanthosh <jishnusanthosh321@gmail.com>
+Date:   Tue Apr 11 19:34:18 2023 +0530
+
+    login and signup
+    
+    This reverts commit e920e765a4ad96af6bafcd5ad03e051fd8b8fa10.
+
+[33mcommit af3c1b8d04e750a108042f0a916104f6a4beceb1[m[33m ([m[1;31morigin/master[m[33m, [m[1;31mOUTLOOKS/master[m[33m)[m
+Author: jishnusanthosh <jishnusanthosh321@gmail.com>
+Date:   Sat Apr 8 15:04:15 2023 +0530
+
+    coverted to ES6
+
+[33mcommit 116d17144e5acbe79faed9e425f3fe13ca0b4b1c[m
+Author: jishnusanthosh <jishnusanthosh321@gmail.com>
+Date:   Fri Apr 7 17:02:54 2023 +0530
+
+    login and register page render
+
+[33mcommit ea97153bc5db58149d25618f6b854f0bda254e78[m
+Author: jishnusanthosh <jishnusanthosh321@gmail.com>
+Date:   Thu Apr 6 17:25:45 2023 +0530
+
+    inital commit
