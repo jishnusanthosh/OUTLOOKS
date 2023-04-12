@@ -1,14 +1,15 @@
 body {
   font-family: "Roboto", sans-serif;
-  background-color: #f8fafb; }
+  background-color:#ffffff; }
 
 p {
-  color: #b3b3b3;
+  color: #ffffff;
   font-weight: 300; }
 
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
-  font-family: "Roboto", sans-serif; }
+  font-family: "Roboto", sans-serif;
+  color: #ffffff; }
 
 a {
   -webkit-transition: .3s all ease;
@@ -35,14 +36,15 @@ h2 {
   .content .contents .form-group, .content .bg .form-group {
     overflow: hidden;
     margin-bottom: 0;
-    padding: 15px 15px;
+    padding: 11px 15px;
     border-bottom: none;
     position: relative;
-    background: #edf2f5;
+    background:#ffffff;
     border-bottom: 1px solid #e6edf1; }
     .content .contents .form-group label, .content .bg .form-group label {
       position: absolute;
       top: 50%;
+      margin-left: 10%;
       -webkit-transform: translateY(-50%);
       -ms-transform: translateY(-50%);
       transform: translateY(-50%);
@@ -52,13 +54,13 @@ h2 {
     .content .contents .form-group input, .content .bg .form-group input {
       background: transparent; }
     .content .contents .form-group.first, .content .bg .form-group.first {
-      border-top-left-radius: 7px;
-      border-top-right-radius: 7px; }
+      border-top-left-radius: 30px;
+      border-top-right-radius: 0px; }
     .content .contents .form-group.last, .content .bg .form-group.last {
-      border-bottom-left-radius: 7px;
-      border-bottom-right-radius: 7px; }
+      border-bottom-left-radius: 0px;
+      border-bottom-right-radius: 30px; }
     .content .contents .form-group label, .content .bg .form-group label {
-      font-size: 12px;
+      font-size: 15px;
       display: block;
       margin-bottom: 0;
       color: #b3b3b3; }
@@ -160,7 +162,7 @@ h2 {
   background: #ccc; }
 
 .control input:checked ~ .control__indicator {
-  background: #6c63ff; }
+  background:#6c757d ; }
 
 .control:hover input:not([disabled]):checked ~ .control__indicator,
 .control input:checked:focus ~ .control__indicator {
@@ -197,5 +199,5 @@ h2 {
   border-color: #7b7b7b; }
 
 .control--checkbox input:disabled:checked ~ .control__indicator {
-  background-color: #7e0cf5;
+  background-color: #ffffff;
   opacity: .2; }

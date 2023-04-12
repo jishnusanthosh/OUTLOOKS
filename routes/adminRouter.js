@@ -1,9 +1,18 @@
-var express = require('express');
-var router = express.Router();
+import express from 'express';
+const router = express.Router();
+import adminController from '../controllers/adminController';
 
-/* GET home page. */
-router.get('/admin', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
 
-module.exports = router;
+router.get('/',adminController.Adminlogin);
+
+export default router;
+
+
+
+
+
+
+
+
+
+
