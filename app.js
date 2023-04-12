@@ -6,13 +6,15 @@ import logger from 'morgan';
 import http from 'http';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import  session  from "express-session";
+
+import connectDB from './config/database.js';
 
 // Import routers
 import adminRouter from './routes/adminRouter.js';
 import userRouter from './routes/userRouter.js';
 
-// Import database connection function
-import connectDB from './config/database.js';
+
 
 // Load environment variables from .env file
 dotenv.config();
@@ -28,12 +30,21 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // Set up middleware
+
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(
+  session({
+    secret: "key",
+    cookie: { maxAge: 600000 },
+    saveUninitialized: false,
+    resave: false,
+  })
+);
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use("/node_modules", express.static("node_modules"));
 // Set up routers
 app.use('/', userRouter);
 app.use('/admin', adminRouter);
@@ -42,6 +53,21 @@ app.use('/admin', adminRouter);
 app.use((req, res, next) => {
   next(createError(404));
 });
+
+
+
+// Set headers for all responses
+app.use(function (req, res, next) {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
+  next();
+});
+
+
+
+
 
 // Error handler
 app.use((err, req, res, next) => {

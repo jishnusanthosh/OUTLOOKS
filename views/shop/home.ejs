@@ -56,10 +56,24 @@
                         <span>2</span>
                     </a>
                 </div>
+
+                <% if (user) { %>
                 <div class="user-access">
-                    <a href="/otp-login">Register</a>
-                    <a href="/login" class="in">Sign in</a>
+                    <a>Welcome, <%= user.username %>!</a>
+                    <a href="/logout" class="in">logout</a>
                 </div>
+
+                  <% } else { %>
+                    <div class="user-access">
+                        <a href="/otp-login">Register</a>
+                        <a href="/login" class="in">Sign in</a>
+                    </div>
+                  <% } %>
+
+                    <!-- <a href="/otp-login">Register</a>
+                    <a href="/login" class="in">Sign in</a> -->
+
+
                 <nav class="main-menu mobile-menu">
                     <ul>
                         <li><a class="" href="home">Home</a></li>

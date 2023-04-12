@@ -49,17 +49,21 @@
                 </div>
                 <form action="/login" method="post">
                   <div class="form-group first">
-                    <label for="username">Username or Phone number</label>
-                    <input type="text" class="form-control" id="username">
+                    <label for="email">email</label>
+                    <input type="text" name="email" class="form-control" id="email">
 
                   </div>
                   <br>
                   <div class="form-group last mb-4">
                     <label for="password">Password</label>
-                    <input type="password" class="form-control" id="password">
+                    <input type="password" name="password" class="form-control" id="password">
 
                   </div>
-
+                  <% var msg = msg || ''; %>
+                  <% if (msg) { %>
+                    <span class="text-white"><%= msg %> </span>
+                  <% } %>
+                 
                   <div class="d-flex mb-5 align-items-center">
                     <label class="control control--checkbox mb-0 "><span class="caption">Remember me</span>
                       <input type="checkbox" class="checkbox" checked="checked" />
