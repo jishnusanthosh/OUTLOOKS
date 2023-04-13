@@ -15,12 +15,4 @@ router.get("/signup", userController.signUpPage);
 router.post("/signup", userController.signUpPost);
 
 
-
-
-
-
-
-
-
-
 export default router;
