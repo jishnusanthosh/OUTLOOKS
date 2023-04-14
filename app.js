@@ -91,7 +91,7 @@ app.set('port', PORT);
 mongoose.connection.once('open', () => {
   console.log('Connected to the database.');
   server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}👶`);
   });
 });
 

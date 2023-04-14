@@ -115,8 +115,8 @@ ol {
 
 @font-face {
 	font-family: "FuturaBT-Book";
-	src: url("../fonts/FuturaBT-Book.eot?#iefix") format("embedded-opentype"), url("../fonts/FuturaBT-Book.woff") format("woff"), url("../fonts/FuturaBT-Book.ttf") format("truetype"), url("../fonts/FuturaBT-Book.svg#FuturaBT-Book") format("svg");
-	font-weight: normal;
+	
+	src: url("../fonts/FuturaBT-Book.eot?#iefix") format("embedded-opentype"), url("../fonts/FuturaBT-Book.svg#FuturaBT-Book") format("svg");font-weight: normal;
 	font-style: normal;
 }
 

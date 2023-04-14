@@ -1,4 +1,5 @@
 import userHelper from "../helpers/userHelpers";
+import twilioFunctions from "../config/twillio";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -67,22 +68,58 @@ export default {
       }
     });
   },
+  generateOtp: (req,res)=>{
+
+  const {phonenumber} =req.body
+  
+  
+  twilioFunctions.generateOTP(phonenumber,"sms")
+
+  res.send('OTP sent');
+  },
+
+  verifyOtp: async (req, res) => {
+    
+    try {
+      const{ phonenumber}=req.body
+console.log(phonenumber);
+      const otpArray = Object.values(req.body).slice(1); 
+      const otp = otpArray.join('').slice(0, 6);
+      console.log(otp);
+      twilioFunctions.client.verify.v2
+        .services(twilioFunctions.verifySid)
+        .verificationChecks.create({ to: `+91${phonenumber}`, code: otp })
+        .then((verification_check) => {
+          if (verification_check.status === "approved") {
+              //res.redirect("/");
+              res.send('OTP verified');
+            
+          } else {
+            res.render("signup", {
+              loginErr: true,
+              user: false,
+              phonenumber: phonenumber,
+            });
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          res.render("catchError", {
+            message: error.message,
+            user: req.session.user,
+          });
+        });
+    } catch (err) {
+      console.error(err);
+      res.render("catchError", {
+        message: err.message,
+        user: req.session.user,
+      });
+    }
+  },
+
   logoutGet: (req,res)=>{
     req.session.login=false
     res.redirect("/");
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
