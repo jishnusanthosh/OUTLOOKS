@@ -7,14 +7,28 @@ import userController from '../controllers/userController';
 
 
 router.get('/', userController.homePage);
-router.get("/login",userController.loginPage);      
-router.post("/login",userController.loginPost);
-router.get("/logout",userController.logoutGet);
+
+router.get("/login",userController.loginPage); 
+
+router.get("/logout",userController.logoutGet);  
 
 router.get("/signup", userController.signUpPage);
+
+router.get("/otp-login",userController.GetOtpLogin);
+
+router.get("/otp-send",userController.GetOtpSend);
+
+
+
+
 router.post("/signup", userController.signUpPost);
+
 router.post('/generate-otp',userController.generateOtp)
+
 router.post('/verify-otp', userController.verifyOtp);
+
+router.post("/login",userController.loginPost);
+
 
 
 

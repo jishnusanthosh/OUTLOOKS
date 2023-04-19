@@ -1,7 +1,7 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
   <head>
-    <%- include("../../partials/user-head") %>
+    
   </head>
   <body class="bg-veryDarkGray">
     <main class="flex justify-center items-center h-screen w-full">
@@ -13,7 +13,7 @@
         </h1>
         <div class="text-sm text-center mt-1">
           Enter the OTP sent to
-          <span class="font-semibold">+91 <%= phone %></span>
+          <span class="font-semibold">+91</span>
         </div>
         <form action="/verify-otp" method="post">
           <div class="mt-5 flex flex-col items-center">
@@ -24,7 +24,7 @@
               name="otp"
               class="bg-white border block w-1/2 p-1 px-3 focus:outline-none"
             />
-            <input type="hidden" name="phone" value="<%= phone %>" />
+            <input type="hidden" name="phone" value="" />
           </div>
 
           <div class="flex justify-center items-center">
@@ -48,4 +48,161 @@
       </div>
     </main>
   </body>
+</html> -->
+
+<!doctype html>
+<html lang="en">
+<%- include('../../partials/user-header') %>
+
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/login/font/icomoon/style.css">
+
+    <link rel="stylesheet" href="/login/css/owl.carousel.min.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/login/css/bootstrap.min.css">
+
+    <!-- Style -->
+    <link rel="stylesheet" href="/login/css/style.css">
+
+    <style>
+      .btn-login {
+        background-color: #6c757d;
+      }
+
+      .btn-login:hover {
+        background-color: rgb(245, 245, 245);
+      }
+
+      .content {
+        background-image: url('../../../login/image/h1_hero.jpg.webp');
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+    </style>
+
+    <title>Login</title>
+  </head>
+
+  <body>
+    <div class="content">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-md-6 contents">
+            <div class="row justify-content-center">
+              <div class="col-md-8">
+                <div class="mb-4">
+                  <h3>OTP Verification</h3>
+                </div>
+                <div>
+                  <% var msg1 = msg1 || ''; %>
+                  <% if (msg1) { %>
+                    <span class="text-white "><%= msg1 %> </span>
+                  <% } %>
+                 
+                
+                  <form action="/verify-otp" method="post" id="verify-otp-form">
+                    <div class="d-flex flex-row">
+                      <input type="hidden" name="phone"  value=<%= phonenumber %>>
+                      <input type="hidden" name="otpValues" id="otpId"  >
+
+                      <input type="text" class="m-1 text-center form-control rounded" maxlength="1" id="otp1" name="otp1" required>
+                      <input type="text" class="m-1 text-center form-control rounded" maxlength="1" id="otp2" name="otp2" required>
+                      <input type="text" class="m-1 text-center form-control rounded" maxlength="1" id="otp3" name="otp3" required>
+                      <input type="text" class="m-1 text-center form-control rounded" maxlength="1" id="otp4" name="otp4" required>
+                      <input type="text" class="m-1 text-center form-control rounded" maxlength="1" id="otp5" name="otp5" required>
+                      <input type="text"   class="m-1 text-center form-control rounded" maxlength="1" id="otp6" name="otp6">
+                    </div>
+                    <% var msg2 = msg2 || ''; %>
+                  <% if (msg2) { %>
+                    <span class="text-white"><%= msg2 %> </span>
+                  <% } %>
+                    <div class="w-100 text-right">
+                      <button type="submit" onmouseenter="setMobileNumber()" class="btn btn-login mt-3" >CONFIRM</button>
+                    </div>
+                    <br>
+                  </form>
+                </div>
+
+        
+                  <span class="d-block text-left my-4 text-muted">&mdash; or login with &mdash;</span>
+
+                  <div class="social-login">
+                    <a href="#" class="facebook">
+                      <span class="icon-facebook mr-3"></span>
+                    </a>
+                    <a href="#" class="twitter">
+                      <span class="icon-twitter mr-3"></span>
+                    </a>
+                    <a href="#" class="google">
+                      <span class="icon-google mr-3"></span>
+                    </a>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <script>
+       var otpValues = []; 
+
+
+
+      $(document).ready(function () {
+       // initialize empty array to store OTP values
+        $('input[type="text"]').on('input keydown', function (e) {
+          var $this = $(this);
+          if (e.keyCode == 8 && !$this.val()) {
+            $this.prev('input[type="text"]').focus(); // move cursor to previous input field if backspace is pressed and field is empty
+            otpValues.pop(); // remove last value from array if backspace is pressed and field is empty
+          } else if ($this.val()) {
+            $this.next('input[type="text"]').focus(); // move cursor to next input field
+            otpValues.push($this.val()); // store entered value in array
+          }
+        });
+      });
+      function setMobileNumber() {
+  // const mobileNumber = document.getElementById("phonenumber").value;
+
+  // document.getElementById("phonenumber-input").value = mobileNumber;
+  
+  let otp = document.getElementById('otp1').value 
+   otp += document.getElementById('otp2').value 
+   otp += document.getElementById('otp3').value 
+   otp += document.getElementById('otp4').value 
+   otp += document.getElementById('otp5').value 
+   otp += document.getElementById('otp6').value 
+
+            console.log(otp);
+document.getElementById('otpId').value = otp;
+// document.getElementById('otpId').value = otpValues.join('');
+
+}
+    </script>
+
+
+
+
+    <script src="/login/js/jquery-3.3.1.min.js"></script>
+    <script src="/login/js/popper.min.js"></script>
+    <script src="/login/js/bootstrap.min.js"></script>
+    <script src="/login/js/main.js"></script>
+  </body>
+
+  <footer>
+    <%- include('../../partials/user-footer.ejs') %>
+  </footer>
+
 </html>

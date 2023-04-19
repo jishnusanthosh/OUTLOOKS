@@ -26,11 +26,37 @@
       .btn-login:hover {
         background-color: rgb(245, 245, 245);
       }
+
       .content {
         background-image: url('../../../login/image/h1_hero.jpg.webp');
         background-repeat: no-repeat;
         background-size: cover;
       }
+
+      .grey-link {
+  color: rgb(255, 247, 247);
+  text-decoration: none;
+}
+
+.grey-link:hover {
+  color: #f8f3f3;
+}
+.icon-round {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #fbfbfb;
+    text-align: center;
+    line-height: 30px;
+  }
+  .icon-mobile {
+    font-size: 2em;
+    color: #606060;
+  }
+
+
+      
     </style>
 
     <title>Login</title>
@@ -47,69 +73,68 @@
                 <div class="mb-4">
                   <h3>Sign In</h3< /p>
                 </div>
-                <form action="/login" method="post">
-                  <div class="form-group first">
-                    <label for="email">email </label>
-                    <input type="text" name="email" class="form-control" id="email">
-
-                  </div>
-                  <br>
-                  <div class="form-group last mb-4">
-                    <label for="password">Password</label>
-                    <input type="password" name="password" class="form-control" id="password">
-
-                  </div>
-                  <% var msg = msg || ''; %>
+                <% var msg=msg || '' ; %>
                   <% if (msg) { %>
-                    <span class="text-white"><%= msg %> </span>
-                  <% } %>
-                 
-                  <div class="d-flex mb-5 align-items-center">
-                    <label class="control control--checkbox mb-0 "><span class="caption">Remember me</span>
-                      <input type="checkbox" class="checkbox" checked="checked" />
-                      <div class="control__indicator"></div>
-                    </label>
-                    <span class="ml-auto"><a href="#" class="forgot-pass">Forgot Password</a></span>
-                  </div>
-                  
-                  <a href="/home">
-                    <button type="submit" class="btn btn-block btn-login">LOGIN</button>
-                  </a>
-                  <br>
+                    <span class="text-white">
+                      <%= msg %>
+                    </span>
+                    <% } %>
+                      <br>
+                      <br>
+                      <form action="/login" method="post">
+                        <div class="form-group first">
+                          <label for="email">email </label>
+                          <input type="text" name="email" class="form-control" id="email">
 
-                  <a href="/signup">
-                    <button type="button" class="btn btn-block btn-login">
-                      SIGNUP
-                    </button>
-                  </a>
-                  
+                        </div>
+                        <br>
+                        <div class="form-group last mb-4">
+                          <label for="password">Password</label>
+                          <input type="password" name="password" class="form-control" id="password">
+
+                        </div>
 
 
+                        <div class="d-flex mb-5 align-items-center">
+                          <label class="control control--checkbox mb-0 "><span class="caption">Remember me</span>
+                            <input type="checkbox" class="checkbox" checked="checked" />
+                            <div class="control__indicator"></div>
+                          </label>
+                          <span class="ml-auto"><a href="#" class="forgot-pass">Forgot Password</a></span>
+                        </div>
+                        <a href="/signup" class="grey-link">Don't have an account?</a>
 
 
+                        <br>
+                        <br>
+                        <a href="/home">
+                          <button type="submit" class="btn btn-block btn-login">LOGIN</button>
+                        </a>
+                        <br>
 
-                  <!-- <div id="login">
-                <button onclick="document.getElementById('login')" class="btn btn--outline-primary btn--large" type="submit">Sign In</button>
-              </div> -->
-                  <!-- <input type="submit" value="Log In" class="btn btn-block btn-primary"> -->
 
-                  <!-- <a href="/otp-login"><input  type="submit"  value="Log in with otp" class="btn btn-block btn-secondary"></a> -->
-                  <!-- <input  type="submit"  value="Log in with otp" class="btn btn-block btn-secondary"> -->
+                        <span class="d-block text-left my-4 text-muted">&mdash; or login with &mdash;</span>
 
-                  <span class="d-block text-left my-4 text-muted">&mdash; or login with &mdash;</span>
-
-                  <div class="social-login">
-                    <a href="#" class="facebook">
-                      <span class="icon-facebook mr-3"></span>
-                    </a>
-                    <a href="#" class="twitter">
-                      <span class="icon-twitter mr-3"></span>
-                    </a>
-                    <a href="#" class="google">
-                      <span class="icon-google mr-3"></span>
-                    </a>
-                  </div>
-                </form>
+                        <div class="social-login">
+                          <a href="#" class="facebook">
+                            <span class="icon-facebook mr-3"></span>
+                          </a>
+                          <a href="#" class="twitter">
+                            <span class="icon-twitter mr-3"></span>
+                          </a>
+                          <a href="#" class="google">
+                            <span class="icon-google mr-3"></span>
+                          </a>
+                          <a href="/otp-send" class="mobile">
+                            <span class="icon-round mr-3">
+                              <span class="icon-mobile"></span>
+                            </span>
+                          </a>
+                        </div>
+                         
+                          
+                        </div>
+                      </form>
               </div>
             </div>
 
@@ -126,8 +151,8 @@
     <script src="/login/js/main.js"></script>
   </body>
 
-<footer>
-  <%- include('../../partials/user-footer.ejs') %>
-</footer>
+  <footer>
+    <%- include('../../partials/user-footer.ejs') %>
+  </footer>
 
 </html>

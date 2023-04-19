@@ -277,13 +277,13 @@ table .form-check {
   border: 1px solid #eee;
 }
 .text-brand {
-  color: #088178 !important;
+  color: #14efe1 !important;
 }
 .bg-primary {
   background-color: rgba(8, 129, 120, 0.2);
 }
 .text-primary {
-  color: #088178 !important;
+  color: #0f9ad1 !important;
 }
 .bg-primary-light {
   background-color: rgba(8, 129, 120, 0.2) !important;
@@ -530,7 +530,7 @@ b {
   background-color: rgba(8, 129, 120, 0.2);
 }
 .menu-aside .menu-item.active .submenu a.active {
-  color: #088178 !important;
+  color: #5d6463 !important;
 }
 .menu-aside .menu-link {
   padding: 10px;

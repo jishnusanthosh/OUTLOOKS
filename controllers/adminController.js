@@ -1,6 +1,7 @@
 import { express } from "express";
 import dotenv from "dotenv";
 
+import  User  from "../models/userModels";
 dotenv.config();
 
 export default {
@@ -8,6 +9,41 @@ export default {
     try {
       if (req.session.admin) {
         res.render("admin/admin-home");
+      } else {
+        res.redirect("/admin/login");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  AdminUsersPage: async (req, res) => {
+    try {
+      const users= await User.find()
+      console.log(users);
+      if (req.session.admin) {
+        res.render("admin/admin-users-list",{ users: users });
+      } else {
+        res.redirect("/admin/login");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  AdminAddProduct: async (req, res) => {
+    try {
+      if (req.session.admin) {
+        res.render("admin/admin-add-product");
+      } else {
+        res.redirect("/admin/login");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  AdminListProduct: async (req, res) => {
+    try {
+      if (req.session.admin) {
+        res.render("admin/admin-productss-list");
       } else {
         res.redirect("/admin/login");
       }

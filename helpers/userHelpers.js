@@ -1,10 +1,8 @@
 import mongoose from "mongoose";
-
-import  User  from "../models/userModels";
+import twilioFunctions from "../config/twilio";
+import User from "../models/userModels";
 
 import bcrypt from "bcrypt";
-
-
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -13,20 +11,24 @@ export default {
   doSignUp: (body) => {
     return new Promise(async (resolve, reject) => {
       try {
-        var oldUser = await User.findOne({ email: body.email});
-        let newpassword=await bcrypt.hash(body.password, 10)
+        var oldUser = await User.findOne({ email: body.email });
         if (oldUser) {
           // If an existing user is found, return an object with status=true
-          resolve({ status: true , user:null });
+          resolve({ status: true, user: null });
         } else {
           // Otherwise, create a new user, save it to the database, and return an object with status=false and the saved user object
+          const saltRounds = 10;
+          let password = body.password.toString();
+          let newpassword = await bcrypt.hash(password, saltRounds);
           const newUser = new User({
             username: body.username,
             email: body.email,
-            password:newpassword,
+            password: newpassword,
+            phonenumber: body.phonenumber,
+            status: false,
           });
           var savedUser = await newUser.save();
-          resolve({ status: false, user: savedUser});
+          resolve({ status: false, user: savedUser });
         }
       } catch (err) {
         console.error(err);
@@ -66,5 +68,24 @@ export default {
       }
     });
   },
-
-}
+  generateOtp: (body) => {
+    console.log(body);
+    return new Promise(async (resolve, reject) => {
+      try {
+        var phonenumber = await User.findOne({ phonenumber: body});
+        console.log(phonenumber);
+        if (phonenumber) {
+          twilioFunctions.generateOTP(body);
+          // const msg1 = "OTP SENT!!";
+          resolve({ status: true,body});
+        } else {
+          console.log("No User Found!");
+          resolve({ status: false});
+        }
+      } catch (err) {
+        console.error(err);
+        reject(err);
+      }
+    });
+  },
+};

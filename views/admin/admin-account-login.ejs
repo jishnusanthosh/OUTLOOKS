@@ -2,7 +2,6 @@
 <html lang="en">
 
 
-<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-account-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:33 GMT -->
 <head>
     <meta charset="utf-8">
     <title>Outlooks Dashboard</title>
@@ -18,55 +17,105 @@
     <!-- Template CSS -->
     <link href="/admin/css/main.css" rel="stylesheet" type="text/css" />
 </head>
+<style>
+    .section1 {
+
+        background-image: url('/login/image/h1_hero.jpg.webp');
+        background-size: cover;
+        background-position: center;
+        height: 100vh; 
+        width: 100%;
+
+
+    }
+    .main-header .brand-wrap .logo {
+        max-height: 60px;
+    }
+
+    .main-header .brand-wrap {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .login-card{
+        margin-top: 100px !important;
+    }
+
+    .card-login {
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 20px;
+    }
+
+    .card-login .card-body {
+        padding: 2rem;
+    }
+
+    .card-login .card-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #000;
+    }
+
+    .card-login .form-control {
+        border-radius: 20px;
+        border: none;
+        box-shadow: none;
+        padding: 15px;
+        font-size: 1.2rem;
+    }
+
+    .card-login .btn-primary {
+        border-radius: 20px;
+        border: none;
+        box-shadow: none;
+        font-size: 1.2rem;
+        padding: 15px;
+        background-color: #2196F3;
+    }
+
+    .card-login .btn-primary:hover {
+        background-color: #0d8bf5;
+    }
+
+    .card-login .form-check {
+        margin-top: 1rem;
+    }
+
+    .card-login .form-check-label {
+        font-size: 1.2rem;
+        color: #000;
+    }
+
+    .card-login .font-sm {
+        font-size: 1rem;
+        color: #000;
+    }
+
+    .main-footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 1rem 0;
+    }
+
+    .main-footer .font-xs {
+        font-size: 0.8rem;
+        color: #000;
+    }
+</style>
 
 <body>
     <main>
         <header class="main-header style-2 navbar">
             <div class="col-brand">
                 <a href="index.html" class="brand-wrap">
-                    <img src="/admin/imgs/theme/logo.svg" class="logo" alt="OUTLOOKS">
+                    <img src="/admin/imgs/logo.png" class="logo" alt="OUTLOOKS">
                 </a>
             </div>
-            <div class="col-nav">
-                <ul class="nav">
-                    <li class="nav-item">
-                        <a class="nav-link btn-icon" href="#">
-                            <i class="material-icons md-notifications animation-shake"></i>
-                            <span class="badge rounded-pill">3</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
-                    </li>
-                    <li class="dropdown nav-item">
-                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage" aria-expanded="false"><i class="material-icons md-public"></i></a>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
-                            <a class="dropdown-item text-brand" href="#"><img src="/admin/imgs/theme/flag-us.png" alt="English">English</a>
-                            <a class="dropdown-item" href="#"><img src="/admin/imgs/theme/flag-fr.png" alt="Français">Français</a>
-                            <a class="dropdown-item" href="#"><img src="/admin/imgs/theme/flag-jp.png" alt="Français">日本語</a>
-                            <a class="dropdown-item" href="#"><img src="/admin/imgs/theme/flag-cn.png" alt="Français">中国人</a>
-                        </div>
-                    </li>
-                    <li class="dropdown nav-item">
-                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="/admin/imgs/people/avatar2.jpg" alt="User"></a>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger" href="#"><i class="material-icons md-exit_to_app"></i>Logout</a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
         </header>
-        <section class="content-main mt-80 mb-80">
-            <div class="card mx-auto card-login">
+        <section class="content-main section1" >
+            <div class="card login-card mx-auto card-login mt-5">
                 <div class="card-body">
                     <h4 class="card-title mb-4">Sign in</h4>
                     <form action="/admin/login" method="post">
@@ -76,28 +125,28 @@
                         <div class="mb-3">
                             <input class="form-control" name="password" placeholder="Password" type="password">
                         </div> <!-- form-group// -->
-                        <div class="mb-3">
+                        <!-- <div class="mb-3">
                             <a href="#" class="float-end font-sm text-muted">Forgot password?</a>
                             <label class="form-check">
                                 <input type="checkbox" class="form-check-input" checked="">
                                 <span class="form-check-label">Remember</span>
                             </label>
-                        </div> <!-- form-group form-check .// -->
+                        </div>  -->
                         <div class="mb-4">
                             <button type="submit" class="btn btn-primary w-100"> Login </button>
                         </div> <!-- form-group// -->
                     </form>
 
-               
-            </div>
+
+                </div>
         </section>
         <footer class="main-footer text-center">
             <p class="font-xs">
                 <script>
-                document.write(new Date().getFullYear())
-                </script> ©, Evara - HTML Ecommerce Template .
+                    document.write(new Date().getFullYear())
+                </script> ©, Outlooks -Ecommerce.
             </p>
-            <p class="font-xs mb-30">All rights reserved</p>
+            <p class="font-xs ">All rights reserved</p>
         </footer>
     </main>
     <script src="/admin/js/vendors/jquery-3.6.0.min.js"></script>
@@ -108,5 +157,6 @@
 </body>
 
 
-<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-account-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:33 GMT -->
+ 
+
 </html>

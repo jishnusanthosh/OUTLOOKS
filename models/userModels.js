@@ -19,6 +19,8 @@ const UserSchema = new mongoose.Schema({
   phonenumber: { type: String,
      required: true,
       unique: true },
+      
+      status: { type: Boolean, default: true },
 });
 
 const User = mongoose.model('User', UserSchema);
