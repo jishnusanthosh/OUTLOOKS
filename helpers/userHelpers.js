@@ -25,7 +25,7 @@ export default {
             email: body.email,
             password: newpassword,
             phonenumber: body.phonenumber,
-            status: false,
+           
           });
           var savedUser = await newUser.save();
           resolve({ status: false, user: savedUser });
@@ -50,6 +50,7 @@ export default {
             );
             if (isPasswordMatch) {
               resolve({ status: true, user: validUser });
+              
             } else {
               console.log("Login Failed");
               resolve({ status: false });

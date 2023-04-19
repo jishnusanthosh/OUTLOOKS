@@ -62,7 +62,8 @@ export default {
 
     userHelper.doLogin(req.body).then((user) => {
       console.log(req.body);
-      let response = user;
+      if (req.body.status) {
+        let response = user;
       if (response.status) {
         req.session.login=true
         req.session.user=user;
@@ -70,6 +71,11 @@ export default {
       } else {
         res.render("shop/userlogin/login.ejs");
       }
+      }else{
+        var blockmsg="Account is blocked...Unable to login"
+        res.render("shop/userlogin/login.ejs",{blockmsg});
+      }
+      
     });
   },
 
@@ -106,7 +112,7 @@ userHelpers.generateOtp(req.body.phonenumber).then((user)=>{
           if (verification_check.status === "approved") {
             var user =  await User.findOne({ phonenumber: phonenumber });
               req.session.login=true;
-              req.session.user=user;
+              req.session.user.user=user;
               res.redirect("/")
             
           } else {

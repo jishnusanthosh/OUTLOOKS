@@ -1,5 +1,6 @@
 import { express } from "express";
 import dotenv from "dotenv";
+import adminHelper from "../helpers/adminHelpers";
 
 import  User  from "../models/userModels";
 dotenv.config();
@@ -18,8 +19,9 @@ export default {
   },
   AdminUsersPage: async (req, res) => {
     try {
+     
       const users= await User.find()
-      console.log(users);
+
       if (req.session.admin) {
         res.render("admin/admin-users-list",{ users: users });
       } else {
@@ -76,10 +78,29 @@ export default {
   AdminlogoutGet: (req,res) => {
     req.session.admin = false;
     res.redirect("/admin");
-  }
+  },
+
+  BlockUser: async (req, res) => {
+    if (req.session.admin) {
+      let userId = req.params.id;
+      try {
+        await adminHelper.blockUser(userId);
+        res.redirect("/admin/admin-users-list");
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  },
+
+  unblockUser: async (req, res) => {
+    if (req.session.admin) {
+      let userId = req.params.id;
+      try {
+        await adminHelper.unblockUser(userId);
+        res.redirect("/admin/admin-users-list");
+      } catch (err) {
+        console.error(err);
+      }
+    }
 }
-
-
-
-
-
+}

@@ -13,6 +13,9 @@ router.get("/logout",adminController.AdminlogoutGet);
 router.get("/admin-users-list",adminController.AdminUsersPage);
 router.get("/admin-add-product",adminController.AdminAddProduct);
 router.get("/admin-productss-list",adminController.AdminListProduct);
+router.get("/blockuser/:id",adminController.BlockUser)
+router.get("/unblockuser/:id",adminController.unblockUser)
+
 
 
 export default router;

@@ -79,6 +79,12 @@
                       <%= msg %>
                     </span>
                     <% } %>
+                    <% var blockmsg=blockmsg || '' ; %>
+                  <% if (blockmsg) { %>
+                    <span class="text-warning">
+                      <%= blockmsg %>
+                    </span>
+                    <% } %>
                       <br>
                       <br>
                       <form action="/login" method="post">
