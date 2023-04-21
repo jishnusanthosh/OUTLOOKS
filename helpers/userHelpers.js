@@ -55,10 +55,7 @@ export default {
               console.log("Login Failed");
               resolve({ status: false });
             }
-          } else {
-            console.log("User account is not active.");
-            resolve({ status: false });
-          }
+          } 
         } else {
           console.log("No User Found!");
           resolve({ status: false });

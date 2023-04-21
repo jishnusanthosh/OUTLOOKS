@@ -3,6 +3,9 @@ import dotenv from "dotenv";
 import adminHelper from "../helpers/adminHelpers";
 
 import  User  from "../models/userModels";
+
+
+
 dotenv.config();
 
 export default {
@@ -34,7 +37,8 @@ export default {
   AdminAddProduct: async (req, res) => {
     try {
       if (req.session.admin) {
-        res.render("admin/admin-add-product");
+        const viewCategory=await adminHelper.getAllCategory()
+        res.render("admin/admin-add-product",{viewCategory});
       } else {
         res.redirect("/admin/login");
       }
@@ -46,6 +50,18 @@ export default {
     try {
       if (req.session.admin) {
         res.render("admin/admin-productss-list");
+      } else {
+        res.redirect("/admin/login");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  AdminCategoriesPage: async (req, res) => {
+    try {
+      if (req.session.admin) {
+        const viewCategory=await adminHelper.getAllCategory()
+        res.render("admin/admin-categories",{viewCategory});
       } else {
         res.redirect("/admin/login");
       }
@@ -82,7 +98,7 @@ export default {
 
   BlockUser: async (req, res) => {
     if (req.session.admin) {
-      let userId = req.params.id;
+      let userId =req.params.id;
       try {
         await adminHelper.blockUser(userId);
         res.redirect("/admin/admin-users-list");
@@ -102,5 +118,36 @@ export default {
         console.error(err);
       }
     }
+},
+
+addCategory: async (req,res)=>{
+  try {
+    await adminHelper.addCategory(req.body);
+    res.redirect("/admin/admin-categories")
+  } catch (error) {
+    console.error(error);
+  }
+},
+deleteCategory: async (req,res)=>{
+  let categoryId = req.params.id;
+  try {
+    await adminHelper.deleteCategory();
+    res.redirect("/admin/admin-categories")
+  } catch (error) {
+    console.error(error);
+  }
+},
+
+AdminViewUser: async (req,res)=>{
+   let userId = req.params.id;
+  try {
+    const user= await User.findById(userId)
+     
+    res.render("admin/admin-users-detail",{user})
+    console.log(user);
+  } catch (error) {
+    console.error(error);
+  }
+
 }
 }

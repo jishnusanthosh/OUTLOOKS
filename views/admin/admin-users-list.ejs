@@ -4,10 +4,15 @@
     <%- include('../partials/admin-header.ejs') %>
         <section class="content-main">
             <div class="content-header">
+                <a href="javascript:history.back()"><i class="material-icons md-arrow_back"></i> Go back </a>
+            </div>
+            <div class="content-header">
+                
                 <h2 class="content-title">Users</h2>
                 <!-- <div>
                     <a href="#" class="btn btn-primary"><i class="material-icons md-plus"></i> Create new</a>
                 </div> -->
+                
             </div>
             <div class="card mb-4">
                 <header class="card-header">
@@ -38,7 +43,8 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>User list</th>
+                             
+                                    <th>Name</th>
 
                                     <th>Email</th>
                                     <th>Phone Number</th>
@@ -49,7 +55,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <% let count = 1; %>
+                                 <% let count = 1; %>
                                 <% users.forEach(function(user) { %>
                                     
                                     <tr>
@@ -85,7 +91,7 @@
                                         </td>
 
                                         <td>
-                                            <% if (user.status) { %>
+                                            <% if (user.isActive) { %>
                                                 <span class="badge rounded-pill alert-success">
                                                     Active
                                                 </span>
@@ -98,14 +104,14 @@
                                         </td>
                                         
                                         <td class="text-end">
-                                            <% if (user.status) { %>
+                                            <% if (user.isActive) { %>
                                                 <a href="/admin/blockuser/<%= user._id %>" class="btn btn-danger rounded font-sm mt-15 ">block</a>
                                              
                                             <% }else{ %>
                                                 <a href="/admin/unblockuser/<%= user._id %>" class="btn btn-info rounded font-sm mt-15 ">unblock</a>
                                             <% }%>
                                             
-                                            <a href="#" class="btn btn-brand rounded font-sm mt-15">View details</a>
+                                            <a href="/admin/viewUser/<%= user._id %>" class="btn btn-brand rounded font-sm mt-15">View details</a>
                                         </td>
                                     </tr>
                                     <% count++; %>

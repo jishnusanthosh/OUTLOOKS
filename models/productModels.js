@@ -6,10 +6,20 @@ const productSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  productModel: {
+  productColor: {
+    type: String,
+  },
+  productSize: {
     type: String,
     required: true,
+    
   },
+  productBrand: {
+    type: String,
+    required: true,
+    
+  },
+  
   productPrice: {
     type: Number,
     required: true,
@@ -22,24 +32,11 @@ const productSchema = new mongoose.Schema({
     type: Array,
     required: true,
   },
-  rating: {
-    type: Number,
-    default: 0,
-  },
   category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "category",
   },
-  reviews: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Review",
-    },
-  ],
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+  
   productStatus: {
     type: String,
     default: "Unlisted",
@@ -47,9 +44,7 @@ const productSchema = new mongoose.Schema({
   productQuantity: {
     type: Number,
   },
-  productColor: {
-    type: String,
-  },
+  
 });
 
 const product = mongoose.model("Product", productSchema);
