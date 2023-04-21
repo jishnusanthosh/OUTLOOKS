@@ -109,7 +109,7 @@
                 
                   <form action="/verify-otp" method="post" id="verify-otp-form">
                     <div class="d-flex flex-row">
-                      <input type="hidden" name="phone"  value=<%= phonenumber %>>
+                      <input type="hidden" name="phone" id="phone"  value=<%= phonenumber %>>
                       <input type="hidden" name="otpValues" id="otpId"  >
 
                       <input type="text" class="m-1 text-center form-control rounded" maxlength="1" id="otp1" name="otp1" required>
@@ -125,6 +125,8 @@
                   <% } %>
                     <div class="w-100 text-right">
                       <button type="submit" onmouseenter="setMobileNumber()" class="btn btn-login mt-3" >CONFIRM</button>
+                      <br>
+                      <p id="resenOtp" onclick="resend()" style="cursor: pointer;">resend otp</p>
                     </div>
                     <br>
                   </form>
@@ -157,7 +159,6 @@
     
     <script>
        var otpValues = []; 
-
 
 
       $(document).ready(function () {
@@ -194,6 +195,29 @@ document.getElementById('otpId').value = otp;
 
 
 
+<script>
+  function resend() {
+
+    let value = document.getElementById('phone').value
+
+    $.ajax({
+    url: "/resendOtp?phone="+value,
+    method: "POST",
+    data: {
+      phone: value
+    },
+
+
+    success: function(response) {
+      console.log(response);
+    },
+    error: function(xhr, status, error) {
+      console.log("Error: " + error);
+    }
+  });
+  }
+</script>
+
 
     <script src="/login/js/jquery-3.3.1.min.js"></script>
     <script src="/login/js/popper.min.js"></script>
@@ -204,5 +228,8 @@ document.getElementById('otpId').value = otp;
   <footer>
     <%- include('../../partials/user-footer.ejs') %>
   </footer>
+
+
+
 
 </html>

@@ -33,6 +33,25 @@ router.post("/createCategory",adminController.addCategory)
 router.get("/deleteCategory/:id",adminController.deleteCategory)
 
 
+router.post("/add-product",adminController.addProductPost)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export default router;
 
 

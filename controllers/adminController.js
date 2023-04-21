@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import adminHelper from "../helpers/adminHelpers";
 
 import  User  from "../models/userModels";
+import  Product from "../models/productModels"
 
 
 
@@ -47,9 +48,12 @@ export default {
     }
   },
   AdminListProduct: async (req, res) => {
+
+    const products= await Product.find()
     try {
+
       if (req.session.admin) {
-        res.render("admin/admin-productss-list");
+        res.render("admin/admin-products-list",{product:products});
       } else {
         res.redirect("/admin/login");
       }
@@ -131,12 +135,26 @@ addCategory: async (req,res)=>{
 deleteCategory: async (req,res)=>{
   let categoryId = req.params.id;
   try {
-    await adminHelper.deleteCategory();
+    await adminHelper.deleteCategory(categoryId);
     res.redirect("/admin/admin-categories")
   } catch (error) {
     console.error(error);
   }
 },
+addProductPost: async (req, res) => {
+  let productDetails=req.body
+  try {
+    await adminHelper.addProductPost(productDetails);
+    res.redirect("/admin/admin-add-product")
+
+    
+  } catch (error) {
+    console.error(error)
+  }
+ 
+
+},
+
 
 AdminViewUser: async (req,res)=>{
    let userId = req.params.id;

@@ -127,6 +127,12 @@ export default {
     }
   },
 
+  resendOtp: (req, res) => {
+    let phone = req.query.phone;
+    console.log(phone);
+    twilioFunctions.generateOTP(phone);
+  },
+
   logoutGet: (req, res) => {
     req.session.user = false;
     res.redirect("/");
