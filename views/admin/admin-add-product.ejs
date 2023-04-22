@@ -79,15 +79,18 @@
                             
                             <hr>
                             <h5 class="mb-3">Categories</h5>
-                            <% viewCategory.forEach(function(category) { %>
+                            <% console.log(viewCategory)
+                             viewCategory.forEach(function(category) { %>
                                 <div class="form-check">
-                                    <input    class="form-check-input" type="checkbox" value=""
-                                        id="product-cat<%= category.CategoryID %>" name="category">
-                                    <label class="form-check-label" for="product-cat-<%= category.CategoryID %>">
+                                    <input onclick="categoryCheck('<%= category._id %>')"   class="form-check-input" type="checkbox" value="<%= category._id %>"
+                                        id="product-cat<%= category._id %>"  
+                                    <label class="form-check-label" for="product-cat-<%= viewCategory._id %>">
                                         <%= category.CategoryName %>
                                     </label>
                                 </div>
                                 <% }) %>
+                                
+                        <input type="text" name="viewCategoryId" value="" id="viewCategoryId" hidden>
 
                         </div>
                     </div> <!-- card end// -->
@@ -118,6 +121,15 @@
         <!-- Main Script -->
         <script src="assets/js/main.js" type="text/javascript"></script>
         <script>
+            const category=document.getElementById('viewCategoryId')
+
+            function categoryCheck(id){
+                category.value=id;
+                
+            }
+
+
+
             const checkboxes = document.querySelectorAll('input[name="product-cat"]');
 
             checkboxes.forEach((checkbox) => {

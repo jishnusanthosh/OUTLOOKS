@@ -7,7 +7,7 @@
     <meta name="keywords" content="Yoga, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Violet | Template</title>
+    <title>OUTLOOKS</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
@@ -15,13 +15,13 @@
         rel="stylesheet">
 
     <!-- Css Styles -->
-    <link rel="stylesheet" href="/shop/css/bootstrap.min.css" type="text/css">
-    <link rel="stylesheet" href="/shop/css/font-awesome.min.css" type="text/css">
-    <link rel="stylesheet" href="/shop/css/nice-select.css" type="text/css">
-    <link rel="stylesheet" href="/shop/css/owl.carousel.min.css" type="text/css">
-    <link rel="stylesheet" href="/shop/css/magnific-popup.css" type="text/css">
-    <link rel="stylesheet" href="/shop/css/slicknav.min.css" type="text/css">
-    <link rel="stylesheet" href="/shop/css/style.css" type="text/css">
+    <link rel="stylesheet" href="shop/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="source/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="shop/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="shop/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="shop/css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="shop/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="shop/css/style.css" type="text/css">
 </head>
 
 <body>
@@ -46,20 +46,34 @@
         <div class="container-fluid">
             <div class="inner-header">
                 <div class="logo">
-                    <a href="./index.html"><img src="/shop/img/logo.png" alt=""></a>
+                    <a href="home"><img src="shop/img/logo.png" alt=""></a>
                 </div>
                 <div class="header-right">
-                    <img src="/shop/img/icons/search.png" alt="" class="search-trigger">
-                    <img src="/shop/img/icons/man.png" alt="">
+                    <img src="shop/img/icons/search.png" alt="" class="search-trigger">
+                    <img src="shop/img/icons/man.png" alt="">
                     <a href="#">
-                        <img src="/shop/img/icons/bag.png" alt="">
+                        <img src="shop/img/icons/bag.png" alt="">
                         <span>2</span>
                     </a>
                 </div>
+          
+                <% if (user) { %>
                 <div class="user-access">
-                    <a href="/signup">Register</a>
-                    <a href="/login" class="in">Sign in</a>
+                    <a>Welcome, <%= user.username %>!</a>
+                    <a href="/logout" class="in">logout</a>
                 </div>
+
+                  <% } else { %>
+                    <div class="user-access">
+                        <a href="/signup">Register</a>
+                        <a href="/login" class="in">Sign in</a>
+                    </div>
+                  <% } %>
+
+                    <!-- <a href="/otp-login">Register</a>
+                    <a href="/login" class="in">Sign in</a> -->
+
+
                 <nav class="main-menu mobile-menu">
                     <ul>
                         <li><a class="" href="home">Home</a></li>
@@ -86,18 +100,3 @@
             </div>
         </div>
     </header>
-
-    <!-- Footer Section End -->
-
-    <!-- Js Plugins -->
-    <script src="/shop/js/jquery-3.3.1.min.js"></script>
-    <script src="/shop/js/bootstrap.min.js"></script>
-    <script src="/shop/js/jquery.magnific-popup.min.js"></script>
-    <script src="/shop/js/jquery.slicknav.js"></script>
-    <script src="/shop/js/owl.carousel.min.js"></script>
-    <script src="/shop/js/jquery.nice-select.min.js"></script>
-    <script src="/shop/js/mixitup.min.js"></script>
-    <script src="/shop/js/main.js"></script>
-</body>
-
-</html>

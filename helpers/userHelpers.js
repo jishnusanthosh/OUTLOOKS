@@ -70,10 +70,10 @@ export default {
     console.log(body);
     return new Promise(async (resolve, reject) => {
       try {
-        var phonenumber = await User.findOne({ phonenumber: body});
-        console.log(phonenumber);
-        if (phonenumber) {
-          twilioFunctions.generateOTP(body);
+        let customer = await User.findOne({ phonenumber: body});
+        console.log(customer);
+        if (customer) {
+          twilioFunctions.generateOTP(customer.phonenumber);
           // const msg1 = "OTP SENT!!";
           resolve({ status: true,body});
         } else {

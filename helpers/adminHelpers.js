@@ -58,11 +58,9 @@ export default {
     }
   },
 
+
   addProductPost: async (productDetails) => {
 
-    const category= await Category.findOne({
-      categoryName:productDetails.categoryName
-    })
     try {
       const newproduct = new product({
         productName: productDetails.productName,
@@ -71,7 +69,7 @@ export default {
         productDescription: productDetails.productDescription,
         productPrice: productDetails.productPrice,
         productSize: productDetails.productSize,
-        category: category._id,
+        category: productDetails.viewCategoryId,
         productStatus: productDetails.productStatus,
         productQuantity: productDetails.productQuantity,
       });

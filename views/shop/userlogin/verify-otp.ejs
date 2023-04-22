@@ -74,6 +74,10 @@
       .btn-login {
         background-color: #6c757d;
       }
+      .btn-resend{
+        background-color: #68a9e1;
+
+      }
 
       .btn-login:hover {
         background-color: rgb(245, 245, 245);
@@ -105,6 +109,7 @@
                   <% if (msg1) { %>
                     <span class="text-white "><%= msg1 %> </span>
                   <% } %>
+
                  
                 
                   <form action="/verify-otp" method="post" id="verify-otp-form">
@@ -121,12 +126,15 @@
                     </div>
                     <% var msg2 = msg2 || ''; %>
                   <% if (msg2) { %>
-                    <span class="text-white"><%= msg2 %> </span>
+                    <span class="text-warning "><%= msg2 %> </span>
                   <% } %>
                     <div class="w-100 text-right">
                       <button type="submit" onmouseenter="setMobileNumber()" class="btn btn-login mt-3" >CONFIRM</button>
                       <br>
-                      <p id="resenOtp" onclick="resend()" style="cursor: pointer;">resend otp</p>
+                      
+                      <button id="resenOtp" class="btn btn-resend  btn-sm" style="float: left; cursor: pointer;" >Resend OTP</button>
+
+                     <!-- // <p id="resenOtp" style="cursor: pointer;">resend otp</p> -->
                     </div>
                     <br>
                   </form>
@@ -195,7 +203,7 @@ document.getElementById('otpId').value = otp;
 
 
 
-<script>
+<!-- <script>
   function resend() {
 
     let value = document.getElementById('phone').value
@@ -216,7 +224,7 @@ document.getElementById('otpId').value = otp;
     }
   });
   }
-</script>
+</script> -->
 
 
     <script src="/login/js/jquery-3.3.1.min.js"></script>

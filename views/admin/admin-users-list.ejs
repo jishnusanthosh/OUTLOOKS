@@ -7,12 +7,12 @@
                 <a href="javascript:history.back()"><i class="material-icons md-arrow_back"></i> Go back </a>
             </div>
             <div class="content-header">
-                
+
                 <h2 class="content-title">Users</h2>
                 <!-- <div>
                     <a href="#" class="btn btn-primary"><i class="material-icons md-plus"></i> Create new</a>
                 </div> -->
-                
+
             </div>
             <div class="card mb-4">
                 <header class="card-header">
@@ -43,7 +43,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                             
+
                                     <th>Name</th>
 
                                     <th>Email</th>
@@ -55,67 +55,73 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                 <% let count = 1; %>
-                                <% users.forEach(function(user) { %>
-                                    
-                                    <tr>
-                                        <td><%= count %></td>
-                                        <td width="40%">
-                                            <a href="#" class="itemside">
-                                                <!-- <div class="left">
+                                <% let count=1; %>
+                                    <% users.forEach(function(user) { %>
+
+                                        <tr>
+                                            <td>
+                                                <%= count %>
+                                            </td>
+                                            <td width="40%">
+                                                <a href="#" class="itemside">
+                                                    <!-- <div class="left">
                                                     <img src="/admin/imgs/people/avatar1.jpg" class="img-sm img-avatar"
                                                         alt="Userpic">
                                                 </div> -->
+                                                    <div class="info pl-3">
+                                                        <h6 class="mb-0 title">
+                                                            <%= user.username %>
+                                                        </h6>
+                                                    </div>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <div class="info ">
+                                                    <h6 class="mb-0 title">
+                                                        <%= user.email %>
+                                                    </h6>
+
+                                                </div>
+                                            </td>
+                                            <td>
                                                 <div class="info pl-3">
                                                     <h6 class="mb-0 title">
-                                                        <%= user.username %>
+                                                        <%= user.phonenumber %>
                                                     </h6>
+
                                                 </div>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <div class="info ">
-                                                <h6 class="mb-0 title">
-                                                    <%= user.email %>
-                                                </h6>
+                                            </td>
 
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="info pl-3">
-                                                <h6 class="mb-0 title">
-                                                    <%= user.phonenumber %>
-                                                </h6>
+                                            <td>
+                                                <% if (user.isActive) { %>
+                                                    <span class="badge rounded-pill alert-success">
+                                                        Active
+                                                    </span>
 
-                                            </div>
-                                        </td>
+                                                    <% }else{ %>
+                                                        <span class="badge rounded-pill alert-danger">
+                                                            Inactive
+                                                        </span>
+                                                        <% }%>
+                                            </td>
 
-                                        <td>
-                                            <% if (user.isActive) { %>
-                                                <span class="badge rounded-pill alert-success">
-                                                    Active
-                                                </span>
-                                             
-                                            <% }else{ %>
-                                            <span class="badge rounded-pill alert-danger">
-                                                Inactive
-                                            </span>
-                                            <% }%>
-                                        </td>
-                                        
-                                        <td class="text-end">
-                                            <% if (user.isActive) { %>
-                                                <a href="/admin/blockuser/<%= user._id %>" class="btn btn-danger rounded font-sm mt-15 ">block</a>
-                                             
-                                            <% }else{ %>
-                                                <a href="/admin/unblockuser/<%= user._id %>" class="btn btn-info rounded font-sm mt-15 ">unblock</a>
-                                            <% }%>
-                                            
-                                            <a href="/admin/viewUser/<%= user._id %>" class="btn btn-brand rounded font-sm mt-15">View details</a>
-                                        </td>
-                                    </tr>
-                                    <% count++; %>
-                                    <% }); %>
+                                            <td class="text-end">
+                                                <% if (user.isActive) { %>
+                                                    <a href="/admin/blockuser/<%= user._id %>"
+                                                        class="btn btn-danger rounded font-sm mt-15 ">block</a>
+
+                                                    <% }else{ %>
+                                                        <a href="/admin/unblockuser/<%= user._id %>"
+                                                            class="btn btn-info rounded font-sm mt-15 ">unblock</a>
+                                                        <% }%>
+
+                                                            <a href="/admin/viewUser/<%= user._id %>"
+                                                                class="btn btn-brand rounded font-sm mt-15">View
+                                                                details</a>
+                                            </td>
+                                        </tr>
+                                        <% count++; %>
+                                            <% }); %>
                             </tbody>
                         </table> <!-- table-responsive.// -->
                     </div>
@@ -159,7 +165,7 @@
         <script src="/admin/js/vendors/jquery.fullscreen.min.js"></script>
         <!-- Main Script -->
         <script src="/admin/js/main.js" type="text/javascript"></script>
-        
+
 </body>
 
 

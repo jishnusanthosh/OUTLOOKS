@@ -18,6 +18,10 @@ router.get("/otp-login",userController.GetOtpLogin);
 
 router.get("/otp-send",userController.GetOtpSend);
 
+router.get("/women",userController.GetWomenCategory)
+
+router.get("/men",userController.GetMenCategory)
+
 
 
 
@@ -29,7 +33,7 @@ router.post('/verify-otp', userController.verifyOtp);
 
 router.post("/login",userController.loginPost);
 
-router.post('/resendOtp',userController.resendOtp )
+// router.post('/resendOtp',userController.resendOtp )
 
 
 
