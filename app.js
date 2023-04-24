@@ -8,12 +8,20 @@ import http from 'http';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import  session  from "express-session";
+import  multer  from "multer";
+import { fileUpload  } from "file-upload";
+
+
+
 
 import connectDB from './config/database.js';
 
 // Import routers
 import adminRouter from './routes/adminRouter.js';
 import userRouter from './routes/userRouter.js';
+
+
+//upload images
 
 
 
@@ -29,6 +37,14 @@ const app = express();
 // Set view engine to EJS
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+
+app.use(multer({
+  dest: 'uploads',
+  storage: storage,
+  limits: { fileSize: 1024 * 1024 } // 1MB
+}).single('productImage'));
+
 
 // Set up middleware
 
@@ -46,9 +62,37 @@ app.use(
 );
 app.use(express.static(path.join(__dirname, 'public')));
 app.use("/node_modules", express.static("node_modules"));
+app.use('/uploads',express.static(path.join(__dirname, 'uploads')));
 // Set up routers
 app.use('/', userRouter);
 app.use('/admin', adminRouter);
+
+
+
+const storage=multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads')
+
+    },
+    filename: (req, file, cb) => {
+      const ext = path.extname(file.originalname);
+      const timestamp = Date.now();
+      const newFilename = `${timestamp}_${path.basename(file.originalname, ext)}.jpg`;
+      cb(null, newFilename);
+    },
+    fileFilter: (req, file, cb) => {
+      if (file.mimetype !== 'image/jpeg' && file.mimetype !== 'image/png') {
+        cb(new Error('Only jpeg and png files are allowed'));
+        return;
+      } else {
+        cb(null, true);
+        return
+      }
+    }
+    
+});
+
+
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -99,23 +143,25 @@ mongoose.connection.once('open', () => {
 const onError = (error) => {
   if (error.syscall !== 'listen') {
     throw error;
-    const bind = typeof PORT === 'string' ? `Pipe ${PORT}` : `Port ${PORT}`;
-    
-    // Handle specific listen errors with friendly messages
-    switch (error.code) {
-      case 'EACCES':
-        console.error(`${bind} requires elevated privileges`);
-        process.exit(1);
-        break;
-      case 'EADDRINUSE':
-        console.error(`${bind} is already in use`);
-        process.exit(1);
-        break;
-      default:
-        throw error;
-    }
+  }
+  const bind = typeof PORT === 'string' ? `Pipe ${PORT}` : `Port ${PORT}`;
+  
+  // Handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(`${bind} requires elevated privileges`);
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(`${bind} is already in use`);
+      process.exit(1);
+      break;
+    default:
+      throw error;
   }
 };
+
+
 
 console.log('Listening to the server on http://localhost:4000');
 

@@ -25,6 +25,7 @@ router.get("/men",userController.GetMenCategory)
 
 
 
+
 router.post("/signup", userController.signUpPost);
 
 router.post('/generate-otp',userController.generateOtp)
@@ -33,7 +34,8 @@ router.post('/verify-otp', userController.verifyOtp);
 
 router.post("/login",userController.loginPost);
 
-// router.post('/resendOtp',userController.resendOtp )
+
+ router.post('/resendOtp',userController.resendOtp )
 
 
 

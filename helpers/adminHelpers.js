@@ -2,6 +2,7 @@ import User from "../models/userModels";
 import Category from "../models/categoryModels";
 import product from "../models/productModels";
 
+
 export default {
   blockUser: async (userId) => {
     try {
@@ -59,7 +60,7 @@ export default {
   },
 
 
-  addProductPost: async (productDetails) => {
+  addProductPost: async (productDetails,image) => {
 
     try {
       const newproduct = new product({
@@ -72,6 +73,7 @@ export default {
         category: productDetails.viewCategoryId,
         productStatus: productDetails.productStatus,
         productQuantity: productDetails.productQuantity,
+        productImage:image,
       });
       await newproduct.save();
       return;

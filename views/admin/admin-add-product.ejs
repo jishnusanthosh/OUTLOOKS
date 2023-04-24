@@ -3,7 +3,7 @@
 <body>
     <%- include('../partials/admin-header.ejs') %>
         <section class="content-main">
-            <form action="/admin/add-product" method="post">
+            <form action="/admin/add-product" method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-9">
                     <div class="content-header">
@@ -12,7 +12,7 @@
                             <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">add product</button>
                             
                             
-                              
+        
                             <!-- <button class="btn btn-md rounded font-sm hover-up">Publich</button> -->
                         </div>
                     </div>
@@ -57,7 +57,7 @@
                         <div class="card-body">
                             <div>
                                 <label class="form-label" >Images</label>
-                                <input class="form-control" type="file" >
+                                <input class="form-control" type="file" name="productImage" >
                             </div>
                         </div>
                     </div> <!-- card end// -->

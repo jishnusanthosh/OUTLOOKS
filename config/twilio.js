@@ -3,7 +3,7 @@
 // and set the environment variables. See http://twil.io/secure
 // import  twilio  from "twilio";
 import  dotenv  from "dotenv";
-import { verify } from "jsonwebtoken";
+
 dotenv.config();
 
 

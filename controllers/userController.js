@@ -3,6 +3,8 @@ import twilioFunctions from "../config/twilio";
 import dotenv from "dotenv";
 import userHelpers from "../helpers/userHelpers";
 import User from "../models/userModels";
+import  Products  from "../models/productModels";
+import  Category from "../models/categoryModels"
 
 dotenv.config();
 
@@ -36,33 +38,44 @@ export default {
   GetOtpSend: (req, res) => {
     res.render("shop/userlogin/otp-send.ejs");
   },
-  GetWomenCategory: async (req, res, next) => {
-    let user = req.session.user;
-
-    try {
-      if (user) {
-        res.render("shop/women.ejs", { user });
-      } else {
-        res.render("shop/women", { user: false });
-      }
-    } catch (error) {
-      console.error(err);
-    }
-  },
-
   GetMenCategory: async (req, res, next) => {
-    let user = req.session.user;
-
     try {
-      if (user) {
-        res.render("shop/men.ejs", { user });
-      } else {
-        res.render("shop/men.ejs", { user: false });
-      }
+      let user=true
+     
+      const category = await Category.findOne({ CategoryName: "MEN" });
+ 
+  
+   
+      const products = await Products.find({ category: category._id });
+      console.log(products);
+  
+
+      res.render("shop/men.ejs", { products ,user});
     } catch (error) {
-      console.error(err);
+      console.error(error);
+      res.render("error.ejs", { message: "An error occurred" });
+    }
+  }
+  ,
+  GetWomenCategory: async (req, res, next) => {
+    let user = req.session.user || null; 
+  
+    try {
+      const category = await Category.findOne({ CategoryName: "WOMEN" });
+      const products = await Products.find({ category: category._id });
+  
+      res.render("shop/women.ejs", { products, user });
+    } catch (error) {
+      console.error(error);
+      res.render("error.ejs", { message: "An error occurred" });
     }
   },
+  
+
+ 
+  
+
+
 
 
 
@@ -163,11 +176,11 @@ export default {
     }
   },
 
-  // resendOtp: (req, res) => {
-  //   let phone = req.query.phone;
-  //   console.log(phone);
-  //   twilioFunctions.generateOTP(phone);
-  // },
+  resendOtp: (req, res) => {
+    let phone = req.query.phone;
+    console.log(phone);
+    twilioFunctions.generateOTP(phone);
+  },
 
   logoutGet: (req, res) => {
     req.session.user = false;

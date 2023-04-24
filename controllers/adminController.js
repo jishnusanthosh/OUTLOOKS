@@ -1,9 +1,10 @@
-import { express } from "express";
+
 import dotenv from "dotenv";
 import adminHelper from "../helpers/adminHelpers";
 
 import User from "../models/userModels";
-import Product from "../models/productModels";
+import Product from "../models/productModels"
+
 
 dotenv.config();
 
@@ -139,14 +140,18 @@ export default {
     }
   },
   addProductPost: async (req, res) => {
-    let productDetails = req.body;
-    console.log(req.body);
-    try {
-      await adminHelper.addProductPost(productDetails);
-      res.redirect("/admin/admin-add-product");
-    } catch (error) {
-      console.error(error);
-    }
+  
+      let productDetails = req.body;
+      let image = req.files;
+      console.log(image,productDetails);
+  
+      try {
+        await adminHelper.addProductPost(productDetails,image);
+        res.redirect("/admin/admin-add-product");
+      } catch (error) {
+        console.error(error);
+      }
+    
   },
 
   AdminViewUser: async (req, res) => {
