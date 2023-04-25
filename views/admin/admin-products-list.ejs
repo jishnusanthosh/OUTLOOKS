@@ -1,4 +1,11 @@
 <html>
+<style>
+    .square-image {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+    }
+</style>
 
 <body>
     <%- include('../partials/admin-header.ejs') %>
@@ -48,6 +55,7 @@
                     <thead>
                         <tr>
                             <th>No.</th>
+                            <th scope="col">Image</th>
                             <th scope="col">Product Name</th>
 
                             <th scope="col">Product Description</th>
@@ -62,20 +70,17 @@
                         </tr>
                     </thead>
                     <tbody>
-
-
-
-
-
-
-
-
                         <% count=1 %>
                             <% product.forEach(function(product) { %>
                                 <tr>
                                     <td>
                                         <%= count%>
                                     </td>
+                                    <td>
+                                        <img class="img-thumbnail square-image "
+                                            src="/uploads/<%= product.productImage %>.jpg" alt="">
+                                    </td>
+
                                     <td>
                                         <%= product.productName %>
                                     </td>
@@ -114,19 +119,36 @@
                                                             <%= cat %>
                                     </td>
                                     <td>
-                                        <%= product.productStatus %>
+                                        <% if (product.productStatus) { %>
+                                            <span class="badge rounded-pill alert-success">
+                                                Listed
+                                            </span>
 
+                                            <% }else{ %>
+                                                <span class="badge rounded-pill alert-danger">
+                                                    Unlisted
+                                                </span>
+                                                <% }%>
+                                                    
 
-
+                                                    
+                                    </td>
                                     <td>
                                         <a href="#" class="btn btn-sm font-sm rounded btn-brand">
                                             <i class="material-icons md-edit"></i> Edit
                                         </a>
-                                        <a href="#" class="btn btn-sm font-sm btn-light rounded">
+                                        <a href="/admin/blockProduct/<%= product._id %>"
+                                            class="btn btn-sm font-sm btn-light rounded">
                                             <i class="material-icons md-delete_forever"></i>
-                                            Delete
+                                            block
+                                        </a>
+                                        <a href="/admin/unblockProduct/<%= product._id %>"
+                                            class="btn btn-sm font-sm btn-light rounded">
+                                            <i class="material-icons md-delete_forever"></i>
+                                            unblock
                                         </a>
                                     </td>
+
                                 </tr>
                                 <% count++ %>
                                     <% }); %>

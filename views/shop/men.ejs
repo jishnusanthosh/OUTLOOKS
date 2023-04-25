@@ -175,17 +175,17 @@
             <div class="row">
                 <% for (var i=0; i < products.length; i++) { %>
 
+                 <% if (products[i].productStatus==true) { %>
                     <% if (i%2==0) { %>
-                        <div class="col-lg-6 col-md-6">
+                        <div class="col-lg-4 col-md-3">
                             <div class="single-product-item">
                                 <figure>
-                                    <img src="shop/img/products/img-13.jpg" alt="">
+                                    <img src="/uploads/<%= products[i].productImage %>.jpg" alt="">
                                     <div class="favorite-icon">
                                         <a href="#" class="favorite-button"><i class="far fa-heart"></i></a>
                                     </div>
                                     <div class="hover-icon">
-                                        <a href="shop/img/products/img-13.jpg" class="pop-up"><i
-                                                class="fas fa-search"></i></a>
+                                        <a href="/uploads/<%= products[i].productImage %>.jpg" class="pop-up"><i class="fas fa-search"></i></a>
                                     </div>
                                 </figure>
                                 <div class="product-text">
@@ -211,15 +211,15 @@
                         </div>
                         <!-- code for if condition is true -->
                         <% } else { %>
-                            <div class="col-lg-3 col-md-6">
+                            <div class="col-lg-3 col-md-4">
                                 <div class="single-product-item">
                                     <figure>
-                                        <img src="shop/img/products/img-4.jpg" alt="">
+                                        <img src="/uploads/<%= products[i].productImage %>.jpg" alt="">
                                         <div class="favorite-icon">
                                             <a href="#" class="favorite-button"><i class="far fa-heart"></i></a>
                                         </div>
                                         <div class="hover-icon">
-                                            <a href="shop/img/products/img-4.jpg" class="pop-up"><i
+                                            <a href="/uploads/<%= products[i].productImage %>.jpg"  class="pop-up"><i
                                                     class="fas fa-search"></i></a>
                                         </div>
                                     </figure>
@@ -247,6 +247,10 @@
                             <!-- code for if condition is false -->
                             <% } %>
 
+                 <% } %>
+                    
+
+                   
 
 
 

@@ -48,8 +48,7 @@ export default {
   AdminListProduct: async (req, res) => {
     const products = await Product.find();
     const viewCategory = await adminHelper.getAllCategory();
-    console.log(products);
-    console.log(viewCategory);
+    
     try {
       if (req.session.admin) {
         res.render("admin/admin-products-list", { product: products ,viewCategory});
@@ -60,6 +59,50 @@ export default {
       console.log(err);
     }
   },
+
+  blockProduct: async (req, res) => {
+    let proId = req.params.id;
+    console.log(proId);
+   let product = await Product.findById(proId);
+
+
+    try {
+      if (req.session.admin) {
+
+        await adminHelper.blockProduct(product);
+        res.redirect("/admin/admin-productss-list");
+      } else {
+        res.redirect("/admin/login");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  unblockProduct: async (req, res) => {
+    let proId = req.params.id;
+    console.log(proId);
+   let product = await Product.findById(proId);
+
+
+    try {
+      if (req.session.admin) {
+
+        await adminHelper.unblockProduct(product);
+        res.redirect("/admin/admin-productss-list");
+      } else {
+        res.redirect("/admin/login");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+
+
+
+
+
+
   AdminCategoriesPage: async (req, res) => {
     try {
       if (req.session.admin) {
@@ -142,8 +185,8 @@ export default {
   addProductPost: async (req, res) => {
   
       let productDetails = req.body;
-      let image = req.files;
-      console.log(image,productDetails);
+      let image = req.file
+      console.log(image);
   
       try {
         await adminHelper.addProductPost(productDetails,image);

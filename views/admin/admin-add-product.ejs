@@ -9,7 +9,7 @@
                     <div class="content-header">
                         <h2 class="content-title">Add New Product</h2>
                         <div>
-                            <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">add product</button>
+                            <button class="btn btn-md rounded font-sm hover-up">add product</button>
                             
                             
         
@@ -30,9 +30,10 @@
                                     <input type="number" placeholder="Type here" class="form-control" name="productQuantity" id="productQuantity"
                                         min="0" required >
                                 </div>
+                                
                                 <div class="col-md-4  mb-3">
                                     <label for="product_color" class="form-label">Color</label>
-                                    <input type="text" placeholder="Type here" id=" product_color" name="productColor" required>
+                                    <input type="text" placeholder="Type here" class="form-control" name="productColor"  required>
                                 </div>
                                 <div class="col-md-4  mb-3">
                                     <label for="product_size" class="form-label">Size</label>
@@ -57,7 +58,8 @@
                         <div class="card-body">
                             <div>
                                 <label class="form-label" >Images</label>
-                                <input class="form-control" type="file" name="productImage" >
+                                <input class="form-control" type="file" name="productImage">
+                    
                             </div>
                         </div>
                     </div> <!-- card end// -->
@@ -69,13 +71,7 @@
                                 <label class="form-label">Price</label>
                                 <input type="text" placeholder="Type here" class="form-control"  name="productPrice" required>
                             </div>
-                            <div class="mb-4">
-                                <label class="form-label">Status</label>
-                                <select class="form-select" name="productStatus">
-                                    <option>listed</option>
-                                    <option>Unlisted</option>
-                                </select>
-                            </div>
+                            
                             
                             <hr>
                             <h5 class="mb-3">Categories</h5>

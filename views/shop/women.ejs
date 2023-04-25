@@ -174,27 +174,34 @@
 
             <div class="row">
                 <% for (var i=0; i < products.length; i++) { %>
-            
+
+                 <% if (products[i].productStatus==true) { %>
                     <% if (i%2==0) { %>
-                        <div class="col-lg-6 col-md-6">
+                        <div class="col-lg-4 col-md-3">
                             <div class="single-product-item">
                                 <figure>
-                                    <img src="<%= products[i].productImage[0] %>" alt="">
+                                    <img src="/uploads/<%= products[i].productImage %>.jpg" alt="">
                                     <div class="favorite-icon">
                                         <a href="#" class="favorite-button"><i class="far fa-heart"></i></a>
                                     </div>
                                     <div class="hover-icon">
-                                        <a href="<%= products[i].productImage[0]%>" class="pop-up"><i class="fas fa-search"></i></a>
+                                        <a href="/uploads/<%= products[i].productImage %>.jpg" class="pop-up"><i class="fas fa-search"></i></a>
                                     </div>
                                 </figure>
                                 <div class="product-text">
                                     <div class="product-name">
                                         <a href="#">
-                                            <h4><%= products[i].productName %></h4>
+                                            <h4>
+                                                <%= products[i].productName %>
+                                            </h4>
                                         </a>
-                                        <h6><%= products[i].productDescription %></h6>
+                                        <h6>
+                                            <%= products[i].productDescription %>
+                                        </h6>
                                     </div>
-                                    <h6><%= "Rs. " + products[i].productPrice %></h6>
+                                    <h6>
+                                        <%= "Rs. " + products[i].productPrice %>
+                                    </h6>
                                     <div class="product-buttons">
                                         <a href="#" class="buy-button">Buy Now</a>
                                         <a href="#" class="add-to-cart-button">Add to Cart</a>
@@ -202,37 +209,55 @@
                                 </div>
                             </div>
                         </div>
-                    <% } else { %>
-                        <div class="col-lg-3 col-md-6">
-                            <div class="single-product-item">
-                                <figure>
-                                    <img src="<%= products[i].productImage[0]%>" alt="">
-                                    <div class="favorite-icon">
-                                        <a href="#" class="favorite-button"><i class="far fa-heart"></i></a>
-                                    </div>
-                                    <div class="hover-icon">
-                                        <a href="<%= products[i].productImage[0] %>" class="pop-up"><i class="fas fa-search"></i></a>
-                                    </div>
-                                </figure>
-                                <div class="product-text">
-                                    <div class="product-name">
-                                        <a href="#">
-                                            <h4><%= products[i].productName %></h4>
-                                        </a>
-                                        <h6><%= products[i].productDescription %></h6>
-                                    </div>
-                                    <h6><%= "Rs. " + products[i].productPrice %></h6>
-                                    <div class="product-buttons">
-                                        <a href="#" class="buy-button">Buy Now</a>
-                                        <a href="#" class="add-to-cart-button">Add to Cart</a>
+                        <!-- code for if condition is true -->
+                        <% } else { %>
+                            <div class="col-lg-3 col-md-4">
+                                <div class="single-product-item">
+                                    <figure>
+                                        <img src="/uploads/<%= products[i].productImage %>.jpg" alt="">
+                                        <div class="favorite-icon">
+                                            <a href="#" class="favorite-button"><i class="far fa-heart"></i></a>
+                                        </div>
+                                        <div class="hover-icon">
+                                            <a href="/uploads/<%= products[i].productImage %>.jpg"  class="pop-up"><i
+                                                    class="fas fa-search"></i></a>
+                                        </div>
+                                    </figure>
+                                    <div class="product-text">
+                                        <div class="product-name">
+                                            <a href="#">
+                                                <h4>
+                                                    <%= products[i].productName %>
+                                                </h4>
+                                            </a>
+                                            <h6>
+                                                <%= products[i].productDescription %>
+                                            </h6>
+                                        </div>
+                                        <h6>
+                                            <%= "Rs. " + products[i].productPrice %>
+                                        </h6>
+                                        <div class="product-buttons">
+                                            <a href="#" class="buy-button">Buy Now</a>
+                                            <a href="#" class="add-to-cart-button">Add to Cart</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    <% } %>
-                <% } %>
+                            <!-- code for if condition is false -->
+                            <% } %>
+
+                 <% } %>
+                    
+
+                   
+
+
+
+
+                                <% } %>
             </div>
-            
+
 
 
 

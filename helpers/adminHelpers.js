@@ -59,6 +59,29 @@ export default {
     }
   },
 
+  blockProduct: async (product) => {
+    try {
+     
+      product.productStatus = false;
+      await product.save();
+      console.log(`product ${product} has been blocked`);
+    } catch (error) {
+      console.error(error);
+      throw new Error("Failed to block product");
+    }
+  },  
+  unblockProduct: async (product) => {
+    try {
+     
+      product.productStatus = true;
+      await product.save();
+      console.log(`product ${product} has been unblocked`);
+    } catch (error) {
+      console.error(error);
+      throw new Error("Failed to unblock product");
+    }
+  },  
+
 
   addProductPost: async (productDetails,image) => {
 
@@ -71,9 +94,9 @@ export default {
         productPrice: productDetails.productPrice,
         productSize: productDetails.productSize,
         category: productDetails.viewCategoryId,
-        productStatus: productDetails.productStatus,
         productQuantity: productDetails.productQuantity,
-        productImage:image,
+        productImage:image.filename
+        
       });
       await newproduct.save();
       return;

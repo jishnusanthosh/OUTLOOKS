@@ -30,20 +30,22 @@ const productSchema = new mongoose.Schema({
   },
   productImage: {
     type: Array,
-     required: true,
+     
   },
+  
   category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "category",
   },
   
   productStatus: {
-    type: String,
-    default: "Unlisted",
+    type: Boolean,
+    default: true,
   },
   productQuantity: {
     type: Number,
   },
+
   
 });
 

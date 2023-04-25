@@ -37,34 +37,28 @@ export default {
     });
   },
 
-  doLogin: (user) => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        var validUser = await User.findOne({ email: user.email });
-        console.log(validUser);
-        if (validUser) {
-          if (true) {
-            const isPasswordMatch = await bcrypt.compare(
-              user.password,
-              validUser.password
-            );
-            if (isPasswordMatch) {
-              resolve({ status: true, user: validUser });
-              
-            } else {
-              console.log("Login Failed");
-              resolve({ status: false });
-            }
-          } 
+  doLogin: async (user) => {
+    try {
+      const validUser = await User.findOne({ email: user.email });
+      if (validUser) {
+        const isPasswordMatch = await bcrypt.compare(
+          user.password,
+          validUser.password
+        );
+        if (isPasswordMatch) {
+          return { status: true, user: validUser };
         } else {
-          console.log("No User Found!");
-          resolve({ status: false });
+          console.log("Invalid Password");
+          return { status: false };
         }
-      } catch (err) {
-        console.error(err);
-        reject(err);
+      } else {
+        console.log("User not found");
+        return { status: false };
       }
-    });
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
   },
   generateOtp: (body) => {
     console.log(body);

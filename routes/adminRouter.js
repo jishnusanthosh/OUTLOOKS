@@ -23,6 +23,10 @@ router.get("/admin-add-product",adminController.AdminAddProduct);
 
 router.get("/admin-productss-list",adminController.AdminListProduct);
 
+router.get("/blockProduct/:id",adminController.blockProduct)
+
+router.get("/unblockProduct/:id",adminController.unblockProduct)
+
 router.get("/admin-categories",adminController.AdminCategoriesPage);
 
 router.get("/blockuser/:id",adminController.BlockUser)

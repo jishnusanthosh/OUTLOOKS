@@ -22,6 +22,98 @@
     <link rel="stylesheet" href="shop/css/magnific-popup.css" type="text/css">
     <link rel="stylesheet" href="shop/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="shop/css/style.css" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <style>
+        .single-product-item {
+            position: relative;
+        }
+    
+        .favorite-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1;
+        }
+    
+        .favorite-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: transparent;
+            color: #333333;
+            border: 2px solid #333333;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+    
+        .favorite-button:hover {
+            background-color: #333333;
+            color: #ffffff;
+            cursor: pointer;
+        }
+    
+        .hover-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            z-index: 1;
+        }
+    
+        .hover-icon a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(0, 0, 0, 0.9);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+    
+        .hover-icon a:hover {
+            background-color: #ff6600;
+            color: #000000;
+            cursor: pointer;
+        }
+    
+        .add-to-cart-button:hover {
+            color: #000000;
+        }
+    
+        .product-buttons {
+            display: flex;
+        }
+    
+        .buy-button {
+            background-color: #999999;
+            color: #ffffff;
+            padding: 5px 10px;
+            font-size: 14px;
+            border: none;
+            border-radius: 3px;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+    
+        .buy-button:hover {
+            background-color: #ff6600;
+            color: #ffffff;
+            cursor: pointer;
+        }
+    
+        .add-to-cart-button {
+            background-color: transparent;
+            color: #ff6600;
+            padding: 5px 10px;
+            font-size: 14px;
+            border: 2px solid #ff6600;
+            border-radius: 3px;
+        }
+    </style>
 </head>
 
 <body>
@@ -76,7 +168,7 @@
 
                 <nav class="main-menu mobile-menu">
                     <ul>
-                        <li><a class="" href="home">Home</a></li>
+                        <li><a class="" href="/home">Home</a></li>
                      
                         <li><a href="/women">Women</a>
                             <ul class="sub-menu">
@@ -101,6 +193,12 @@
         </div>
     </header>
     <!-- Header Info Begin -->
+
+
+
+   
+
+
     <div class="header-info col-lg-12">
         <div class="container-fluid">
             <div class="row">
@@ -158,7 +256,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
-                            <h1>2019</h1>
+                            <h1>2023</h1>
                             <h2>Lookbook.</h2>
                             <a href="#" class="primary-btn">See More</a>
                         </div>
@@ -265,104 +363,44 @@
                     </div>
                 </div>
             </div>
-            <div class="row" id="product-list">
-                <div class="col-lg-3 col-sm-6 mix all dresses bags">
-                    <div class="single-product-item">
+
+
+            <div class="container">
+                <div class="row" id="product-list">
+                  <% for (let i = 0; i < allproducts.length; i++) { %>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                      <div class="single-product-item">
                         <figure>
-                            <a href="#"><img src="shop/img/products/img-1.jpg" alt=""></a>
-                            <div class="p-status">new</div>
-                        </figure>
-                        <div class="product-text">
-                            <h6>Green Dress with details</h6>
-                            <p>$22.90</p>
+                          <img src="/uploads/<%= allproducts[i].productImage %>.jpg" alt="">
+                          <div class="favorite-icon">
+                            <a href="#" class="favorite-button"><i class="far fa-heart"></i></a>
                         </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6 mix all dresses bags">
-                    <div class="single-product-item">
-                        <figure>
-                            <a href="#"><img src="shop/img/products/img-2.jpg" alt=""></a>
-                            <div class="p-status sale">sale</div>
-                        </figure>
-                        <div class="product-text">
-                            <h6>Yellow Maxi Dress</h6>
-                            <p>$25.90</p>
+                          <div class="p-status">new</div>
+                          <div class="hover-icon">
+                            <a href="/uploads/<%= allproducts[i].productImage %>.jpg"  class="pop-up"><i
+                                    class="fas fa-search"></i></a>
                         </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6 mix all shoes accesories">
-                    <div class="single-product-item">
-                        <figure>
-                            <a href="#"><img src="shop/img/products/img-3.jpg" alt=""></a>
-                            <div class="p-status">new</div>
                         </figure>
+                        
                         <div class="product-text">
-                            <h6>One piece bodysuit</h6>
-                            <p>$19.90</p>
+                          <h6><%= allproducts[i].productName %></h6>
+                          <p>Rs. <%= allproducts[i].productPrice %></p>
+                          <div class="product-buttons">
+                            <a href="#" class="buy-button">Buy Now</a>
+                            <a href="#" class="add-to-cart-button">Add to Cart</a>
                         </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6 mix all shoes accesories">
-                    <div class="single-product-item">
-                        <figure>
-                            <a href="#"><img src="shop/img/products/img-4.jpg" alt=""></a>
-                            <div class="p-status popular">popular</div>
-                        </figure>
-                        <div class="product-text">
-                            <h6>Blue Dress with details</h6>
-                            <p>$35.50</p>
+                        
+                         
+
                         </div>
+                      </div>
                     </div>
+                  <% } %>
                 </div>
-                <div class="col-lg-3 col-sm-6 mix all dresses shoes">
-                    <div class="single-product-item">
-                        <figure>
-                            <a href="#"><img src="shop/img/products/img-5.jpg" alt=""></a>
-                            <div class="p-status">new</div>
-                        </figure>
-                        <div class="product-text">
-                            <h6>Green Dress with details</h6>
-                            <p>$22.90</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6 mix all accesories bags">
-                    <div class="single-product-item">
-                        <figure>
-                            <a href="#"><img src="shop/img/products/img-6.jpg" alt=""></a>
-                            <div class="p-status sale">sale</div>
-                        </figure>
-                        <div class="product-text">
-                            <h6>Yellow Maxi Dress</h6>
-                            <p>$25.90</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6 mix all dresses bags">
-                    <div class="single-product-item">
-                        <figure>
-                            <a href="#"><img src="shop/img/products/img-7.jpg" alt=""></a>
-                        </figure>
-                        <div class="product-text">
-                            <h6>One piece bodysuit</h6>
-                            <p>$19.90</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6 mix all accesories bags">
-                    <div class="single-product-item">
-                        <figure>
-                            <a href="#"><img src="shop/img/products/img-8.jpg" alt=""></a>
-                            <div class="p-status popular">popular</div>
-                        </figure>
-                        <div class="product-text">
-                            <h6>Blue Dress with details</h6>
-                            <p>$35.50</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+              </div>
+              
+           
+               
     </section>
     <!-- Latest Product End -->
 

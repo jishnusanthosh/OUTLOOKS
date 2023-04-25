@@ -17,12 +17,13 @@ const client = require("twilio")(accountSid, authToken)
 export default {
   homePage: async (req, res, next) => {
     let user = req.session.user;
+    const allproducts = await Products.find()
 
     try {
       if (user) {
-        res.render("shop/home.ejs", { user });
+        res.render("shop/home.ejs", { user ,allproducts});
       } else {
-        res.render("shop/home.ejs", { user: false });
+        res.render("shop/home.ejs", { user: false ,allproducts});
       }
     } catch (error) {
       console.error(err);
@@ -40,8 +41,7 @@ export default {
   },
   GetMenCategory: async (req, res, next) => {
     try {
-      let user=true
-     
+      let user = req.session.user || null; 
       const category = await Category.findOne({ CategoryName: "MEN" });
  
   
@@ -72,14 +72,6 @@ export default {
   },
   
 
- 
-  
-
-
-
-
-
-
   //signup
   signUpPage: (req, res) => {
     res.render("shop/userlogin/signup.ejs");
@@ -100,23 +92,21 @@ export default {
       
     });
   },
-  loginPost: (req, res) => {
-    userHelper.doLogin(req.body).then((user) => {
-      let response = user;
-      if (response.user.isActive == true) {
-        if (response.status) {
-          req.session.login = true;
-          req.session.user = response.user;
-          res.redirect("/");
-        } else {
-          res.render("shop/userlogin/login.ejs");
-        }
+  loginPost: async (req, res) => {
+    try {
+      const response = await userHelper.doLogin(req.body);
+      if (response.status && response.user.isActive) {
+        req.session.login = true;
+        req.session.user = response.user;
+        res.redirect("/");
       } else {
-        var blockmsg = "Account is blocked...Unable to login";
+        const blockmsg = "Account is blocked...Unable to login";
         res.render("shop/userlogin/login.ejs", { blockmsg });
       }
-   
-    });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Internal Server Error");
+    }
   },
 
   generateOtp: (req, res) => {

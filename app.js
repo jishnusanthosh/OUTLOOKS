@@ -9,7 +9,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import  session  from "express-session";
 import  multer  from "multer";
-import { fileUpload  } from "file-upload";
+
 
 
 
@@ -62,6 +62,7 @@ app.use(
 );
 app.use(express.static(path.join(__dirname, 'public')));
 app.use("/node_modules", express.static("node_modules"));
+
 app.use('/uploads',express.static(path.join(__dirname, 'uploads')));
 // Set up routers
 app.use('/', userRouter);
