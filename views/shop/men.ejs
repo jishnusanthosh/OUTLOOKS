@@ -175,43 +175,9 @@
             <div class="row">
                 <% for (var i=0; i < products.length; i++) { %>
 
-                 <% if (products[i].productStatus==true) { %>
-                    <% if (i%2==0) { %>
-                        <div class="col-lg-4 col-md-3">
-                            <div class="single-product-item">
-                                <figure>
-                                    <img src="/uploads/<%= products[i].productImage %>.jpg" alt="">
-                                    <div class="favorite-icon">
-                                        <a href="#" class="favorite-button"><i class="far fa-heart"></i></a>
-                                    </div>
-                                    <div class="hover-icon">
-                                        <a href="/uploads/<%= products[i].productImage %>.jpg" class="pop-up"><i class="fas fa-search"></i></a>
-                                    </div>
-                                </figure>
-                                <div class="product-text">
-                                    <div class="product-name">
-                                        <a href="#">
-                                            <h4>
-                                                <%= products[i].productName %>
-                                            </h4>
-                                        </a>
-                                        <h6>
-                                            <%= products[i].productDescription %>
-                                        </h6>
-                                    </div>
-                                    <h6>
-                                        <%= "Rs. " + products[i].productPrice %>
-                                    </h6>
-                                    <div class="product-buttons">
-                                        <a href="#" class="buy-button">Buy Now</a>
-                                        <a href="#" class="add-to-cart-button">Add to Cart</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- code for if condition is true -->
-                        <% } else { %>
-                            <div class="col-lg-3 col-md-4">
+                    <% if (products[i].productStatus==true) { %>
+                        <% if (i%2==0) { %>
+                            <div class="col-lg-4 col-md-3">
                                 <div class="single-product-item">
                                     <figure>
                                         <img src="/uploads/<%= products[i].productImage %>.jpg" alt="">
@@ -219,7 +185,7 @@
                                             <a href="#" class="favorite-button"><i class="far fa-heart"></i></a>
                                         </div>
                                         <div class="hover-icon">
-                                            <a href="/uploads/<%= products[i].productImage %>.jpg"  class="pop-up"><i
+                                            <a href="/uploads/<%= products[i].productImage %>.jpg" class="pop-up"><i
                                                     class="fas fa-search"></i></a>
                                         </div>
                                     </figure>
@@ -244,18 +210,55 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- code for if condition is false -->
-                            <% } %>
+                            <!-- code for if condition is true -->
+                            <% } else { %>
+                                <div class="col-lg-3 col-md-4">
+                                    <div class="single-product-item">
+                                        <figure>
+                                            <img src="/uploads/<%= products[i].productImage %>.jpg" alt="">
+                                            <div class="favorite-icon">
+                                                <a href="#" class="favorite-button"><i class="far fa-heart"></i></a>
+                                            </div>
+                                            <div class="hover-icon">
+                                                <a href="/uploads/<%= products[i].productImage %>.jpg" class="pop-up"><i
+                                                        class="fas fa-search"></i></a>
+                                            </div>
+                                        </figure>
+                                        <div class="product-text">
+                                            <div class="product-name">
+                                                <a href="#">
+                                                    <h4>
+                                                        <%= products[i].productName %>
+                                                    </h4>
+                                                </a>
+                                                <h6>
+                                                    <%= products[i].productDescription %>
+                                                </h6>
+                                            </div>
+                                            <h6>
+                                                <%= "Rs. " + products[i].productPrice %>
+                                            </h6>
+                                            <div class="product-buttons">
+                                                <a href="#" class="buy-button">Buy Now</a>
+                                                <a href="#" class="add-to-cart-button" data-product-id="<%= products[i]._id %>">Add to Cart</a>
 
-                 <% } %>
-                    
 
-                   
-
-
-
-
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- code for if condition is false -->
                                 <% } %>
+
+                                    <% } %>
+
+
+
+
+
+
+
+                                        <% } %>
             </div>
 
 
@@ -307,16 +310,36 @@
             }
 
             // Add event listener to add to cart button
-            const addToCartButtons = document.querySelectorAll('.add-to-cart-button');
-            addToCartButtons.forEach((button) => {
-                button.addEventListener('click', addToCart);
-            });
+    
 
-            function addToCart(event) {
-                event.preventDefault();
-                // Replace '#' with the actual link to add the product to cart
-                window.location.href = 'shop/addToCart';
-            }
+
+            const addToCartButtons = document.querySelectorAll('.add-to-cart-button');
+
+addToCartButtons.forEach((button) => {
+  button.addEventListener('click', addToCart);
+});
+
+function addToCart(event) {
+  event.preventDefault();
+
+  const button = event.target;
+  const productId = button.dataset.productId;
+
+  console.log(`Product ID: ${productId}`);
+
+  fetch(`/addToCart/${productId}`)
+    .then(response => {
+        console.log(productId+"dfsgklfk");
+     
+      window.location.reload();
+    })
+    .catch(error => console.error(error));
+}
+
+
+
+
+
         </script>
         <script src="shop/js/jquery-3.3.1.min.js"></script>
         <script src="shop/js/bootstrap.min.js"></script>

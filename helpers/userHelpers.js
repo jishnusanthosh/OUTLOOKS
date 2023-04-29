@@ -46,7 +46,7 @@ export default {
           validUser.password
         );
         if (isPasswordMatch) {
-          return { status: true, user: validUser };
+          return { status: true, user: validUser};
         } else {
           console.log("Invalid Password");
           return { status: false };

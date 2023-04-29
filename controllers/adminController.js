@@ -1,15 +1,16 @@
-
 import dotenv from "dotenv";
 import adminHelper from "../helpers/adminHelpers";
 
 import User from "../models/userModels";
-import Product from "../models/productModels"
-
+import Product from "../models/productModels";
 
 dotenv.config();
 
+
+
 export default {
   AdminHomePage: async (req, res) => {
+    
     try {
       if (req.session.admin) {
         res.render("admin/admin-home");
@@ -46,12 +47,20 @@ export default {
     }
   },
   AdminListProduct: async (req, res) => {
-    const products = await Product.find();
-    const viewCategory = await adminHelper.getAllCategory();
-    
+    const products = await Product.aggregate([
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+    ]);
+
     try {
       if (req.session.admin) {
-        res.render("admin/admin-products-list", { product: products ,viewCategory});
+        res.render("admin/admin-products-list", { product: products });
       } else {
         res.redirect("/admin/login");
       }
@@ -63,12 +72,11 @@ export default {
   blockProduct: async (req, res) => {
     let proId = req.params.id;
     console.log(proId);
-   let product = await Product.findById(proId);
-
+    console.log('👶👶👶');
+    let product = await Product.findById(proId);
 
     try {
       if (req.session.admin) {
-
         await adminHelper.blockProduct(product);
         res.redirect("/admin/admin-productss-list");
       } else {
@@ -81,12 +89,10 @@ export default {
   unblockProduct: async (req, res) => {
     let proId = req.params.id;
     console.log(proId);
-   let product = await Product.findById(proId);
-
+    let product = await Product.findById(proId);
 
     try {
       if (req.session.admin) {
-
         await adminHelper.unblockProduct(product);
         res.redirect("/admin/admin-productss-list");
       } else {
@@ -96,12 +102,6 @@ export default {
       console.log(err);
     }
   },
-
-
-
-
-
-
 
   AdminCategoriesPage: async (req, res) => {
     try {
@@ -146,7 +146,9 @@ export default {
       let userId = req.params.id;
       try {
         await adminHelper.blockUser(userId);
-        res.redirect("/admin/admin-users-list");
+      
+        res.status(200).json("done")
+       // res.redirect("/admin/admin-users-list");
       } catch (error) {
         console.error(error);
       }
@@ -158,7 +160,8 @@ export default {
       let userId = req.params.id;
       try {
         await adminHelper.unblockUser(userId);
-        res.redirect("/admin/admin-users-list");
+        res.status(200).json("done")
+       // res.redirect("/admin/admin-users-list");
       } catch (err) {
         console.error(err);
       }
@@ -183,18 +186,16 @@ export default {
     }
   },
   addProductPost: async (req, res) => {
-  
-      let productDetails = req.body;
-      let image = req.file
-      console.log(image);
-  
-      try {
-        await adminHelper.addProductPost(productDetails,image);
-        res.redirect("/admin/admin-add-product");
-      } catch (error) {
-        console.error(error);
-      }
-    
+    let productDetails = req.body;
+    let image = req.file;
+    console.log(image);
+
+    try {
+      await adminHelper.addProductPost(productDetails, image);
+      res.redirect("/admin/admin-add-product");
+    } catch (error) {
+      console.error(error);
+    }
   },
 
   AdminViewUser: async (req, res) => {

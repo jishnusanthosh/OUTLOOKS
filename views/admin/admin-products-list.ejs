@@ -18,7 +18,7 @@
                 <div>
                     <a href="#" class="btn btn-light rounded font-md">Export</a>
                     <a href="#" class="btn btn-light rounded  font-md">Import</a>
-                    <a href="#" class="btn btn-primary btn-sm rounded">Create new</a>
+                    <a href="/admin/admin-add-product" class="btn btn-primary btn-sm rounded">Create new</a>
                 </div>
             </div>
             <div class="card mb-4">
@@ -98,27 +98,11 @@
                                     <td>
                                         <%= product.productPrice %>
                                     </td>
-
-
                                     <td>
-                                        <% for (let i=0; i < viewCategory.length; i++) { %>
-
-
-
-                                            <% if (String(viewCategory[i]._id)===String(product.category)) { %>
-
-
-                                                <% var cat=viewCategory[i].CategoryName;%>
-                                                    <% } %>
-
-
-
-                                                        <% } %>
-
-
-                                                            <%= cat %>
+                                        <%= product.category[0].CategoryName %>
                                     </td>
                                     <td>
+
                                         <% if (product.productStatus) { %>
                                             <span class="badge rounded-pill alert-success">
                                                 Listed
@@ -129,9 +113,10 @@
                                                     Unlisted
                                                 </span>
                                                 <% }%>
-                                                    
+                                    </td>
 
-                                                    
+
+
                                     </td>
                                     <td>
                                         <a href="#" class="btn btn-sm font-sm rounded btn-brand">
@@ -152,6 +137,7 @@
                                 </tr>
                                 <% count++ %>
                                     <% }); %>
+
                     </tbody>
                 </table>
 

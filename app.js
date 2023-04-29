@@ -9,6 +9,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import  session  from "express-session";
 import  multer  from "multer";
+import  swal from "sweetalert";
 
 
 
@@ -55,7 +56,7 @@ app.use(cookieParser());
 app.use(
   session({
     secret: "key",
-    cookie: { maxAge: 600000 },
+    cookie: { maxAge: 600000000 },
     saveUninitialized: false,
     resave: false,
   })
@@ -114,7 +115,6 @@ app.use(function (req, res, next) {
 
 
 
-
 // Error handler
 app.use((err, req, res, next) => {
   // Set locals, only providing error in development
@@ -124,6 +124,7 @@ app.use((err, req, res, next) => {
   // Render the error page
   res.status(err.status || 500);
   res.render('error');
+  
 });
 
 // Create HTTP server

@@ -3,27 +3,27 @@ import twilioFunctions from "../config/twilio";
 import dotenv from "dotenv";
 import userHelpers from "../helpers/userHelpers";
 import User from "../models/userModels";
-import  Products  from "../models/productModels";
-import  Category from "../models/categoryModels"
+import Products from "../models/productModels";
+import mongoose from "mongoose";
+
 
 dotenv.config();
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
-const client = require("twilio")(accountSid, authToken)
-
-
+const client = require("twilio")(accountSid, authToken);
 
 export default {
   homePage: async (req, res, next) => {
     let user = req.session.user;
-    const allproducts = await Products.find()
+    const allproducts = await Products.find();
+    console.log(req.session.login);
 
     try {
       if (user) {
-        res.render("shop/home.ejs", { user ,allproducts});
+        res.render("shop/home.ejs", { user, allproducts });
       } else {
-        res.render("shop/home.ejs", { user: false ,allproducts});
+        res.render("shop/home.ejs", { user: false, allproducts });
       }
     } catch (error) {
       console.error(err);
@@ -31,7 +31,7 @@ export default {
   },
 
   loginPage: (req, res) => {
-    res.render("shop/userlogin/login.ejs");
+    res.render("shop/userlogin/login");
   },
   GetOtpLogin: (req, res) => {
     res.render("shop/userlogin/otp-login.ejs");
@@ -40,37 +40,58 @@ export default {
     res.render("shop/userlogin/otp-send.ejs");
   },
   GetMenCategory: async (req, res, next) => {
+    let user = req.session.user || null;
     try {
-      let user = req.session.user || null; 
-      const category = await Category.findOne({ CategoryName: "MEN" });
- 
-  
-   
-      const products = await Products.find({ category: category._id });
-      console.log(products);
-  
+      const products = await Products.aggregate([
+        {
+          $lookup: {
+            from: "categories",
+            localField: "category",
+            foreignField: "_id",
+            as: "category",
+          },
+        },
+      ]);
 
-      res.render("shop/men.ejs", { products ,user});
+      let categoryProducts = products.filter(
+        (product) => product.category[0].CategoryName === "MEN"
+      );
+      console.log(categoryProducts);
+      res.render("shop/men.ejs", { products: categoryProducts, user });
     } catch (error) {
       console.error(error);
-      res.render("error.ejs", { message: "An error occurred" });
-    }
-  }
-  ,
-  GetWomenCategory: async (req, res, next) => {
-    let user = req.session.user || null; 
-  
-    try {
-      const category = await Category.findOne({ CategoryName: "WOMEN" });
-      const products = await Products.find({ category: category._id });
-  
-      res.render("shop/women.ejs", { products, user });
-    } catch (error) {
-      console.error(error);
-      res.render("error.ejs", { message: "An error occurred" });
+      // const msg="An error occurred"
+
+      // res.render("error.ejs",{ msg});
     }
   },
-  
+  GetWomenCategory: async (req, res, next) => {
+    let user = req.session.user || null;
+
+    try {
+      const products = await Products.aggregate([
+        {
+          $lookup: {
+            from: "categories",
+            localField: "category",
+            foreignField: "_id",
+            as: "category",
+          },
+        },
+      ]);
+
+      let categoryProducts = products.filter(
+        (product) => product.category[0].CategoryName === "WOMEN"
+      );
+      console.log(categoryProducts);
+      res.render("shop/women.ejs", { products: categoryProducts, user });
+    } catch (error) {
+      console.error(error);
+      // const msg="An error occurred"
+
+      // res.render("error.ejs",{ msg});
+    }
+  },
 
   //signup
   signUpPage: (req, res) => {
@@ -82,14 +103,15 @@ export default {
       console.log(user);
 
       if (userData.status) {
-        const msg = "Email  already exist";
-
+        const msg = "Email already exists";
         res.render("shop/userlogin/signup", { msg });
       } else {
-        const msg = "account created succesfully";
-        res.render("shop/userlogin/login.ejs", { msg });
+        if (userData.user) {
+          req.session.login = true;
+          req.session.user = userData.user;
+          res.redirect("/");
+        }
       }
-      
     });
   },
   loginPost: async (req, res) => {
@@ -100,8 +122,13 @@ export default {
         req.session.user = response.user;
         res.redirect("/");
       } else {
-        const blockmsg = "Account is blocked...Unable to login";
-        res.render("shop/userlogin/login.ejs", { blockmsg });
+        if (response.status == false) {
+          const blockmsg = "Incorrect Password or Email...!!";
+          res.render("shop/userlogin/login.ejs", { blockmsg });
+        } else {
+          const blockmsg = "Account is blocked...Unable to login";
+          res.render("shop/userlogin/login.ejs", { blockmsg });
+        }
       }
     } catch (err) {
       console.error(err);
@@ -131,7 +158,7 @@ export default {
       const otp = req.body.otpValues;
       console.log(otp);
       client.verify.v2
-        .services('VAd7d72ed7e0d900851e1b08c0bffc1f65')
+        .services("VAd7d72ed7e0d900851e1b08c0bffc1f65")
         .verificationChecks.create({ to: `+91${phonenumber}`, code: otp })
         .then(async (verificationChecks) => {
           if (verificationChecks.status === "approved") {
@@ -148,7 +175,8 @@ export default {
           } else {
             const msg2 = "INCORRECT OTP!!";
             res.render("shop/userlogin/verify-otp", {
-              msg2:msg2,phonenumber
+              msg2: msg2,
+              phonenumber,
             });
           }
         })
@@ -176,4 +204,97 @@ export default {
     req.session.user = false;
     res.redirect("/");
   },
+
+  GetCart: (req, res) => {
+
+    let user = req.session.user || null;
+    let cart = req.session.cart || null;
+  
+    res.render("shop/cart",{user,cart});
+  },
+
+  addToCart: async (req, res) => {
+    try {
+      const  id  = req.params;
+      console.log(id+"dngklsjfkljd");
+      const cart = req.session.cart || [];
+
+      // Check if product ID is valid
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        throw new Error('Invalid product ID');
+      }
+
+      // Check if product already exists in cart
+      const existingCartItem = cart.find((item) => item.productId === id);
+      if (existingCartItem) {
+        // Increment quantity of existing cart item
+        existingCartItem.quantity += 1;
+      } else {
+        // Create new cart item for product
+        const product = await Products.findById(id);
+        if (!product) {
+          throw new Error('Product not found');
+        }
+        const cartItem = {
+          productId: product._id,
+          quantity: 1,
+          price: product.price,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        };
+        cart.push(cartItem);
+      }
+
+      req.session.cart = cart;
+      res.redirect('/shop/cart');
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      res.status(500).json({ success: false, message: 'Error adding to cart' });
+    }
+  }, addToCart: async (req, res) => {
+    try {
+      const productId = req.params.id;
+      console.log(productId);
+  
+      const cart = req.session.cart || [];
+  
+      // Check if product ID is valid
+      if (!mongoose.Types.ObjectId.isValid(productId)) {
+        throw new Error('Invalid product ID');
+      }
+  
+      // Check if product already exists in cart
+      const existingCartItem = cart.find(item => item.productId === productId);
+      if (existingCartItem) {
+        // Increment quantity of existing cart item
+        existingCartItem.quantity += 1;
+      } else {
+        // Create new cart item for product
+        const product = await Products.findById(productId);
+        if (!product) {
+          throw new Error('Product not found');
+        }
+        const cartItem = {
+          productId: product._id,
+          quantity: 1,
+          price: product.price,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        };
+        cart.push(cartItem);
+      }
+  
+      req.session.cart = cart;
+      res.redirect("/shop/cart");
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      res.status(500).json({ success: false, message: 'Error adding to cart' });
+    }
+  }
+
+
+
+  
+  
+
 };

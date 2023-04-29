@@ -22,6 +22,11 @@ router.get("/women",userController.GetWomenCategory)
 
 router.get("/men",userController.GetMenCategory)
 
+router.get("/cart",userController.GetCart)
+
+router.get("/addToCart/:id", userController.addToCart);
+
+
 
 
 

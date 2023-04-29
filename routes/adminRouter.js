@@ -1,60 +1,45 @@
 import express from 'express';
-const router = express.Router();
 
 
 import adminController from '../controllers/adminController';
+import {isloggedInadmin} from '../middlewares/sessionHandling'
 
 
 
+const router = express.Router();
 
-router.get('/', adminController.AdminHomePage);
+router.get('/',isloggedInadmin,adminController.AdminHomePage);
 
 router.get("/login",adminController.AdminloginPage);
 
 router.post("/login",adminController.AdminloginPost);
 
-router.get("/logout",adminController.AdminlogoutGet);
+router.get("/logout",isloggedInadmin,adminController.AdminlogoutGet);
 
-router.get("/admin-users-list",adminController.AdminUsersPage);
+router.get("/admin-users-list", isloggedInadmin,adminController.AdminUsersPage);
 
-router.get("/viewUser/:id",adminController.AdminViewUser);
+router.get("/viewUser/:id",isloggedInadmin,adminController.AdminViewUser);
 
-router.get("/admin-add-product",adminController.AdminAddProduct);
+router.get("/admin-add-product",isloggedInadmin,adminController.AdminAddProduct);
 
-router.get("/admin-productss-list",adminController.AdminListProduct);
+router.get("/admin-productss-list",isloggedInadmin,adminController.AdminListProduct);
 
-router.get("/blockProduct/:id",adminController.blockProduct)
+router.get("/blockProduct/:id",isloggedInadmin,adminController.blockProduct)
 
-router.get("/unblockProduct/:id",adminController.unblockProduct)
+router.get("/unblockProduct/:id",isloggedInadmin,adminController.unblockProduct)
 
-router.get("/admin-categories",adminController.AdminCategoriesPage);
+router.get("/admin-categories",isloggedInadmin,adminController.AdminCategoriesPage);
 
-router.get("/blockuser/:id",adminController.BlockUser)
+router.put("/blockuser/:id",isloggedInadmin,adminController.BlockUser)
 
-router.get("/unblockuser/:id",adminController.unblockUser)
+router.put("/unblockuser/:id",isloggedInadmin,adminController.unblockUser)
 
-router.post("/createCategory",adminController.addCategory)
+router.post("/createCategory",isloggedInadmin,adminController.addCategory)
 
-router.get("/deleteCategory/:id",adminController.deleteCategory)
-
-
-router.post("/add-product",adminController.addProductPost)
+router.get("/deleteCategory/:id",isloggedInadmin,adminController.deleteCategory)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+router.post("/add-product",isloggedInadmin,adminController.addProductPost)
 
 
 export default router;
