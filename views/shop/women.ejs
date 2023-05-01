@@ -204,7 +204,7 @@
                                     </h6>
                                     <div class="product-buttons">
                                         <a href="#" class="buy-button">Buy Now</a>
-                                        <a href="#" class="add-to-cart-button">Add to Cart</a>
+                                        <a href="/addToCart/<%= products[i]._id %>" class="add-to-cart-button">Add to Cart</a>
                                     </div>
                                 </div>
                             </div>
@@ -239,7 +239,7 @@
                                         </h6>
                                         <div class="product-buttons">
                                             <a href="#" class="buy-button">Buy Now</a>
-                                            <a href="#" class="add-to-cart-button">Add to Cart</a>
+                                            <a href="/addToCart/<%= products[i]._id %>" class="add-to-cart-button">Add to Cart</a>
                                         </div>
                                     </div>
                                 </div>
@@ -248,22 +248,9 @@
                             <% } %>
 
                  <% } %>
-                    
-
-                   
-
-
-
-
+             
                                 <% } %>
             </div>
-
-
-
-
-
-
-
 
             <div class="more-product">
                 <div class="row">
@@ -306,17 +293,7 @@
                 window.location.href = 'shop/buyProduct';
             }
 
-            // Add event listener to add to cart button
-            const addToCartButtons = document.querySelectorAll('.add-to-cart-button');
-            addToCartButtons.forEach((button) => {
-                button.addEventListener('click', addToCart);
-            });
-
-            function addToCart(event) {
-                event.preventDefault();
-                // Replace '#' with the actual link to add the product to cart
-                window.location.href = 'shop/addToCart';
-            }
+         
         </script>
         <script src="shop/js/jquery-3.3.1.min.js"></script>
         <script src="shop/js/bootstrap.min.js"></script>

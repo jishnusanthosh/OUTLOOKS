@@ -5,6 +5,7 @@ import userHelpers from "../helpers/userHelpers";
 import User from "../models/userModels";
 import Products from "../models/productModels";
 import mongoose from "mongoose";
+import  Cart  from "../models/cartModels";
 
 
 dotenv.config();
@@ -205,96 +206,44 @@ export default {
     res.redirect("/");
   },
 
-  GetCart: (req, res) => {
-
-    let user = req.session.user || null;
-    let cart = req.session.cart || null;
+  GetCart: async (req, res) => {
+    try {
+      const user = req.session.user;
+      const cart = await Cart.findOne({ user: user._id }).populate(
+        "products.productId"
+      );
   
-    res.render("shop/cart",{user,cart});
+      if (!cart) {
+        res.render("shop/emptyCart", { user });
+        return;
+      }
+    
+      const products = cart.products;
+  
+      res.render("shop/cart", { user, products });
+    } catch (error) {
+      console.error(error);
+      res.render("catchError", { message: error.message, user: req.session.user });
+    }
   },
 
   addToCart: async (req, res) => {
+    let user = req.session.user._id
+    let productId=req.params.id
+    console.log(productId);
+    console.log(user);
     try {
-      const  id  = req.params;
-      console.log(id+"dngklsjfkljd");
-      const cart = req.session.cart || [];
-
-      // Check if product ID is valid
-      if (!mongoose.Types.ObjectId.isValid(id)) {
-        throw new Error('Invalid product ID');
-      }
-
-      // Check if product already exists in cart
-      const existingCartItem = cart.find((item) => item.productId === id);
-      if (existingCartItem) {
-        // Increment quantity of existing cart item
-        existingCartItem.quantity += 1;
+      const response =await userHelpers.addToCart(user,productId);
+      if (response) {
+        console.log("product added");
+        res.redirect("/cart")
       } else {
-        // Create new cart item for product
-        const product = await Products.findById(id);
-        if (!product) {
-          throw new Error('Product not found');
-        }
-        const cartItem = {
-          productId: product._id,
-          quantity: 1,
-          price: product.price,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        };
-        cart.push(cartItem);
+        res.redirect("/cart")
+        console.log("product not added");
       }
-
-      req.session.cart = cart;
-      res.redirect('/shop/cart');
     } catch (error) {
-      console.error('Error adding to cart:', error);
-      res.status(500).json({ success: false, message: 'Error adding to cart' });
-    }
-  }, addToCart: async (req, res) => {
-    try {
-      const productId = req.params.id;
-      console.log(productId);
-  
-      const cart = req.session.cart || [];
-  
-      // Check if product ID is valid
-      if (!mongoose.Types.ObjectId.isValid(productId)) {
-        throw new Error('Invalid product ID');
-      }
-  
-      // Check if product already exists in cart
-      const existingCartItem = cart.find(item => item.productId === productId);
-      if (existingCartItem) {
-        // Increment quantity of existing cart item
-        existingCartItem.quantity += 1;
-      } else {
-        // Create new cart item for product
-        const product = await Products.findById(productId);
-        if (!product) {
-          throw new Error('Product not found');
-        }
-        const cartItem = {
-          productId: product._id,
-          quantity: 1,
-          price: product.price,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        };
-        cart.push(cartItem);
-      }
-  
-      req.session.cart = cart;
-      res.redirect("/shop/cart");
-    } catch (error) {
-      console.error('Error adding to cart:', error);
-      res.status(500).json({ success: false, message: 'Error adding to cart' });
-    }
+      
+    } 
   }
-
-
-
-  
-  
 
 };

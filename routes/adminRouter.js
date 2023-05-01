@@ -39,6 +39,11 @@ router.post("/createCategory",isloggedInadmin,adminController.addCategory)
 router.get("/deleteCategory/:id",isloggedInadmin,adminController.deleteCategory)
 
 
+router.get("/admin-edit-product/:id",isloggedInadmin,adminController.getEditProduct)
+
+router.post("/edit-product-post/:id",isloggedInadmin,adminController.postEditProduct)
+
+
 router.post("/add-product",isloggedInadmin,adminController.addProductPost)
 
 

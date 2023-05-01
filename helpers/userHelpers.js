@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import twilioFunctions from "../config/twilio";
 import User from "../models/userModels";
+import  Product  from "../models/productModels";
+import Cart from "../models/cartModels";
 
 import bcrypt from "bcrypt";
 
@@ -80,4 +82,57 @@ export default {
       }
     });
   },
+  addToCart: async (userId,productId) => {
+
+    // Find product
+    console.log(typeof productId);
+    console.log(userId+"dfghnjm");
+
+    try {
+      const product = await Product.findById(productId);
+
+    console.log(product);
+    if (!product) {
+      throw new Error("Product not found");
+    }
+
+    const quantity = product.productQuantity;
+
+    if (quantity <= 0) {
+      return false;
+    }
+
+    await Cart.updateOne(
+      { user: userId },
+      { $push: { products: { productId, quantity: 1 } } },
+      { upsert: true }
+    );
+
+    return true;
+    } catch (error) {
+      console.error(error);
+    }
+  },
+  getCartProducts :async(userId)=>{
+    try {
+      const cart = await Cart.findOne({ user: userId });
+      if (!cart) {
+        return false;
+        }
+     
+        return cart.products;
+        
+      
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+
+
+
+
+
+
+
 };

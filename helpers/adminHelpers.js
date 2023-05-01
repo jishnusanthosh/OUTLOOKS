@@ -1,10 +1,13 @@
 import User from "../models/userModels";
 import Category from "../models/categoryModels";
 import product from "../models/productModels";
+import { ObjectId } from "mongodb";
+
 
 
 export default {
   blockUser: async (userId) => {
+    console.log(userId);
     try {
       const user = await User.findById(userId);
       user.isActive = false;
@@ -104,4 +107,56 @@ export default {
       console.error(err);
     }
   },
+  postEditProduct: async (productDetails, image, productId) => {
+    try {
+      let updatedProduct;
+  
+      if (image) {
+        // If an image is uploaded, update the product with the image filename
+        updatedProduct = await product.findByIdAndUpdate(
+          productId,
+          {
+            productName: productDetails.productName,
+            productColor: productDetails.productColor,
+            productBrand: productDetails.productBrand,
+            productDescription: productDetails.productDescription,
+            productPrice: productDetails.productPrice,
+            productSize: productDetails.productSize,
+            category: productDetails.viewCategoryId,
+            productQuantity: productDetails.productQuantity,
+            productImage: image.filename,
+          },
+          { new: true }
+        );
+      } else {
+        // If no image is uploaded, update the product without changing the productImage field
+        updatedProduct = await product.findByIdAndUpdate(
+          productId,
+          {
+            productName: productDetails.productName,
+            productColor: productDetails.productColor,
+            productBrand: productDetails.productBrand,
+            productDescription: productDetails.productDescription,
+            productPrice: productDetails.productPrice,
+            productSize: productDetails.productSize,
+            category: productDetails.viewCategoryId,
+            productQuantity: productDetails.productQuantity,
+          },
+          { new: true }
+        );
+      }
+  
+      return updatedProduct;
+    } catch (err) {
+      console.error(err);
+    }
+  },
+  
+  
+
+
+  
+
+
+
 };

@@ -61,31 +61,7 @@
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <% products.forEach(product => { %>
-                            <tr>
-                                <td class="product-col">
-                                    <div class="product-images">
-                                        <% product.productId.productImage.forEach(image => { %>
-                                            <img src="/uploads/<%= product.productId.productImage %>.jpg" alt="">
-                                        <% }) %>
-                                    </div>
-                                    <div class="p-title">
-                                        <h5><%= product.productId.productName %></h5>
-                                    </div>
-                                </td>
-                                <td class="price-col"><%= product.productId.productPrice %></td>
-                                <td class="quantity-col">
-                                    <div class="pro-qty">
-                                        <input type="text" value="1">
-                                    </div>
-                                </td>
-                                <td class="total">$29</td>
-                                <td class="product-close">x</td>
-                            </tr>
-                        <% }) %>
-                    </tbody>
-                    
+                   
                 </table>
             </div>
             <div class="cart-btn">

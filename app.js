@@ -10,6 +10,8 @@ import mongoose from 'mongoose';
 import  session  from "express-session";
 import  multer  from "multer";
 import  swal from "sweetalert";
+const toastr = require('toastr');
+
 
 
 
@@ -48,6 +50,8 @@ app.use(multer({
 
 
 // Set up middleware
+
+
 
 app.use(logger('dev'));
 app.use(express.json());

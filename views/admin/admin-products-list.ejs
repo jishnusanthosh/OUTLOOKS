@@ -81,6 +81,8 @@
                                             src="/uploads/<%= product.productImage %>.jpg" alt="">
                                     </td>
 
+                                    
+
                                     <td>
                                         <%= product.productName %>
                                     </td>
@@ -119,7 +121,7 @@
 
                                     </td>
                                     <td>
-                                        <a href="#" class="btn btn-sm font-sm rounded btn-brand">
+                                        <a href="/admin/admin-edit-product/<%= product._id %>" class="btn btn-sm font-sm rounded btn-brand">
                                             <i class="material-icons md-edit"></i> Edit
                                         </a>
                                         <a href="/admin/blockProduct/<%= product._id %>"

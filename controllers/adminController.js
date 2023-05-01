@@ -197,6 +197,48 @@ export default {
       console.error(error);
     }
   },
+  getEditProduct: async (req, res) => {
+    let productId = req.params.id;
+   
+    try {
+      if (req.session.admin) {
+        let viewCategory = await adminHelper.getAllCategory();
+        let product = await Product.findById(productId)
+        res.locals.notificationMessage = 'Product updated successfully';
+        res.render("admin/admin-edit-product",{viewCategory,product});
+      } else {
+        res.redirect("/admin/login");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  postEditProduct: async (req, res) => {
+    try {
+      // get the product id, details, and image from the request
+      const productId = req.params.id;
+      const productDetails = req.body;
+      const image = req.file;
+  
+      // call the editProductPost function to update the product details
+      const updatedProduct = await adminHelper.postEditProduct(
+        productDetails,
+        image,
+        productId
+      );
+      
+      // redirect to the updated product page
+      res.redirect(`/admin/admin-edit-product/${productId}`);
+    } catch (error) {
+      console.error(error);
+    }
+  },
+  
+
+
+
+
 
   AdminViewUser: async (req, res) => {
     let userId = req.params.id;
