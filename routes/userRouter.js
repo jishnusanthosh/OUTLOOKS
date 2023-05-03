@@ -25,10 +25,18 @@ router.get("/men",userController.GetMenCategory)
 router.get("/cart",userController.GetCart)
 
 
+router.get("/viewProduct/:id",userController.getProductView)
+
+
 
 
 router.get("/addToCart/:id",userController.addToCart);
 
+
+
+router.get("/userProfile/:id",userController.getUserProfile);
+
+router.post("/deleteCartProduct",userController.deleteCartProduct)
 
 
 
@@ -49,3 +57,12 @@ router.post("/login",userController.loginPost);
 
 
 export default router;
+
+
+
+
+
+
+
+
+

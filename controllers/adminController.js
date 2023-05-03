@@ -78,7 +78,8 @@ export default {
     try {
       if (req.session.admin) {
         await adminHelper.blockProduct(product);
-        res.redirect("/admin/admin-productss-list");
+        res.status(200).json("done")
+        // res.redirect("/admin/admin-productss-list");
       } else {
         res.redirect("/admin/login");
       }
@@ -94,7 +95,8 @@ export default {
     try {
       if (req.session.admin) {
         await adminHelper.unblockProduct(product);
-        res.redirect("/admin/admin-productss-list");
+        res.status(200).json("done")
+        // res.redirect("/admin/admin-productss-list");
       } else {
         res.redirect("/admin/login");
       }
@@ -230,6 +232,18 @@ export default {
       
       // redirect to the updated product page
       res.redirect(`/admin/admin-edit-product/${productId}`);
+    } catch (error) {
+      console.error(error);
+    }
+  },
+
+  AdminViewProduct: async (req, res) => {
+    let productId = req.params.id;
+    try {
+      const product = await Product.findById(productId);
+
+      res.render("admin/admin-product-details", { product });
+     
     } catch (error) {
       console.error(error);
     }

@@ -3,7 +3,98 @@
 
     <%- include('../shop/layout/user-header.ejs') %>
 
-   
+    <style>
+        .single-product-item {
+            position: relative;
+        }
+    
+        .favorite-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1;
+        }
+    
+        .favorite-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: transparent;
+            color: #333333;
+            border: 2px solid #333333;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+    
+        .favorite-button:hover {
+            background-color: #333333;
+            color: #ffffff;
+            cursor: pointer;
+        }
+    
+        .hover-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            z-index: 1;
+        }
+    
+        .hover-icon a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(0, 0, 0, 0.9);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+    
+        .hover-icon a:hover {
+            background-color: #ff6600;
+            color: #000000;
+            cursor: pointer;
+        }
+    
+        .add-to-cart-button:hover {
+            color: #000000;
+        }
+    
+        .product-buttons {
+            display: flex;
+        }
+    
+        .buy-button {
+            background-color: #999999;
+            color: #ffffff;
+            padding: 5px 10px;
+            font-size: 14px;
+            border: none;
+            border-radius: 3px;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+    
+        .buy-button:hover {
+            background-color: #ff6600;
+            color: #ffffff;
+            cursor: pointer;
+        }
+    
+        .add-to-cart-button {
+            background-color: transparent;
+            color: #ff6600;
+            padding: 5px 10px;
+            font-size: 14px;
+            border: 2px solid #ff6600;
+            border-radius: 3px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 
 
     <div class="header-info col-lg-12">
@@ -172,40 +263,116 @@
             </div>
 
 
-            <div class="container">
-                <div class="row" id="product-list">
-                  <% for (let i = 0; i < allproducts.length; i++) { %>
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                      <div class="single-product-item">
-                        <figure>
-                          <img src="/uploads/<%= allproducts[i].productImage %>.jpg" alt="">
-                          <div class="favorite-icon">
-                            <a href="#" class="favorite-button"><i class="far fa-heart"></i></a>
-                        </div>
-                          <div class="p-status">new</div>
-                          <div class="hover-icon">
-                            <a href="/uploads/<%= allproducts[i].productImage %>.jpg"  class="pop-up"><i
-                                    class="fas fa-search"></i></a>
-                        </div>
-                        </figure>
-                        
-                        <div class="product-text">
-                          <h6><%= allproducts[i].productName %></h6>
-                          <p>Rs. <%= allproducts[i].productPrice %></p>
-                          <div class="product-buttons">
-                            <a href="#" class="buy-button">Buy Now</a>
-                            <a href="#" class="add-to-cart-button">Add to Cart</a>
-                        </div>
-                        
-                         
 
-                        </div>
-                      </div>
-                    </div>
-                  <% } %>
-                </div>
-              </div>
-              
+
+              <div class="row">
+                <% for (var i=0; i < allproducts.length; i++) { %>
+
+                    <% if (allproducts[i].productStatus==true) { %>
+                        <% if (i%2==0) { %>
+                            <div class="col-lg-4 col-md-6 col-sm-12">
+                                <div class="single-product-item">
+                                    <figure>
+                                        <img src="/uploads/<%= allproducts[i].productImage %>.jpg" alt="">
+                                        <div class="favorite-icon">
+                                            <a href="#" class="favorite-button"><i class="far fa-heart"></i></a>
+                                        </div>
+                                        <div class="hover-icon">
+                                            <a href="/uploads/<%= allproducts[i].productImage %>.jpg" class="pop-up"><i
+                                                    class="fas fa-search"></i></a>
+                                        </div>
+                                    </figure>
+                                    <div class="product-text">
+                                        <div class="product-name">
+                                            <a href="#">
+                                                <h4>
+                                                    <%= allproducts[i].productName %>
+                                                </h4>
+                                            </a>
+                                            <h6>
+                                                <%= allproducts[i].productDescription %>
+                                            </h6>
+                                        </div>
+                                        <h6>
+                                            <%= "Rs. " + allproducts[i].productPrice %>
+                                        </h6>
+                                        <div class="product-buttons">
+                                            <a href="#" class="buy-button">Buy Now</a>
+                                            <a href="/addToCart/<%=allproducts[i]._id %>" class="add-to-cart-button">Add to Cart</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- code for if condition is true -->
+                            <% } else { %>
+                                <div class="col-lg-4 col-md-6 col-sm-12">
+                                    <div class="single-product-item">
+                                        <figure>
+                                            <img src="/uploads/<%= allproducts[i].productImage %>.jpg" alt="">
+                                            <div class="favorite-icon">
+                                                <a href="#" class="favorite-button"><i class="far fa-heart"></i></a>
+                                            </div>
+                                            <div class="hover-icon">
+                                                <a href="/uploads/<%= allproducts[i].productImage %>.jpg" class="pop-up"><i
+                                                        class="fas fa-search"></i></a>
+                                            </div>
+                                        </figure>
+                                        <div class="product-text">
+                                            <div class="product-name">
+                                                <a href="#">
+                                                    <h4>
+                                                        <%= allproducts[i].productName %>
+                                                    </h4>
+                                                </a>
+                                                <h6>
+                                                    <%= allproducts[i].productDescription %>
+                                                </h6>
+                                            </div>
+                                            <h6>
+                                                <%= "Rs. " + allproducts[i].productPrice %>
+                                            </h6>
+                                            <div class="product-buttons">
+                                                <a href="#" class="buy-button">Buy Now</a>
+                                                <a href="/addToCart/<%= allproducts[i]._id %>" class="add-to-cart-button" data-product-id="<%= allproducts[i]._id %>">Add to Cart</a>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- code for if condition is false -->
+                                <% } %>
+
+                                    <% } %>
+
+
+
+
+
+
+
+                                        <% } %>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
            
                
     </section>

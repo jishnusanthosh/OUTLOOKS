@@ -34,7 +34,7 @@
       }
     </style>
 
-    <title>Login</title>
+    <title>SignUp</title>
   </head>
 
   <body>
@@ -56,38 +56,62 @@
                       </span>
                       <% } %>
 
-                        <form action="/signup" method="post">
+                        <form action="/signup" method="post" id="signup-form">
                           <div class="form-group first">
-                            <label for="username">Fullname</label>
-                            <input type="text" class="form-control" id="username" name="username" required>
+                            <label for="username">Fullname<span class="text-color-danger">*</span></label>
+                            <input type="text" class="form-control" id="username" name="username" value="">
                           </div>
+                          <span class="text-warning d-none" style="font-size: 14px; margin-left: 10px;" id="usernameError"></span>
+
                           <br>
-                          <% var msg=msg || '' ; %>
+                          
+                                <div class="form-group first">
+                                  <label for="email">Email<span class="text-color-danger">*</span></label>
+                                  <input type="text" class="form-control" id="email" name="email" value="">
+                                 
+                                </div>
+                                <% var msg=msg || '' ; %>
                             <% if (msg) { %>
-                              <span class="text-white">
+                              <span class="text-warning">
                                 <%= msg %>
                               </span>
                               <% } %>
-                                <div class="form-group first">
-                                  <label for="email">Email</label>
-                                  <input type="text" class="form-control" id="email" name="email" required>
-                                </div>
+                                <span class="text-warning d-none" style="font-size: 14px; margin-left: 10px;"
+                                id="emailError"></span>
                                 <br>
+
                                 <div class="form-group last mb-2">
-                                  <label for="phonenumber">Phone Number</label>
+                                  <label for="phonenumber">Phone Number<span class="text-color-danger">*</span></label>
                                   <input type="number" class="form-control" id="phonenumber" name="phonenumber"
-                                    required>
+                                    value="">
+                                 
+
                                 </div>
+                                <% if (msg) { %>
+                                  <span class="text-warning">
+                                    <%= msg %>
+                                  </span>
+                                  <% } %>
+                                <span class="text-warning d-none" style="font-size: 14px; margin-left: 10px;"
+                                id="phonenumberError"></span>
                                 <br>
                                 <div class="form-group last mb-2">
-                                  <label for="password">Password</label>
-                                  <input type="password" class="form-control" id="password" name="password" required>
+                                  <label for="password">Password<span class="text-color-danger">*</span></label>
+                                  <input type="password" class="form-control" id="password" name="password" value="">
+                                 
+
+
                                 </div>
+                                <span class="text-warning d-none" style="font-size: 14px; margin-left: 10px;"
+                                id="passwordError"></span>
                                 <br>
-                               
-                                <a href="/signup">
-                                  <button type="submit" class="btn btn-block btn-login">REGISTER</button>
-                                </a>
+
+                                <form>
+                                  <!-- form fields -->
+                                  <button type="submit" class="btn btn-block btn-login"
+                                    formaction="/signup">REGISTER</button>
+                                </form>
+
                                 <span class="d-block text-left my-4 text-muted">&mdash; or login with &mdash;</span>
 
                                 <div class="social-login">
@@ -112,44 +136,6 @@
       </div>
 
 
-      <script>
-        var otpValues = [];
-
-        function setMobileNumber() {
-          const mobileNumber = document.getElementById("phonenumber").value;
-
-          document.getElementById("phonenumber-input").value = mobileNumber;
-
-          const otp = document.getElementById('otp1').value +
-            document.getElementById('otp2').value +
-            document.getElementById('otp3').value +
-            document.getElementById('otp4').value +
-            document.getElementById('otp5').value +
-            document.getElementById('otp6').value;
-          console.log(otp);
-          document.getElementById('otpId').value = otp;
-        }
-
-        $(document).ready(function () {
-          // initialize empty array to store OTP values
-          $('input[type="text"]').on('input keydown', function (e) {
-            var $this = $(this);
-            if (e.keyCode == 8 && !$this.val()) {
-              $this.prev('input[type="text"]').focus(); // move cursor to previous input field if backspace is pressed and field is empty
-              otpValues.pop(); // remove last value from array if backspace is pressed and field is empty
-            } else if ($this.val()) {
-              $this.next('input[type="text"]').focus(); // move cursor to next input field
-              otpValues.push($this.val()); // store entered value in array
-            }
-          });
-        });
-        function abc() {
-          otpValues = otpValues.join('')
-          document.getElementById('otpId').value = otpValues
-
-        }
-      </script>
-
 
 
 
@@ -157,6 +143,89 @@
       <script src="/login/js/popper.min.js"></script>
       <script src="/login/js/bootstrap.min.js"></script>
       <script src="/login/js/main.js"></script>
+      <script>
+        const loginForm = document.getElementById("signup-form");
+
+        const userName = document.getElementById("username");
+        const email = document.getElementById("email");
+        const mobile = document.getElementById("phonenumber");
+        const password = document.getElementById("password")
+        //   const password2 = document.getElementById("password2")
+
+
+        const usernameRegex = /^[a-zA-Z0-9_]+$/;
+        const emailRegX = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+        const mobileRegex = /^\d{10}$/;
+        const passRegX = /^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]{6,}$/;
+
+        loginForm.addEventListener('submit', (e) => {
+          if (userName.value === "" || userName.value === null) {
+            e.preventDefault();
+            document.getElementById("usernameError").classList.remove('d-none');
+            document.getElementById("usernameError").innerHTML = "Name must be filled!"
+          } else if (!userName.value.match(usernameRegex)) {
+            e.preventDefault();
+            document.getElementById("usernameError").classList.remove('d-none');
+            document.getElementById("usernameError").innerHTML = "invalid name"
+          } else if (userName.value.match(usernameRegex)) {
+            document.getElementById('usernameError').innerHTML = "";
+            document.getElementById('usernameError').classList.add('d-none')
+          }
+
+
+          if (email.value === "" || email.value === null) {
+            e.preventDefault();
+            document.getElementById("emailError").classList.remove('d-none');
+            document.getElementById("emailError").innerHTML = "Email must be filled!"
+          } else if (!email.value.match(emailRegX)) {
+            e.preventDefault();
+            document.getElementById("emailError").classList.remove('d-none');
+            document.getElementById("emailError").innerHTML = "Invalid Email Address";
+          } else if (email.value.match(emailRegX)) {
+            document.getElementById("emailError").classList.remove('d-none');
+            document.getElementById("emailError").innerHTML = ""
+          }
+
+
+          if (mobile.value === "" || mobile.value === null) {
+            e.preventDefault();
+            document.getElementById("phonenumberError").classList.remove('d-none');
+            document.getElementById("phonenumberError").innerHTML = "Phone number must be filled!"
+          } else if (!mobile.value.match(mobileRegex)) {
+            e.preventDefault();
+            document.getElementById("phonenumberError").classList.remove('d-none');
+            document.getElementById("phonenumberError").innerHTML = "Invalid Phone Number";
+          } else if (mobile.value.match(mobileRegex)) {
+            document.getElementById("phonenumberError").classList.remove('d-none');
+            document.getElementById("phonenumberError").innerHTML = ""
+          }
+
+          if (password.value === "" || password.value === null) {
+            e.preventDefault();
+            document.getElementById("passwordError").classList.remove('d-none');
+            document.getElementById("passwordError").innerHTML = "password number must be filled!"
+          } else if (!password.value.match(passRegX)) {
+            e.preventDefault();
+            document.getElementById("passwordError").classList.remove('d-none');
+            document.getElementById("passwordError").innerHTML = "Password must contain at least 6 characters including one uppercase letter,<br> one lowercase letter, one number and one special character.";
+          } else if (password.value.match(passRegX)) {
+            document.getElementById("passwordError").classList.remove('d-none');
+            document.getElementById("passwordError").innerHTML = ""
+          }
+          // if (password2.value === "" || password2.value === null) {
+          //     e.preventDefault();
+          //     document.getElementById("password2Error").classList.remove('d-none');
+          //     document.getElementById("password2Error").innerHTML = "password number must be filled!"
+          // } else if (!password.value.match(passRegX)) {
+          //     e.preventDefault();
+          //     document.getElementById("password2Error").classList.remove('d-none');
+          //     document.getElementById("password2Error").innerHTML = "Password must contain at least 6 characters including one uppercase letter,<br> one lowercase letter, one number and one special character.";
+          // } else if (password.value.match(passRegX)) {
+          //     document.getElementById("password2Error").classList.remove('d-none');
+          //     document.getElementById("password2Error").innerHTML = ""
+          // }
+        })
+      </script>
   </body>
 
   <footer>

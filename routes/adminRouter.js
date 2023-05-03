@@ -20,13 +20,15 @@ router.get("/admin-users-list", isloggedInadmin,adminController.AdminUsersPage);
 
 router.get("/viewUser/:id",isloggedInadmin,adminController.AdminViewUser);
 
+router.get("/viewProduct/:id",isloggedInadmin,adminController.AdminViewProduct);
+
 router.get("/admin-add-product",isloggedInadmin,adminController.AdminAddProduct);
 
 router.get("/admin-productss-list",isloggedInadmin,adminController.AdminListProduct);
 
-router.get("/blockProduct/:id",isloggedInadmin,adminController.blockProduct)
+router.put("/blockProduct/:id",isloggedInadmin,adminController.blockProduct)
 
-router.get("/unblockProduct/:id",isloggedInadmin,adminController.unblockProduct)
+router.put("/unblockProduct/:id",isloggedInadmin,adminController.unblockProduct)
 
 router.get("/admin-categories",isloggedInadmin,adminController.AdminCategoriesPage);
 

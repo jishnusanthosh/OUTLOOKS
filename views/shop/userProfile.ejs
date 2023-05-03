@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Yoga Studio Template">
+    <meta name="keywords" content="Yoga, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Violet | Template</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900&display=swap"
+        rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="/shop/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/style.css" type="text/css">
+
+
+
+    <style>
+        .th-space {
+          padding-right: 20px;
+        }
+      </style>
+</head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+    
+    <!-- Search model -->
+	<div class="search-model">
+		<div class="h-100 d-flex align-items-center justify-content-center">
+			<div class="search-close-switch">+</div>
+			<form class="search-model-form">
+				<input type="text" id="search-input" placeholder="Search here.....">
+			</form>
+		</div>
+	</div>
+	<!-- Search model end -->
+  <header class="header-section">
+        <div class="container-fluid">
+            <div class="inner-header">
+                <div class="logo">
+                    <a href="/"><img src="/shop/img/logo.png" alt=""></a>
+                </div>
+                <div class="header-right">
+                    <img src="/shop/img/icons/search.png" alt="" class="search-trigger">
+                    <img src="/shop/img/icons/man.png" alt="">
+                    <a href="/cart">
+                        <img src="/shop/img/icons/bag.png" alt="">
+                        <span>2</span>
+                    </a>
+                </div>
+
+                <% if (user) { %>
+                    <div class="user-access">
+                        <a>Welcome, <%= user.username %>!</a>
+                        <a href="/logout" class="in">logout</a>
+                    </div>
+    
+                      <% } else if(!user) { %>
+                        <div class="user-access">
+                            <a href="/signup">Register</a>
+                            <a href="/login" class="in">Sign in</a>
+                        </div>
+                      <% } %>
+    
+                <nav class="main-menu mobile-menu">
+                    <ul>
+                        <li><a href="/men">Men</a>
+                            <ul class="sub-menu">
+                                <li><a href="product-page.html">Suits</a></li>
+                                <li><a href="shopping-cart.html">Wedding Dress</a></li>
+                                <li><a href="check-out.html">Casual</a></li>
+                            </ul>
+                        </li>
+
+                        <li><a href="/women">Women</a>
+                            <ul class="sub-menu">
+                                <li><a href="product-page.html">Formals</a></li>
+                                <li><a href="shopping-cart.html">Wedding Dress</a></li>
+                                <li><a href="check-out.html">Casuals</a></li>
+                            </ul>
+                        </li>
+
+                        <li><a href="./product-page.html">About</a></li>
+                        <li><a href="./check-out.html">Blog</a></li>
+                        <li><a href="./contact.html">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <!-- Header Section Begin -->
+
+    <!-- Header Info Begin -->
+    <div class="header-info">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="header-item">
+                        <img src="/shop/img/icons/delivery.png" alt="">
+                        <p>Free shipping on orders over $30 in USA</p>
+                    </div>
+                </div>
+                <div class="col-md-4 text-left text-lg-center">
+                    <div class="header-item">
+                        <img src="/shop/img/icons/voucher.png" alt="">
+                        <p>20% Student Discount</p>
+                    </div>
+                </div>
+                <div class="col-md-4 text-left text-xl-right">
+                    <div class="header-item">
+                    <img src="/shop/img/icons/sales.png" alt="">
+                    <p>30% off on dresses. Use code: 30OFF</p>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header Info End -->
+
+
+
+
+    <!DOCTYPE html>
+    <html class="no-js" lang="en">
+    
+    
+    <!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/page-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:27:15 GMT -->
+    <head>
+        <meta charset="utf-8">
+        <title>Outlooks</title>
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta property="og:title" content="">
+        <meta property="og:type" content="">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/x-icon" href="/profile/imgs/theme/favicon.svg">
+        <!-- Template CSS -->
+        <link rel="stylesheet" href="/profile/css/main.css">
+    </head>
+    
+    <body>
+        
+        <main class="main">
+    
+            <section class="pt-150 pb-150">
+             
+                <div class="container">
+                  
+                    <div class="row" >
+                       
+                        <div class="col-lg-10 m-auto">
+                            <div class="row">
+                                <h2>My Account</h2>
+                                <br>
+                                <br>
+                                <div class="col-md-4">
+                                    <div class="dashboard-menu">
+                                        <ul class="nav flex-column" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link " id="dashboard-tab" data-bs-toggle="tab" href="#dashboard" role="tab" aria-controls="dashboard" aria-selected="false"><i class="fi-rs-settings-sliders mr-10"></i>Dashboard</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link " id="account-detail-edit" data-bs-toggle="tab" href="#account-edit" role="tab" aria-controls="dashboard" aria-selected="false"><i class="fi-rs-settings-sliders mr-10"></i>Account Info</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="fi-rs-shopping-bag mr-10"></i>Orders</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="track-orders-tab" data-bs-toggle="tab" href="#track-orders" role="tab" aria-controls="track-orders" aria-selected="false"><i class="fi-rs-shopping-cart-check mr-10"></i>Track Your Order</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="true"><i class="fi-rs-marker mr-10"></i>My Address</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="account-detail-tab" data-bs-toggle="tab" href="#account-detail" role="tab" aria-controls="account-detail" aria-selected="true"><i class="fi-rs-user mr-10"></i>Edit Account</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="page-login-register.html"><i class="fi-rs-sign-out mr-10"></i>Logout</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                               
+                                <div class="col-md-8">
+                                    <div class="tab-content dashboard-content">
+                                        <div class="tab-pane fade active show" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h5 class="mb-0"><%= user.username %> </h5>
+                                                </div>
+                                                <div class="card-body">
+                                                    <p>From your account dashboard. you can easily check &amp; view your <a href="#">recent orders</a>, manage your <a href="#">shipping and billing addresses</a> and <a href="#">edit your password and account details.</a></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h5 class="mb-0">Your Orders</h5>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Order</th>
+                                                                    <th>Date</th>
+                                                                    <th>Status</th>
+                                                                    <th>Total</th>
+                                                                    <th>Actions</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>#1357</td>
+                                                                    <td>March 45, 2020</td>
+                                                                    <td>Processing</td>
+                                                                    <td>$125.00 for 2 item</td>
+                                                                    <td><a href="#" class="btn-small d-block">View</a></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>#2468</td>
+                                                                    <td>June 29, 2020</td>
+                                                                    <td>Completed</td>
+                                                                    <td>$364.00 for 5 item</td>
+                                                                    <td><a href="#" class="btn-small d-block">View</a></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>#2366</td>
+                                                                    <td>August 02, 2020</td>
+                                                                    <td>Completed</td>
+                                                                    <td>$280.00 for 3 item</td>
+                                                                    <td><a href="#" class="btn-small d-block">View</a></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="track-orders" role="tabpanel" aria-labelledby="track-orders-tab">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h5 class="mb-0">Orders tracking</h5>
+                                                </div>
+                                                <div class="card-body contact-from-area">
+                                                    <p>To track your order please enter your OrderID in the box below and press "Track" button. This was given to you on your receipt and in the confirmation email you should have received.</p>
+                                                    <div class="row">
+                                                        <div class="col-lg-8">
+                                                            <form class="contact-form-style mt-30 mb-50" action="#" method="post">
+                                                                <div class="input-style mb-20">
+                                                                    <label>Order ID</label>
+                                                                    <input name="order-id" placeholder="Found in your order confirmation email" type="text" class="square">
+                                                                </div>
+                                                                <div class="input-style mb-20">
+                                                                    <label>Billing email</label>
+                                                                    <input name="billing-email" placeholder="Email you used during checkout" type="email" class="square">
+                                                                </div>
+                                                                <button class="submit submit-auto-width" type="submit">Track</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="card mb-3 mb-lg-0">
+                                                        <div class="card-header">
+                                                            <h5 class="mb-0">Billing Address</h5>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <address>3522 Interstate<br> 75 Business Spur,<br> Sault Ste. <br>Marie, MI 49783</address>
+                                                            <p>New York</p>
+                                                            <a href="#" class="btn-small">Edit</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="card">
+                                                        <div class="card-header">
+                                                            <h5 class="mb-0">Shipping Address</h5>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <address>4299 Express Lane<br>
+                                                                Sarasota, <br>FL 34249 USA <br>Phone: 1.941.227.4444</address>
+                                                            <p>Sarasota</p>
+                                                            <a href="#" class="btn-small">Edit</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h5>Account Details</h5>
+                                                </div>
+                                                <div class="card-body">
+                                                    <p>Already have an account? <a href="page-login-register.html">Log in instead!</a></p>
+                                                    <form method="post" name="enq">
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label>First Name <span class="required">*</span></label>
+                                                                <input required="" class="form-control square" name="name" type="text" >
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label>Last Name <span class="required">*</span></label>
+                                                                <input required="" class="form-control square" name="phone">
+                                                            </div>
+                                                            <div class="form-group col-md-12">
+                                                                <label>Display Name <span class="required">*</span></label>
+                                                                <input required="" class="form-control square" name="dname" type="text" value="<%= user.username %>">
+                                                            </div>
+                                                            <div class="form-group col-md-12">
+                                                                <label>Email Address <span class="required">*</span></label>
+                                                                <input required="" class="form-control square" name="email" type="email" value="<%= user.email %>">
+                                                            </div>
+                                                            <div class="form-group col-md-12">
+                                                                <label>Mobile Number <span class="required">*</span></label>
+                                                                <input required="" class="form-control square" name="phonenumber" type="number" value="<%= user.phonenumber %>">
+                                                            </div>
+                                                            <div class="form-group col-md-12">
+                                                                <label>Current Password <span class="required">*</span></label>
+                                                                <input required="" class="form-control square" name="password" type="password">
+                                                            </div>
+                                                            <div class="form-group col-md-12">
+                                                                <label>New Password <span class="required">*</span></label>
+                                                                <input required="" class="form-control square" name="npassword" type="password">
+                                                            </div>
+                                                            <div class="form-group col-md-12">
+                                                                <label>Confirm Password <span class="required">*</span></label>
+                                                                <input required="" class="form-control square" name="cpassword" type="password">
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <button type="submit" class="btn btn-fill-out submit" name="submit" value="Submit">Save</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="account-edit" role="tabpanel" aria-labelledby="account-detail-edit">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h5>Account</h5>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label>Name <span ></span></label>
+                                                                <h3><%= user.username %></h3>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label>Email Address <span ></span></label>
+                                                                <h6><%= user.email %></h6>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label>Mobile <span ></span></label>
+                                                                <h6><%= user.phonenumber %></h6>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 text-center">
+                                                            <img src="<%= user.photo_url %>" alt="User photo" class="img-thumbnail">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    
+        <!-- Preloader Start -->
+        <div id="preloader-active">
+            <div class="preloader d-flex align-items-center justify-content-center">
+                <div class="preloader-inner position-relative">
+                    <div class="text-center">
+                        <h5 class="mb-5"> Loading</h5>
+                        <div class="loader">
+                            <div class="bar bar1"></div>
+                            <div class="bar bar2"></div>
+                            <div class="bar bar3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Vendor JS-->
+        <script src="/profile/js/vendor/modernizr-3.6.0.min.js"></script>
+        <script src="/profile/js/vendor/jquery-3.6.0.min.js"></script>
+        <script src="/profile/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+        <script src="/profile/js/vendor/bootstrap.bundle.min.js"></script>
+        <script src="/profile/js/plugins/slick.js"></script>
+        <script src="/profile/js/plugins/jquery.syotimer.min.js"></script>
+        <script src="/profile/js/plugins/wow.js"></script>
+        <script src="/profile/js/plugins/jquery-ui.js"></script>
+        <script src="/profile/js/plugins/perfect-scrollbar.js"></script>
+        <script src="/profile/js/plugins/magnific-popup.js"></script>
+        <script src="/profile/js/plugins/select2.min.js"></script>
+        <script src="/profile/js/plugins/waypoints.js"></script>
+        <script src="/profile/js/plugins/counterup.js"></script>
+        <script src="/profile/js/plugins/jquery.countdown.min.js"></script>
+        <script src="/profile/js/plugins/images-loaded.js"></script>
+        <script src="/profile/js/plugins/isotope.js"></script>
+        <script src="/profile/js/plugins/scrollup.js"></script>
+        <script src="/profile/js/plugins/jquery.vticker-min.js"></script>
+        <script src="/profile/js/plugins/jquery.theia.sticky.js"></script>
+        <!-- Template  JS -->
+        <script src="/profile/js/main.js"></script>
+    </body>
+    
+    
+    <!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/page-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:27:15 GMT -->
+    </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Footer Section Begin -->
+    <footer class="footer-section spad">
+        <div class="container">
+            <div class="newslatter-form">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <form action="#">
+                            <input type="text" placeholder="Your email address">
+                            <button type="submit">Subscribe to our newsletter</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-widget">
+                <div class="row">
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="single-footer-widget">
+                            <h4>About us</h4>
+                            <ul>
+                                <li>About Us</li>
+                                <li>Community</li>
+                                <li>Jobs</li>
+                                <li>Shipping</li>
+                                <li>Contact Us</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="single-footer-widget">
+                            <h4>Customer Care</h4>
+                            <ul>
+                                <li>Search</li>
+                                <li>Privacy Policy</li>
+                                <li>2019 Lookbook</li>
+                                <li>Shipping & Delivery</li>
+                                <li>Gallery</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="single-footer-widget">
+                            <h4>Our Services</h4>
+                            <ul>
+                                <li>Free Shipping</li>
+                                <li>Free Returnes</li>
+                                <li>Our Franchising</li>
+                                <li>Terms and conditions</li>
+                                <li>Privacy Policy</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="single-footer-widget">
+                            <h4>Information</h4>
+                            <ul>
+                                <li>Payment methods</li>
+                                <li>Times and shipping costs</li>
+                                <li>Product Returns</li>
+                                <li>Shipping methods</li>
+                                <li>Conformity of the products</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="social-links-warp">
+			<div class="container">
+				<div class="social-links">
+					<a href="" class="instagram"><i class="fa fa-instagram"></i><span>instagram</span></a>
+					<a href="" class="pinterest"><i class="fa fa-pinterest"></i><span>pinterest</span></a>
+					<a href="" class="facebook"><i class="fa fa-facebook"></i><span>facebook</span></a>
+					<a href="" class="twitter"><i class="fa fa-twitter"></i><span>twitter</span></a>
+					<a href="" class="youtube"><i class="fa fa-youtube"></i><span>youtube</span></a>
+					<a href="" class="tumblr"><i class="fa fa-tumblr-square"></i><span>tumblr</span></a>
+				</div>
+			</div>
+
+<div class="container text-center pt-5">
+                <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart color-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+            </div>
+
+		</div>
+    </footer>
+    <!-- Footer Section End -->
+
+    <!-- Js Plugins -->
+    <script src="/shop/js/jquery-3.3.1.min.js"></script>
+    <script src="/shop/js/bootstrap.min.js"></script>
+    <script src="/shop/js/jquery.magnific-popup.min.js"></script>
+    <script src="/shop/js/jquery.slicknav.js"></script>
+    <script src="/shop/js/owl.carousel.min.js"></script>
+    <script src="/shop/js/jquery.nice-select.min.js"></script>
+    <script src="/shop/js/mixitup.min.js"></script>
+    <script src="/shop/js/main.js"></script>
+</body>
+
+</html>

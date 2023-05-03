@@ -5,8 +5,7 @@ import userHelpers from "../helpers/userHelpers";
 import User from "../models/userModels";
 import Products from "../models/productModels";
 import mongoose from "mongoose";
-import  Cart  from "../models/cartModels";
-
+import Cart from "../models/cartModels";
 
 dotenv.config();
 
@@ -103,8 +102,11 @@ export default {
       let user = userData.user;
       console.log(user);
 
-      if (userData.status) {
+      if (userData.emailStatus) {
         const msg = "Email already exists";
+        res.render("shop/userlogin/signup", { msg });
+      } else if (userData.emailStatus == false) {
+        const msg = "phonenumber already exists";
         res.render("shop/userlogin/signup", { msg });
       } else {
         if (userData.user) {
@@ -212,38 +214,85 @@ export default {
       const cart = await Cart.findOne({ user: user._id }).populate(
         "products.productId"
       );
-  
+
       if (!cart) {
         res.render("shop/emptyCart", { user });
         return;
       }
-    
+
       const products = cart.products;
-  
+
       res.render("shop/cart", { user, products });
     } catch (error) {
       console.error(error);
-      res.render("catchError", { message: error.message, user: req.session.user });
+      res.render("catchError", {
+        message: error.message,
+        user: req.session.user,
+      });
     }
   },
 
   addToCart: async (req, res) => {
-    let user = req.session.user._id
-    let productId=req.params.id
+    let user = req.session.user._id;
+    let productId = req.params.id;
     console.log(productId);
-    console.log(user);
+
     try {
-      const response =await userHelpers.addToCart(user,productId);
+      const response = await userHelpers.addToCart(user, productId);
       if (response) {
-        console.log("product added");
-        res.redirect("/cart")
+        console.log("product added to cart");
+        res.redirect("/cart");
       } else {
-        res.redirect("/cart")
+        res.redirect("/cart");
         console.log("product not added");
       }
-    } catch (error) {
-      
-    } 
-  }
+    } catch (error) {}
+  },
 
+  getProductView: async (req, res) => {
+    let productId = req.params.id;
+    let user = req.session.user || null;
+    try {
+      const response = await userHelpers.getProductView(productId);
+      if (response) {
+        res.render("shop/product-details", { product: response, user });
+      } else {
+        res.redirect("/shop");
+      }
+    } catch (error) {
+      res.redirect("/shop");
+      console.log(error);
+    }
+  },
+
+  getUserProfile: async (req, res) => {
+    let userid = req.params.id;
+
+    try {
+      const response = await userHelpers.getUserDetails(userid);
+      if (response) {
+        res.render("shop/userProfile", { user: response });
+      } else {
+        res.redirect("/shop/login");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  },
+  deleteCartProduct: async (req, res) => {
+    let { productId }= req.body;
+    let userId = req.session.user._id;
+    try{
+      const response = await userHelpers.deleteProductFromCart(userId, productId);
+      if(response.status){
+        res.json({success:true,message:response.message})
+      }else{
+        res.json({success:false,message:response.message})
+      }
+    
+    }catch(error){
+      console.log(error);
+    }
+
+  },
 };

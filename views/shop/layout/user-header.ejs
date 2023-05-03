@@ -55,13 +55,25 @@
                     <a href="/"><img src="shop/img/logo.png" alt=""></a>
                 </div>
                 <div class="header-right">
-                    <img src="shop/img/icons/search.png" alt="" class="search-trigger">
-                    <img src="shop/img/icons/man.png" alt="">
-                    <a href="/cart">
+                    <span style="margin-right: 10px;">
+                      <a href="">
+                        <img src="shop/img/icons/search.png" alt="" class="search-trigger">
+                      </a>
+                    </span>
+                  
+                    <span style="margin-right: 10px;">
+                      <a href="/userProfile/<%= user._id %>">
+                        <img src="shop/img/icons/man.png" alt="">
+                      </a>
+                    </span>
+                  
+                    <span>
+                      <a href="/cart">
                         <img src="shop/img/icons/bag.png" alt="">
-                        <span>2</span>
-                    </a>
-                </div>
+                      </a>
+                    </span>
+                  </div>
+                  
 
                 <% if (user) { %>
                     <div class="user-access">

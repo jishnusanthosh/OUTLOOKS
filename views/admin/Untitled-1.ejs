@@ -1,0 +1,235 @@
+<%- include('../partials/admin-header') %>
+<style>
+    .square-image {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+    }
+</style>
+<section class="content-main">
+    <form action="/admin/editProduct/<%= product._id %>" method="post" enctype="multipart/form-data" >
+    <div class="row">
+        <div class="col-9">
+            <div class="content-header">
+                <%= product.category %>
+                <h2 class="content-title">Edit Product</h2>
+                <div>
+                   
+                    <button class="btn btn-md rounded font-sm hover-up"type="submit">Update Product</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>Basic</h4>
+                </div>
+                <div class="card-body">
+                        <div class="mb-4">
+                            <label for="product_name" class="form-label">Product name</label>
+                            <input type="text" placeholder="Type here" value="<%= product.productName %>" class="form-control" name="productName"id="product_name"required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="product_name" class="form-label">Select Brand</label>
+                            <select class="form-select">
+                                
+                                <% viewBrand.forEach(function(brand) { %>
+                                    
+                                    <option for="product-cat-<%= brand._id %>" > <%= brand.brandName %> </option>
+                                    <% }) %>
+                            </select>
+                            <input type="text" name="viewBrandId" value="" id="viewBrandId" hidden>
+                        </div>
+                        <div class="mb-4">
+                            <label for="product_name" class="form-label">Color</label>
+                            <input type="text" placeholder="Type here" class="form-control" value="<%= product.productColor %>" name="productColor"id="product_color">
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label class="form-label">Price</label>
+                                    <div class="row gx-2">
+                                        <input placeholder="$" type="text" class="form-control" value="<%= product.productPrice %>"name="productPrice"id="product_price"required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label class="form-label">Product quantity</label>
+                                    <input placeholder="quantity" type="text" class="form-control"value="<%= product.productQuantity %>" name="productQuantity" id="product_quantity"required>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" value="<%= product.productStatus %>" name="productStatus">
+                                <option>listed</option>
+                                <option>Unlisted</option>
+                            </select>
+                        </div> 
+                       
+                        
+                   
+                </div>
+            </div> <!-- card end// -->
+          
+        </div>
+        <div class="col-lg-3">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>Media</h4>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <label class="form-label" >Images</label>
+                        <input class="form-control" type="file" name="productImage" >
+                        <img src="/uploads/<%= product.productImage%>" class="img-thumbnail square-image " id="imgView">
+                    </div>
+                    <input type="text" name="productImage" value="<%= product.productImage  %>" id="viewBrandId"onchange="viewImage(event)" hidden>
+                </div>
+            </div> <!-- card end// -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>Category</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row gx-2">
+                        <div class="col-sm-6 mb-3">
+                           
+                            <% viewCategory.forEach(function(category) { %>
+                                <div class="form-check">
+                                  <input onclick="categoryCheck('<%= category._id %>')" class="form-check-input" type="checkbox" value="<%= category._id %>"
+                                    id="product-cat<%= category._id %>" name="product-cat">
+                                  <label class="form-check-label" for="product-cat-<%= category._id %>">
+                                    <%= category.CategoryName %>
+                                  </label>
+                                </div>
+                                <% }) %>
+                                <input type="text" name="viewCategoryId" value="" id="viewCategoryId" hidden>
+                        </div>
+                        
+                        
+                    </div> <!-- row.// -->
+                </div>
+            </div> <!-- card end// -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>Brand</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row gx-2">
+                        
+                        <div class="col-sm-6 mb-3">
+                            <label class="form-label">Brand</label>
+                            <% viewBrand.forEach(function(brand) { %>
+                             
+                                <div class="form-check">
+                                    <input  onclick="brandCheck('<%= brand._id %>')"   class="form-check-input" type="checkbox"  value="<%= brand._id %>"
+                                        id="product-bnd<%= brand._id %>" name="product-bnd" >
+                                    <label class="form-check-label" for="product-bnd <%= viewBrand._id %>">
+                                        <%= brand.brandName %>
+                                    </label>
+                                </div>
+                             
+                                <% }) %>
+                                <input type="text" name="viewBrandId" value="" id="viewBrandId" hidden>
+                        </div>
+                     
+                        
+                    </div> <!-- row.// -->
+                </div>
+            </div> 
+        </div>
+    </div>
+    </form>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function viewImage(event){
+            document.getElementById('imgView').src=URL.createObjectURL(event.target.files[0])
+        }
+    </script>
+    <script>
+        const categoryId = '<%= product.category %>';
+  const categoryInput = document.getElementById('viewCategoryId');
+  const checkboxes = document.querySelectorAll('input[name="product-cat"]');
+
+  checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener('click', () => {
+      if (checkbox.checked) {
+        checkboxes.forEach((otherCheckbox) => {
+          if (otherCheckbox !== checkbox) {
+            otherCheckbox.disabled = true;
+          }
+        });
+        categoryInput.value = checkbox.value;
+      } else {
+        checkboxes.forEach((otherCheckbox) => {
+          if (otherCheckbox !== checkbox) {
+            otherCheckbox.disabled = false;
+          }
+        });
+        categoryInput.value = '';
+      }
+    });
+  });
+
+  function selectCategory(categoryId) {
+    checkboxes.forEach((checkbox) => {
+      if (checkbox.value === categoryId) {
+        checkbox.checked = true;
+        checkbox.disabled = false;
+        categoryInput.value = categoryId;
+      } else {
+        checkbox.checked = false;
+        checkbox.disabled = true;
+      }
+    });
+  }
+
+  selectCategory(categoryId);
+    </script>
+     <script>
+        const brandId = '<%= product.brand %>';
+  const brandInput = document.getElementById('viewBrandId');
+  const checkbrand = document.querySelectorAll('input[name="product-bnd"]');
+
+  checkbrand.forEach((checkbox) => {
+    checkbox.addEventListener('click', () => {
+      if (checkbox.checked) {
+        checkbrand.forEach((otherCheckbox) => {
+          if (otherCheckbox !== checkbox) {
+            otherCheckbox.disabled = true;
+          }
+        });
+        brandInput.value = checkbox.value;
+      } else {
+        checkbrand.forEach((otherCheckbox) => {
+          if (otherCheckbox !== checkbox) {
+            otherCheckbox.disabled = false;
+          }
+        });
+        brandInput.value = '';
+      }
+    });
+  });
+
+  function selectBrand(brandId) {
+    checkbrand.forEach((checkbox) => {
+      if (checkbox.value === brandId) {
+        checkbox.checked = true;
+        checkbox.disabled = false;
+        brandInput.value = brandId;
+      } else {
+        checkbox.checked = false;
+        checkbox.disabled = true;
+      }
+    });
+  }
+
+  selectBrand(brandId);
+    </script>
+   
+</section> <!-- content-main end// -->
+<%- include('../partials/admin-footer') %>

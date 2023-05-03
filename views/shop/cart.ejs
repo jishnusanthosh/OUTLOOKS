@@ -48,6 +48,7 @@
     <!-- Page Add Section End -->
 
     <!-- Cart Page Section Begin -->
+   
     <div class="cart-page">
         <div class="container">
             <div class="cart-table">
@@ -67,8 +68,8 @@
                                 <td class="product-col">
                                     <div class="product-images">
                                         <% product.productId.productImage.forEach(image => { %>
-                                            <img src="/uploads/<%= product.productId.productImage %>.jpg" alt="">
-                                        <% }) %>
+                                            <img src="/uploads/<%= product.productId.productImage %>.jpg" alt="" width="130" height="150">
+                                            <% }) %>
                                     </div>
                                     <div class="p-title">
                                         <h5><%= product.productId.productName %></h5>
@@ -81,10 +82,16 @@
                                     </div>
                                 </td>
                                 <td class="total">$29</td>
-                                <td class="product-close">x</td>
+                                <a>
+                                   
+                                    <td onclick="productRemove('<%= product.productId._id %>')" class="product-close">x</td>
+                                </a>
+                                
                             </tr>
                         <% }) %>
                     </tbody>
+                                <%= console.log("==================================="); %>
+                              
                     
                 </table>
             </div>
@@ -181,3 +188,32 @@
 </body>
 
 </html>
+<script>
+	function productRemove(productId) {
+		console.log(productId);
+		swal("Do you want to remove this item from cart?", {
+			buttons: ["No", "yes"],
+		}).then((res) => {
+			if (res) {
+				$.ajax({
+					url: '/deleteCartProduct',
+					data:{
+						productId:productId
+					},
+					type: 'post',
+				})
+				.done((res) => {
+					swal("Successful",`${res.message}`,"success").then(()=>{
+                        location.reload()
+					})
+					
+				})
+				.fail((error) => {
+					console.log(error);
+				})	
+			}
+		})
+
+	}
+</script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
