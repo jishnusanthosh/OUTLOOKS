@@ -95,21 +95,31 @@
 
                                             <td>
                                                 <% if (user.isActive) { %>
-                                                  <span id="user-status-<%= user._id %>" class="badge rounded-pill alert-success">Active</span>
-                                                <% } else { %>
-                                                  <span id="user-status-<%= user._id %>" class="badge rounded-pill alert-danger">Inactive</span>
-                                                <% } %>
-                                              </td>
-                                              
-                                              <td class="text-end">
+                                                    <span id="user-status-<%= user._id %>"
+                                                        class="badge rounded-pill alert-success">Active</span>
+                                                    <% } else { %>
+                                                        <span id="user-status-<%= user._id %>"
+                                                            class="badge rounded-pill alert-danger">Inactive</span>
+                                                        <% } %>
+                                            </td>
+
+                                            <td class="text-end">
                                                 <% if (user.isActive) { %>
-                                                  <button id="block-unblock-button-<%= user._id %>" data-userid="<%= user._id %>" class="btn btn-danger rounded font-sm mt-15"onclick="toggleUserBlockStatus('<%= user._id %>', <%= user.isActive %>)">Block</button>
-                                                <% } else { %>
-                                                  <button id="block-unblock-button-<%= user._id %>" data-userid="<%= user._id %>" class="btn btn-info rounded font-sm mt-15" onclick="toggleUserBlockStatus('<%= user._id %>', <%= user.isActive %>)">Unblock</button>
-                                                <% } %>
-                                                <a href="/admin/viewUser/<%= user._id %>" class="btn btn-brand rounded font-sm mt-15">View details</a>
-                                              </td>
-                                              
+                                                    <button id="block-unblock-button-<%= user._id %>"
+                                                        data-userid="<%= user._id %>"
+                                                        class="btn btn-danger rounded font-sm mt-15"
+                                                        onclick="toggleUserBlockStatus('<%= user._id %>', <%= user.isActive %>)">Block</button>
+                                                    <% } else { %>
+                                                        <button id="block-unblock-button-<%= user._id %>"
+                                                            data-userid="<%= user._id %>"
+                                                            class="btn btn-info rounded font-sm mt-15"
+                                                            onclick="toggleUserBlockStatus('<%= user._id %>', <%= user.isActive %>)">Unblock</button>
+                                                        <% } %>
+                                                            <a href="/admin/viewUser/<%= user._id %>"
+                                                                class="btn btn-brand rounded font-sm mt-15">View
+                                                                details</a>
+                                            </td>
+
                                         </tr>
                                         <% count++; %>
                                             <% }); %>
@@ -166,76 +176,74 @@
 
 
         <script>
-            
+
             function toggleUserBlockStatus(userId, isActive) {
-    const url = isActive ? `/admin/blockuser/${userId}` :  `/admin/unblockuser/${userId}`;
+                const url = isActive ? `/admin/blockuser/${userId}` : `/admin/unblockuser/${userId}`;
 
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'ok'
-    }).then(async (result) => {
-        if (result.isConfirmed) {
-            try {
-                const response = await fetch(url, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json"
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'ok'
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        try {
+                            const response = await fetch(url, {
+                                method: "PUT",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                }
+                            });
+                            console.log(response);
+                            if (response.status === 200) {
+                                const userStatusBadge = document.getElementById(`user-status-${userId}`);
+                                const blockUnblockButton = document.getElementById(`block-unblock-button-${userId}`);
+
+                                if (isActive) {
+                                    userStatusBadge.classList.remove('alert-success');
+                                    userStatusBadge.classList.add('alert-danger');
+                                    userStatusBadge.innerText = 'Inactive';
+
+                                    blockUnblockButton.classList.remove('btn-danger');
+                                    blockUnblockButton.classList.add('btn-info');
+                                    blockUnblockButton.innerText = 'Unblock';
+                                } else {
+                                    userStatusBadge.classList.remove('alert-danger');
+                                    userStatusBadge.classList.add('alert-success');
+                                    userStatusBadge.innerText = 'Active';
+
+                                    blockUnblockButton.classList.remove('btn-info');
+                                    blockUnblockButton.classList.add('btn-danger');
+                                    blockUnblockButton.innerText = 'Block';
+                                }
+
+                                Swal.fire(
+                                    `${isActive ? 'Blocked' : 'Unblocked'}!`,
+                                    `User has been ${isActive ? 'Blocked' : 'Unblocked'}.`,
+                                    'success'
+                                );
+                            } else {
+                                Swal.fire(
+                                    'Error!',
+                                    `Failed to ${isActive ? 'Block' : 'Unblock'} User.`,
+                                    'error'
+                                );
+                            }
+
+                        } catch (error) {
+                            console.error(`${error.message}`);
+                        }
                     }
-                });
-                console.log(response);
-                if (response.status === 200) {
-                    const userStatusBadge = document.getElementById(`user-status-${userId}`);
-                    const blockUnblockButton = document.getElementById(`block-unblock-button-${userId}`);
-                  
-                    if (isActive) {
-                        userStatusBadge.classList.remove('alert-success');
-                        userStatusBadge.classList.add('alert-danger');
-                        userStatusBadge.innerText = 'Inactive';
-
-                        blockUnblockButton.classList.remove('btn-danger');
-                        blockUnblockButton.classList.add('btn-info');
-                        blockUnblockButton.innerText = 'unblock';
-                    } else {
-                        userStatusBadge.classList.remove('alert-danger');
-                        userStatusBadge.classList.add('alert-success');
-                        userStatusBadge.innerText = 'Active';
-
-                        blockUnblockButton.classList.remove('btn-info');
-                        blockUnblockButton.classList.add('btn-danger');
-                        blockUnblockButton.innerText = 'block';
-                    }
-
-                    Swal.fire(
-                        `${isActive ? 'Blocked' : 'Unblocked'}!`,
-                        `User has been ${isActive ? 'Blocked' : 'Unblocked'}.`,
-                        'success'
-                    );
-                } else {
-                    Swal.fire(
-                        'Error!',
-                        `Failed to ${isActive ? 'Block' : 'Unblock'} User.`,
-                        'error'
-                    );
-                }
-
-            } catch (error) {
-                console.error(`${error.message}`);
+                })
             }
-        }
-    })
-}
 
 
         </script>
 
 </body>
 
-
-<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-sellers-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:23 GMT -->
 
 </html>

@@ -21,13 +21,14 @@
         rel="stylesheet">
 
     <!-- Css Styles -->
-    <link rel="stylesheet" href="shop/css/bootstrap.min.css" type="text/css">
-    <link rel="stylesheet" href="source/css/font-awesome.min.css" type="text/css">
-    <link rel="stylesheet" href="shop/css/nice-select.css" type="text/css">
-    <link rel="stylesheet" href="shop/css/owl.carousel.min.css" type="text/css">
-    <link rel="stylesheet" href="shop/css/magnific-popup.css" type="text/css">
-    <link rel="stylesheet" href="shop/css/slicknav.min.css" type="text/css">
-    <link rel="stylesheet" href="shop/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/bootstrap.min.css.map" >
 </head>
 
 <body>
@@ -52,26 +53,54 @@
         <div class="container-fluid">
             <div class="inner-header">
                 <div class="logo">
-                    <a href="/"><img src="shop/img/logo.png" alt=""></a>
+                    <a href="/"><img src="/shop/img/logo.png" alt=""></a>
                 </div>
                 <div class="header-right">
                     <span style="margin-right: 10px;">
                       <a href="">
-                        <img src="shop/img/icons/search.png" alt="" class="search-trigger">
+                        <img src="/shop/img/icons/search.png" alt="" class="search-trigger">
                       </a>
                     </span>
                   
-                    <span style="margin-right: 10px;">
+                    <% if (user) {  %>
+                        <span style="margin-right: 10px;">
                       <a href="/userProfile/<%= user._id %>">
-                        <img src="shop/img/icons/man.png" alt="">
+                        <img src="/shop/img/icons/man.png" alt="">
                       </a>
                     </span>
+                    <%  } else if (!user){ %>
+                        <span style="margin-right: 10px;">
+                            <img src="/shop/img/icons/man.png" alt="">
+                            </span>
+                        
+                        <% } %>
                   
-                    <span>
-                      <a href="/cart">
-                        <img src="shop/img/icons/bag.png" alt="">
-                      </a>
-                    </span>
+            
+                      
+                        
+                       
+                        <% if (user) { %>
+
+                            <% if (cartCount) { %>
+                                <a href="/cart">
+                                    <img src="/shop/img/icons/bag.png" alt="">
+                                  <span class="badge badge-soft-light" id="cart-count"><%= cartCount %></span>
+                                </a>
+            
+                            
+                            <% } else { %>
+                                <a href="/cart">
+                                    <img src="/shop/img/icons/bag.png" alt="">
+                                  <span class="badge badge-soft-light"><%= cartCount %></span>
+                                </a>
+                                <% } %>
+                            
+                          <% } %>
+                          
+
+                       
+                       
+            
                   </div>
                   
 
@@ -87,30 +116,34 @@
                             <a href="/login" class="in">Sign in</a>
                         </div>
                       <% } %>
-    
-                <nav class="main-menu mobile-menu">
-                    <ul>
-                        <li><a href="/men">Men</a>
+                      <nav class="main-menu mobile-menu">
+                        <ul>
+                          <li><a href="/">Home</a></li>
+                      
+                          <li><a href="/">Shop</a>
                             <ul class="sub-menu">
-                                <li><a href="product-page.html">Suits</a></li>
-                                <li><a href="shopping-cart.html">Wedding Dress</a></li>
-                                <li><a href="check-out.html">Casual</a></li>
+                              <% for(let i = 0; i < allcategory.length; i++) { %>
+                                <li><a href="/shopView/<%= allcategory[i]._id %>"><%= allcategory[i].CategoryName %></a>
+                                  <% if (allcategory[i].SubCategories && allcategory[i].SubCategories.length > 0) { %>
+                                    <ul class="sub-menu">
+                                      <% for(let j = 0; j < allcategory[i].SubCategories.length; j++) { %>
+                                        <li><a href="#"><%= allcategory[i].SubCategories[j] %></a></li>
+                                      <% } %>
+                                    </ul>
+                                  <% } %>
+                                </li>
+                              <% } %>
                             </ul>
-                        </li>
-
-                        <li><a href="/women">Women</a>
-                            <ul class="sub-menu">
-                                <li><a href="product-page.html">Formals</a></li>
-                                <li><a href="shopping-cart.html">Wedding Dress</a></li>
-                                <li><a href="check-out.html">Casuals</a></li>
-                            </ul>
-                        </li>
-
-                        <li><a href="./product-page.html">About</a></li>
-                        <li><a href="./check-out.html">Blog</a></li>
-                        <li><a href="./contact.html">Contact</a></li>
-                    </ul>
-                </nav>
+                          </li>
+                      
+                          <li><a href="./product-page.html">About</a></li>
+                          <li><a href="./check-out.html">Blog</a></li>
+                          <li><a href="./contact.html">Contact</a></li>
+                        </ul>
+                      </nav>
+                      
+                      
+                
             </div>
         </div>
     </header>

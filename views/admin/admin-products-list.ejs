@@ -119,6 +119,7 @@
                                           <button id="block-unblock-button-<%= product._id %>" data-productid="<%=product._id %>" class="btn btn-info rounded font-sm mt-15" onclick="toggleUserBlockStatus('<%= product._id %>',<%= product.productStatus %>)">Unblock</button>
                                         <% } %>
                                         <a href="/admin/viewProduct/<%= product._id %>" class="btn btn-brand rounded font-sm mt-15">View details</a>
+                                        <a href="/admin/admin-edit-product/<%= product._id %>" class="btn btn-brand rounded font-sm mt-15">Edit</a>
                                       </td>
                                       
 

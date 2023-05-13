@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="/shop/css/magnific-popup.css" type="text/css">
     <link rel="stylesheet" href="/shop/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="/shop/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/profile/css/magiczoomplus.css">
 
 
 
@@ -29,7 +30,9 @@
         .th-space {
           padding-right: 20px;
         }
+       
       </style>
+    
 </head>
 
 <body>
@@ -130,160 +133,198 @@
         </div>
     </div>
     <!-- Header Info End -->
-    <!-- Header End -->
 
-    <!-- Page Add Section Begin -->
-    <section class="page-add">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="page-breadcrumb">
-                        <h2>Shirts<span>.</span></h2>
-                        <a href="#">Home</a>
-                        <a href="#">Dresses</a>
-                        <a class="active" href="#">Night Dresses</a>
+    <!DOCTYPE html>
+    <html class="no-js" lang="en">
+    
+    
+    <!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/page-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:27:15 GMT -->
+    <head>
+        <meta charset="utf-8">
+        <title>Outlooks</title>
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta property="og:title" content="">
+        <meta property="og:type" content="">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/x-icon" href="/profile/imgs/theme/favicon.svg">
+        <!-- Template CSS -->
+        <link rel="stylesheet" href="/profile/css/main.css">
+    </head>
+    <body>
+        <main class="main">
+            <div class="page-header breadcrumb-wrap">
+                <div class="container">
+                    <div class="breadcrumb">
+                        <a href="index.html" rel="nofollow">Home</a>
+                        <span></span> Fashion
+                        <span></span> Abstract Print Patchwork Dress
                     </div>
-                </div>
-                <div class="col-lg-8">
-                    <img src="/shop/img/add.jpg" alt="">
                 </div>
             </div>
-        </div>
-    </section>
-    <!-- Page Add Section End -->
-
-    <!-- Product Page Section Begin -->
-    <section class="product-page">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-5">
-                    <div class="product-slider owl-carousel">
-                        <div class="product-img">
-                            <figure>
-                                <img src="/uploads/<%= product.productImage %>.jpg" alt="">
-                                <div class="p-status">new</div>
-                            </figure>
-                        </div>
-                        <div class="product-img">
-                            <figure>
-                                <img src="/uploads/<%= product.productImage %>.jpg" alt="">
-                                <div class="p-status">new</div>
-                            </figure>
-                        </div>
-                    </div>
-                    
-                </div>
-                <div class="col-lg-6">
-                    <div class="product-content">
-                        <h2><%= product.productName %></h2>
-                        <div class="pc-meta">
-                            <h5>Rs. <%= product.productPrice %></h5>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
+            <section class="mt-50 mb-50 " >
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="product-detail accordion-detail">
+                                <div class="row mb-50">
+                                    <div class="col-md-6 col-sm-12 col-xs-12">
+                                        <div class="detail-gallery">
+                                            <span class="zoom-icon"><i class="fi-rs-search"></i></span>
+                                            <!-- MAIN SLIDES -->
+                                            <div class="product-image-slider">
+                                               
+                                                <a class="MagicZoom" title="Product image" href="/uploads/<%=product.productImage%>.jpg"
+                                                    data-zoom-image-2x="/uploads/<%=product.productImage%>.jpg"
+                                                    data-image-2x="/uploads/<%=product.productImage%>.jpg">
+                                                    <img data-hash="product-1" src="/uploads/<%=product.productImage%>.jpg"
+                                                        srcset="/uploads/<%=product.productImage%>.jpg" alt="" />
+                                                </a>
+                                             
+                                            </div>
+                                            <!-- THUMBNAILS -->
+                                            
+                                        </div>
+                                        <!-- End Gallery -->
+                                    </div>
+                                    <div class="col-md-6 col-sm-12 col-xs-12">
+                                        <div class="detail-info">
+                                            <h2 class="title-detail"><%=product.productName%></h2>
+                                            <div class="product-detail-rating">
+                                                <div class="pro-details-brand">
+                                                    <span> Brands: <a href="shop-grid-right.html"><%=product.productBrand%></a></span>
+                                                </div>
+                                                <div class="product-rate-cover text-end">
+                                                    <div class="product-rate d-inline-block">
+                                                        <div class="product-rating" style="width:90%">
+                                                        </div>
+                                                    </div>
+                                                    <span class="font-small ml-5 text-muted"> (25 reviews)</span>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix product-price-cover">
+                                                <div class="product-price primary-color float-left">
+                                                    <ins><span class="text-brand">Rs. <%=product.productPrice%></span></ins>
+                                                    <ins><span class="old-price font-md ml-15">Rs.2000.00</span></ins>
+                                                    <span class="save-price  font-md color3 ml-15">25% Off</span>
+                                                </div>
+                                            </div>
+                                            <div class="bt-1 border-color-1 mt-15 mb-15"></div>
+                                            <div class="short-desc mb-30">
+                                                <p><%=product.productDescription%></p>
+                                            </div>
+                                            <div class="product_sort_info font-xs mb-30">
+                                                <ul>
+                                                    <li class="mb-10"><i class="fi-rs-crown mr-5"></i> 1 Year AL Jazeera Brand Warranty</li>
+                                                    <li class="mb-10"><i class="fi-rs-refresh mr-5"></i> 30 Day Return Policy</li>
+                                                    <li><i class="fi-rs-credit-card mr-5"></i> Cash on Delivery available</li>
+                                                </ul>
+                                            </div>
+                                            <div class="attr-detail attr-color mb-15">
+                                                <strong class="mr-10">Color</strong>
+                                                <ul class="list-filter color-filter">
+                                                    <li><a href="#" data-color="Red"><span class="product-color-red"></span></a></li>
+                                                    <li><a href="#" data-color="Yellow"><span class="product-color-yellow"></span></a></li>
+                                                    <li ><a href="#" data-color="White"><span class="product-color-white"></span></a></li>
+                                                    <li><a href="#" data-color="Orange"><span class="product-color-orange"></span></a></li>
+                                                    <li><a href="#" data-color="Cyan"><span class="product-color-cyan"></span></a></li>
+                                                    <li><a href="#" data-color="Green"><span class="product-color-green"></span></a></li>
+                                                    <li><a href="#" data-color="Purple"><span class="product-color-purple"></span></a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="attr-detail attr-size">
+                                                <strong class="mr-10">Size</strong>
+                                                <ul class="list-filter size-filter font-small">
+                                                    <li><a href="#">S</a></li>
+                                                    <li><a href="#">M</a></li>
+                                                    <li><a href="#">L</a></li>
+                                                    <li><a href="#">XL</a></li>
+                                                    <li><a href="#">XXL</a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+                                            <div class="detail-extralink">
+                                                <div class="detail-qty border radius">
+                                                    <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
+                                                    <span class="qty-val">1</span>
+                                                    <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
+                                                </div>
+                                                <div class="product-extra-link2">
+                                                    <button type="submit" class="button button-add-to-cart">Add to cart</button>
+                                                    <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
+                                                    <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+                                                </div>
+                                            </div>
+                                            <ul class="product-meta font-xs color-grey mt-50">
+                                                <li class="mb-5">SKU: <a href="#">FWM15VKT</a></li>
+                                                <li class="mb-5">Tags: <a href="#" rel="tag">Cloth</a>, <a href="#" rel="tag">Women</a>, <a href="#" rel="tag">Dress</a> </li>
+                                                <li>Availability:<span class="in-stock text-success ml-5">8 Items In Stock</span></li>
+                                            </ul>
+                                        </div>
+                                        <!-- Detail Info -->
+                                    </div>
+                                </div>
+                                
+                                
+                                
                             </div>
                         </div>
-                        <p><%= product.productDescription %></p>
-                        <ul class="tags">
-                            <li><span>Brand :</span><%= product.productBrand %> </li>
-                            <li><span>Category :</span> <%= product.category.CategoryName %></li>
-                            
-                        </ul>
-                        <div class="product-quantity">
-                            <div class="pro-qty">
-                                <input type="text" value="1">
-                            </div>
-                        </div>
-                        <a href="/addToCart/<%= product._id %>" class="primary-btn pc-btn">Add to cart</a>
-                        <br>
-                        <br>
-                        <table>
-                            <thead>
-                              <tr>
-                                <th class="th-space">Size</th>
-                                <th class="th-space">Color</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td><%= product.productSize %></td>
-                                <td><%= product.productColor %></td>
-                              </tr>
-                            </tbody>
-                          </table>
-                          
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-    <!-- Product Page Section End -->
-    <!-- Related Product Section Begin -->
-    <section class="related-product spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <div class="section-title">
-                        <h2>Related Products</h2>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-3 col-sm-6">
-                    <div class="single-product-item">
-                        <figure>
-                            <a href="#"><img src="/shop/img/products/img-1.jpg" alt=""></a>
-                            <div class="p-status">new</div>
-                        </figure>
-                        <div class="product-text">
-                            <h6>Green Dress with details</h6>
-                            <p>$22.90</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="single-product-item">
-                        <figure>
-                            <a href="#"><img src="/shop/img/products/img-2.jpg" alt=""></a>
-                            <div class="p-status sale">sale</div>
-                        </figure>
-                        <div class="product-text">
-                            <h6>Yellow Maxi Dress</h6>
-                            <p>$25.90</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="single-product-item">
-                        <figure>
-                            <a href="#"><img src="/shop/img/products/img-3.jpg" alt=""></a>
-                            <div class="p-status">new</div>
-                        </figure>
-                        <div class="product-text">
-                            <h6>One piece bodysuit</h6>
-                            <p>$19.90</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="single-product-item">
-                        <figure>
-                            <a href="#"><img src="/shop/img/products/img-4.jpg" alt=""></a>
-                            <div class="p-status popular">popular</div>
-                        </figure>
-                        <div class="product-text">
-                            <h6>Blue Dress with details</h6>
-                            <p>$35.50</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Related Product Section End -->
+            </section>
+        </main>
+
+
+  
+            <!-- Preloader Start -->
+      
+        <!-- Vendor JS-->
+        <script src="/profile/js/vendor/modernizr-3.6.0.min.js"></script>
+        <script src="/profile/js/vendor/jquery-3.6.0.min.js"></script>
+        <script src="/profile/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+        <script src="/profile/js/vendor/bootstrap.bundle.min.js"></script>
+        <script src="/profile/js/plugins/slick.js"></script>
+        <script src="/profile/js/plugins/jquery.syotimer.min.js"></script>
+        <script src="/profile/js/plugins/wow.js"></script>
+        <script src="/profile/js/plugins/jquery-ui.js"></script>
+        <script src="/profile/js/plugins/perfect-scrollbar.js"></script>
+        <script src="/profile/js/plugins/magnific-popup.js"></script>
+        <script src="/profile/js/plugins/select2.min.js"></script>
+        <script src="/profile/js/plugins/waypoints.js"></script>
+        <script src="/profile/js/plugins/counterup.js"></script>
+        <script src="/profile/js/plugins/jquery.countdown.min.js"></script>
+        <script src="/profile/js/plugins/images-loaded.js"></script>
+        <script src="/profile/js/plugins/isotope.js"></script>
+        <script src="/profile/js/plugins/scrollup.js"></script>
+        <script src="/profile/js/plugins/jquery.vticker-min.js"></script>
+        <script src="/profile/js/plugins/jquery.theia.sticky.js"></script>
+        <!-- Template  JS -->
+        <script src="/profile/js/main.js"></script>
+    </body>
+    
+    
+    <!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/page-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:27:15 GMT -->
+    </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <!-- Footer Section Begin -->
     <footer class="footer-section spad">
@@ -382,6 +423,8 @@
     <script src="/shop/js/jquery.nice-select.min.js"></script>
     <script src="/shop/js/mixitup.min.js"></script>
     <script src="/shop/js/main.js"></script>
+    <script src="/profile/js/magiczoomplus.js"></script>
+    <script src="/profile/js/magiczoomplus.min.js"></script>
 </body>
 
 </html>

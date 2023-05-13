@@ -262,8 +262,7 @@
                 </div>
             </div>
 
-
-
+           
 
               <div class="row">
                 <% for (var i=0; i < allproducts.length; i++) { %>
@@ -284,7 +283,7 @@
                                     </figure>
                                     <div class="product-text">
                                         <div class="product-name">
-                                            <a href="#">
+                                            <a href="/viewProduct/<%= allproducts[i]._id %>">
                                                 <h4>
                                                     <%= allproducts[i].productName %>
                                                 </h4>
@@ -298,7 +297,7 @@
                                         </h6>
                                         <div class="product-buttons">
                                             <a href="#" class="buy-button">Buy Now</a>
-                                            <a href="/addToCart/<%=allproducts[i]._id %>" class="add-to-cart-button">Add to Cart</a>
+                                            <button onclick="AddToCart('<%= allproducts[i]._id %>')" class="add-to-cart-button">Add to Cart</button>
                                         </div>
                                     </div>
                                 </div>
@@ -319,7 +318,7 @@
                                         </figure>
                                         <div class="product-text">
                                             <div class="product-name">
-                                                <a href="#">
+                                                <a href="/viewProduct/<%= allproducts[i]._id %>">
                                                     <h4>
                                                         <%= allproducts[i].productName %>
                                                     </h4>
@@ -333,8 +332,8 @@
                                             </h6>
                                             <div class="product-buttons">
                                                 <a href="#" class="buy-button">Buy Now</a>
-                                                <a href="/addToCart/<%= allproducts[i]._id %>" class="add-to-cart-button" data-product-id="<%= allproducts[i]._id %>">Add to Cart</a>
-
+                                                
+                                                <button onclick="AddToCart('<%= allproducts[i]._id %>')" class="add-to-cart-button">Add to Cart</button>
 
                                             </div>
                                         </div>
@@ -346,34 +345,11 @@
                                     <% } %>
 
 
-
-
-
-
-
                                         <% } %>
             </div>
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-           
                
     </section>
     <!-- Latest Product End -->
@@ -443,6 +419,29 @@
     <script src="shop/js/jquery.nice-select.min.js"></script>
     <script src="shop/js/mixitup.min.js"></script>
     <script src="shop/js/main.js"></script>
+    <script>
+        function AddToCart(productId) {
+            $.ajax({
+                url:'/addToCart/'+productId,
+                method:'get',
+                success:(response)=>{
+                    if (response.status) {
+                        let coubt=$('#cart-count').html()
+                        count=parseInt(count)+1
+                        $("#cart-count").html(count)
+                    }
+                },
+                error:function(e){
+                    console.log(e)
+                }
+
+            })
+            
+        }
+    </script>
+
+
+
 </body>
 
 </html>

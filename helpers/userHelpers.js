@@ -94,32 +94,36 @@ export default {
     });
   },
   addToCart: async (userId, productId) => {
-    // Find product
-
     try {
-      const product = await Product.findById(productId);
-
-      if (!product) {
-        throw new Error("Product not found");
-      }
-
-      const quantity = product.productQuantity;
-
-      if (quantity <= 0) {
-        return false;
-      }
-
-      await Cart.updateOne(
-        { user: userId },
-        { $push: { products: { productId, quantity: 1 } } },
-        { upsert: true }
-      );
-
-      return true;
+        const product = await Product.findById(productId);
+        if (!product) {
+            throw new Error("Product not found");
+        }
+        const quantity = product.productQuantity;
+        if (quantity <= 0) {
+            return false;
+        }
+        let cart = await Cart.findOne({ user: userId });
+        if (!cart) {
+            // if cart doesn't exist for the user, create a new one
+            cart = new Cart({ user: userId, products: [] });
+        }
+        // check if the product is already present in the cart
+        const index = cart.products.findIndex((p) => p.productId == productId);
+        if (index === -1) {
+            // if the product is not present in the cart, add a new entry
+            cart.products.push({ productId, quantity: 1 });
+        } else {
+            // if the product is already present, increase its quantity
+            cart.products[index].quantity += 1;
+        }
+        await cart.save();
+        return true;
     } catch (error) {
-      console.error(error);
+        console.error(error);
     }
-  },
+},
+
   getCartProducts: async (userId) => {
     try {
       const cart = await Cart.findOne({ user: userId });
@@ -168,7 +172,7 @@ export default {
       }
 
       const cart = await Cart.findOne({ user: userId });
-      console.log(cart);
+     
       if (cart) {
         const itemIndex = cart.products.findIndex((item) =>
           item.productId.equals(productId)
@@ -193,4 +197,65 @@ export default {
       console.error(error);
     }
   },
+  getCartCount: async(userId)=>{
+    try {
+      const cart = await Cart.findOne({ user: userId});
+      if (!cart) {
+        return { status: false, message: "cart not found" };
+      }
+      return cart.products.length;
+      
+    } catch (error) {
+      console.error(error);
+      return { status: false, message: "cart not found" };
+      }
+  },
+  updateProductQuantity: async(productId,count,userId)=>{
+
+ 
+    try {
+      const cart = await Cart.findOne({user:userId});
+
+
+      const product = cart.products.find(
+        (p) => p.productId.toString() === productId
+      );
+        if (!product) {
+          console.log("product not found");
+        } 
+        else{
+          product.quantity = count;
+          await cart.save();
+          return { status: true, message: "product quantity updated" };
+        }
+    } catch (error) {
+      console.error(error);
+    }
+    
+      },
+
+
+
+      getCartTotal: async(user)=>{
+        try {
+          const cart = await Cart.findOne({ user: user._id }).populate('products.productId')
+          console.log(cart);
+          if (!cart) {
+            return { status: false, message: "cart not found" };
+          }
+          let total = 0;
+          cart.products.forEach((item) => {
+          
+            total += item.productId.productPrice * item.quantity;
+          });
+          console.log(total);
+          return total;
+        } catch (error) {
+          console.error(error);
+          return { status: false, message: "cart not found" };
+        }
+      },
+     
+
+  
 };

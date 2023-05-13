@@ -1,0 +1,443 @@
+<%- include('../shop/layout/user-header.ejs') %>
+    <!-- Header Section Begin -->
+    <link rel="stylesheet" href="/profile/css/magiczoomplus.css">
+    <link rel="stylesheet" href="/shop/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/bootstrap.min.css.map" >
+ 
+
+    <!-- Header Info Begin -->
+    <div class="header-info">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="header-item">
+                        <img src="/shop/img/icons/delivery.png" alt="">
+                        <p>Free shipping on orders over $30 in USA</p>
+                    </div>
+                </div>
+                <div class="col-md-4 text-left text-lg-center">
+                    <div class="header-item">
+                        <img src="/shop/img/icons/voucher.png" alt="">
+                        <p>20% Student Discount</p>
+                    </div>
+                </div>
+                <div class="col-md-4 text-left text-xl-right">
+                    <div class="header-item">
+                        <img src="/shop/img/icons/sales.png" alt="">
+                        <p>30% off on dresses. Use code: 30OFF</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header Info End -->
+    <div class="page-add">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="page-breadcrumb">
+                        <h2>Dresses<span>.</span></h2>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <img src="/shop/img/add.jpg" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!DOCTYPE html>
+    <html class="no-js" lang="en">
+
+
+    <!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/page-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:27:15 GMT -->
+
+    <head>
+        <meta charset="utf-8">
+        <title>Outlooks</title>
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta property="og:title" content="">
+        <meta property="og:type" content="">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/x-icon" href="/profile/imgs/theme/favicon.svg">
+        <!-- Template CSS -->
+        <link rel="stylesheet" href="/profile/css/main.css">
+    </head>
+
+    <!-- Page Add Section End -->
+
+
+
+
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="index.html" rel="nofollow">Home</a>
+                    <span></span> Shop
+                </div>
+            </div>
+        </div>
+        <section class="mt-50 mb-50">
+            <div class="container">
+                <div class="row flex-row-reverse">
+                    <div class="col-lg-9">
+                        <div class="shop-product-fillter">
+                            <div class="totall-product">
+                                <p> New Collections for you!</p>
+                            </div>
+                            <div class="sort-by-product-area">
+                                <div class="sort-by-cover mr-10">
+                                    <div class="sort-by-product-wrap">
+                                        <div class="sort-by">
+                                            <span><i class="fi-rs-apps"></i>Show:</span>
+                                        </div>
+                                        <div class="sort-by-dropdown-wrap">
+                                            <span> 50 <i class="fi-rs-angle-small-down"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="sort-by-dropdown">
+                                        <ul>
+                                            <li><a class="active" href="#">50</a></li>
+                                            <li><a href="#">100</a></li>
+                                            <li><a href="#">150</a></li>
+                                            <li><a href="#">200</a></li>
+                                            <li><a href="#">All</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="sort-by-cover">
+                                    <div class="sort-by-product-wrap">
+                                        <div class="sort-by">
+                                            <span><i class="fi-rs-apps-sort"></i>Sort by:</span>
+                                        </div>
+                                        <div class="sort-by-dropdown-wrap">
+                                            <span> Featured <i class="fi-rs-angle-small-down"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="sort-by-dropdown">
+                                        <ul>
+                                            <li><a class="active" href="#">Featured</a></li>
+                                            <li><a href="#">Price: Low to High</a></li>
+                                            <li><a href="#">Price: High to Low</a></li>
+                                            <li><a href="#">Release Date</a></li>
+                                            <li><a href="#">Avg. Rating</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row product-grid-3">
+
+                            <% for (var i=0; i < products.length; i++) { %>
+
+                                <% if (products[i].productStatus==true) { %>
+                                    <div class="col-lg-4 col-md-4 col-12 col-sm-6">
+                                        <div class="product-cart-wrap mb-30">
+                                            <div class="product-img-action-wrap">
+                                                <div class="product-img product-img-zoom">
+                                                    
+                                                    <img src="/uploads/<%= products[i].productImage %>.jpg" alt="" srcset="">
+                                                    
+                                                </div>
+                                                <div class="product-action-1">
+                                                    
+                                                    <a aria-label="Add To Wishlist" class="action-btn hover-up"
+                                                        href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
+                                                    
+                                                </div>
+                                                <div class="product-badges product-badges-position product-badges-mrg">
+                                                    <span class="hot">Hot</span>
+                                                </div>
+                                            </div>
+                                            <div class="product-content-wrap">
+                                                <div class="product-category">
+                                                    <a href="shop-grid-right.html"> <%= products[i].productBrand %></a>
+                                                </div>
+                                                <h2><a href="/viewProduct/<%= products[i]._id %>"> <%= products[i].productName %></a></h2>
+                                                <div class="rating-result" title="90%">
+                                                    <span>
+                                                        <span>90%</span>
+                                                    </span>
+                                                </div>
+                                                <div class="product-price">
+                                                    <span>Rs. <%= products[i].productPrice %></span>
+                                                    <span class="old-price">$245.8</span>
+                                                </div>
+                                                <div class="product-action-1 show">
+                                                    <a aria-label="Add To Cart" class="action-btn hover-up"
+                                                        href="/addToCart/<%= products[i]._id %>"><i class="fi-rs-shopping-bag-add"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <% } %>
+
+                                <% } %>
+                            
+                            
+                            
+                           
+                        </div>
+                        <!--pagination-->
+                        <div class="pagination-area mt-15 mb-sm-5 mb-lg-0">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination justify-content-start">
+                                    <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">02</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">03</a></li>
+                                    <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">16</a></li>
+                                    <li class="page-item"><a class="page-link" href="#"><i
+                                                class="fi-rs-angle-double-small-right"></i></a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 primary-sidebar sticky-sidebar">
+                        <div class="widget-category mb-30">
+                            <h5 class="section-title style-1 mb-30 wow fadeIn animated">Category</h5>
+                            <ul class="categories">
+                                <li><a href="shop-grid-right.html">Formal</a></li>
+                                <li><a href="shop-grid-right.html">Casual</a></li>
+                                <li><a href="shop-grid-right.html">Wedding Dresses</a></li>
+                                
+                            </ul>
+                        </div>
+                        <!-- Fillter By Price -->
+                        <div class="sidebar-widget price_range range mb-30">
+                            <div class="widget-header position-relative mb-20 pb-10">
+                                <h5 class="widget-title mb-10">Fill by price</h5>
+                                <div class="bt-1 border-color-1"></div>
+                            </div>
+                            <div class="price-filter">
+                                <div class="price-filter-inner">
+                                    <div id="slider-range"></div>
+                                    <div class="price_slider_amount">
+                                        <div class="label-input">
+                                            <span>Range:</span><input type="text" id="amount" name="price"
+                                                placeholder="Add Your Price" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group">
+                                <div class="list-group-item mb-10 mt-10">
+                                    <label class="fw-900">Color</label>
+                                    <div class="custome-checkbox">
+                                        <input class="form-check-input" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox1" value="">
+                                        <label class="form-check-label" for="exampleCheckbox1"><span>Red
+                                                (56)</span></label>
+                                        <br>
+                                        <input class="form-check-input" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox2" value="">
+                                        <label class="form-check-label" for="exampleCheckbox2"><span>Green
+                                                (78)</span></label>
+                                        <br>
+                                        <input class="form-check-input" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox3" value="">
+                                        <label class="form-check-label" for="exampleCheckbox3"><span>Blue
+                                                (54)</span></label>
+                                    </div>
+                                    <label class="fw-900 mt-15">Item Condition</label>
+                                    <div class="custome-checkbox">
+                                        <input class="form-check-input" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox11" value="">
+                                        <label class="form-check-label" for="exampleCheckbox11"><span>New
+                                                (1506)</span></label>
+                                        <br>
+                                        <input class="form-check-input" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox21" value="">
+                                        <label class="form-check-label" for="exampleCheckbox21"><span>Refurbished
+                                                (27)</span></label>
+                                        <br>
+                                        <input class="form-check-input" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox31" value="">
+                                        <label class="form-check-label" for="exampleCheckbox31"><span>Used
+                                                (45)</span></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="shop-grid-right.html" class="btn btn-sm btn-default"><i
+                                    class="fi-rs-filter mr-5"></i> Fillter</a>
+                        </div>
+                        <!-- Product sidebar Widget -->
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+
+    <!-- Vendor JS-->
+    <script src="/profile/js/vendor/modernizr-3.6.0.min.js"></script>
+    <script src="/profile/js/vendor/jquery-3.6.0.min.js"></script>
+    <script src="/profile/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+    <script src="/profile/js/vendor/bootstrap.bundle.min.js"></script>
+    <script src="/profile/js/plugins/slick.js"></script>
+    <script src="/profile/js/plugins/jquery.syotimer.min.js"></script>
+    <script src="/profile/js/plugins/wow.js"></script>
+    <script src="/profile/js/plugins/jquery-ui.js"></script>
+    <script src="/profile/js/plugins/perfect-scrollbar.js"></script>
+    <script src="/profile/js/plugins/magnific-popup.js"></script>
+    <script src="/profile/js/plugins/select2.min.js"></script>
+    <script src="/profile/js/plugins/waypoints.js"></script>
+    <script src="/profile/js/plugins/counterup.js"></script>
+    <script src="/profile/js/plugins/jquery.countdown.min.js"></script>
+    <script src="/profile/js/plugins/images-loaded.js"></script>
+    <script src="/profile/js/plugins/isotope.js"></script>
+    <script src="/profile/js/plugins/scrollup.js"></script>
+    <script src="/profile/js/plugins/jquery.vticker-min.js"></script>
+    <script src="/profile/js/plugins/jquery.theia.sticky.js"></script>
+    <script src="/profile/js/magiczoomplus.js"></script>
+    <script src="/profile/js/magiczoomplus.min.js"></script>
+    <!-- Template  JS -->
+    <script src="/profile/js/main.js"></script>
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/page-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:27:15 GMT -->
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Footer Section Begin -->
+<footer class="footer-section spad">
+    <div class="container">
+        <div class="newslatter-form">
+            <div class="row">
+                <div class="col-lg-12">
+                    <form action="#">
+                        <input type="text" placeholder="Your email address">
+                        <button type="submit">Subscribe to our newsletter</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="footer-widget">
+            <div class="row">
+                <div class="col-lg-3 col-sm-6">
+                    <div class="single-footer-widget">
+                        <h4>About us</h4>
+                        <ul>
+                            <li>About Us</li>
+                            <li>Community</li>
+                            <li>Jobs</li>
+                            <li>Shipping</li>
+                            <li>Contact Us</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="single-footer-widget">
+                        <h4>Customer Care</h4>
+                        <ul>
+                            <li>Search</li>
+                            <li>Privacy Policy</li>
+                            <li>2019 Lookbook</li>
+                            <li>Shipping & Delivery</li>
+                            <li>Gallery</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="single-footer-widget">
+                        <h4>Our Services</h4>
+                        <ul>
+                            <li>Free Shipping</li>
+                            <li>Free Returnes</li>
+                            <li>Our Franchising</li>
+                            <li>Terms and conditions</li>
+                            <li>Privacy Policy</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="single-footer-widget">
+                        <h4>Information</h4>
+                        <ul>
+                            <li>Payment methods</li>
+                            <li>Times and shipping costs</li>
+                            <li>Product Returns</li>
+                            <li>Shipping methods</li>
+                            <li>Conformity of the products</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="social-links-warp">
+        <div class="container">
+            <div class="social-links">
+                <a href="" class="instagram"><i class="fa fa-instagram"></i><span>instagram</span></a>
+                <a href="" class="pinterest"><i class="fa fa-pinterest"></i><span>pinterest</span></a>
+                <a href="" class="facebook"><i class="fa fa-facebook"></i><span>facebook</span></a>
+                <a href="" class="twitter"><i class="fa fa-twitter"></i><span>twitter</span></a>
+                <a href="" class="youtube"><i class="fa fa-youtube"></i><span>youtube</span></a>
+                <a href="" class="tumblr"><i class="fa fa-tumblr-square"></i><span>tumblr</span></a>
+            </div>
+        </div>
+
+        <div class="container text-center pt-5">
+            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                Copyright &copy;
+                <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made
+                with <i class="icon-heart color-danger" aria-hidden="true"></i> by <a href="https://colorlib.com"
+                    target="_blank">Colorlib</a>
+                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            </p>
+        </div>
+
+    </div>
+</footer>
+<!-- Footer Section End -->
+
+<!-- Js Plugins -->
+<script src="/shop/js/jquery-3.3.1.min.js"></script>
+<script src="/shop/js/bootstrap.min.js"></script>
+<script src="/shop/js/jquery.magnific-popup.min.js"></script>
+<script src="/shop/js/jquery.slicknav.js"></script>
+<script src="/shop/js/owl.carousel.min.js"></script>
+<script src="/shop/js/jquery.nice-select.min.js"></script>
+<script src="/shop/js/mixitup.min.js"></script>
+<script src="/shop/js/main.js"></script>
+<script src="/profile/js/magiczoomplus.js"></script>
+<script src="/profile/js/magiczoomplus.min.js"></script>
+
+</body>
+
+</html>

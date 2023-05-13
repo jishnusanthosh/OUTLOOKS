@@ -18,27 +18,22 @@ router.get("/otp-login",userController.GetOtpLogin);
 
 router.get("/otp-send",userController.GetOtpSend);
 
-router.get("/women",userController.GetWomenCategory)
-
-router.get("/men",userController.GetMenCategory)
 
 router.get("/cart",userController.GetCart)
 
+router.get("/shopView/:id",userController.getShopView)
+
 
 router.get("/viewProduct/:id",userController.getProductView)
-
-
-
-
-router.get("/addToCart/:id",userController.addToCart);
-
-
 
 router.get("/userProfile/:id",userController.getUserProfile);
 
 router.post("/deleteCartProduct",userController.deleteCartProduct)
 
 
+router.get("/addToCart/:id",userController.addToCart);
+
+router.get("/GetcheckOut",userController.getCheckOut);
 
 
 
@@ -52,6 +47,8 @@ router.post("/login",userController.loginPost);
 
 
  router.post('/resendOtp',userController.resendOtp )
+
+ router.post('/update-product-quantity',userController.updateProductQuantity)
 
 
 
