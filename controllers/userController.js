@@ -221,13 +221,14 @@ export default {
   getProductView: async (req, res) => {
     let productId = req.params.id;
     let user = req.session.user || null;
+    let allcategory = await Category.find()
     try {
       
       let cartCount= await userHelpers.getCartCount(req.session.user._id)
      
       const response = await userHelpers.getProductView(productId);
       if (response) {
-        res.render("shop/product-details", { product: response, user,cartCount });
+        res.render("shop/product-details", { product: response, user,cartCount,allcategory });
       } else {
         res.redirect("/shop");
       }
