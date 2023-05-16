@@ -1,24 +1,40 @@
 
 
 
-
-
-    
+ 
     <!DOCTYPE html>
 <html lang="zxx">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="description" content="Yoga Studio Template">
-    <meta name="keywords" content="Yoga, unica, creative, html">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>OutLooks | Template</title>
+  <meta charset="UTF-8">
+  <meta name="description" content="Yoga Studio Template">
+  <meta name="keywords" content="Yoga, unica, creative, html">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Violet | Template</title>
 
+    
     <!-- Google Font -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
     <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900&display=swap"
         rel="stylesheet">
+
+
+<!-- Popper JS -->
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+<!-- Bootstrap JS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+<!-- Sweetalert2 CSS -->
+
+<!-- Sweetalert2 JS -->
+
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="/shop/css/bootstrap.min.css" type="text/css">
@@ -28,7 +44,8 @@
     <link rel="stylesheet" href="/shop/css/magnific-popup.css" type="text/css">
     <link rel="stylesheet" href="/shop/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="/shop/css/style.css" type="text/css">
-    <link rel="stylesheet" href="/shop/css/bootstrap.min.css.map" >
+    <link rel="stylesheet" href="/shop/css/bootstrap.min.css" >
+    
 </head>
 
 <body>
@@ -79,23 +96,18 @@
                       
                         
                        
-                        <% if (user) { %>
-
-                            <% if (cartCount) { %>
-                                <a href="/cart">
-                                    <img src="/shop/img/icons/bag.png" alt="">
-                                  <span class="badge badge-soft-light" id="cart-count"><%= cartCount %></span>
-                                </a>
-            
-                            
-                            <% } else { %>
-                                <a href="/cart">
-                                    <img src="/shop/img/icons/bag.png" alt="">
-                                  <span class="badge badge-soft-light"><%= cartCount %></span>
-                                </a>
-                                <% } %>
-                            
-                          <% } %>
+                        <% if (user && (cartCount || cartCount === 0)) { %>
+                          <a href="/cart">
+                            <img src="/shop/img/icons/bag.png" alt="">
+                            <% if (cartCount > 0) { %>
+                              <span class="badge badge-soft-light" id="cart-count"><%= String(cartCount) %></span>
+                            <% } %>
+                          </a>
+                        <% } %>
+                        
+                        
+                        
+                      
                           
 
                        
@@ -147,6 +159,8 @@
             </div>
         </div>
     </header>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.min.js"></script>
+
     <!-- Header Info Begin -->
   
     <!-- Header Info End -->

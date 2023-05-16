@@ -1,166 +1,177 @@
-<!doctype html>
-<html lang="en">
-<%- include('../../partials/user-header') %>
+<head>
 
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="/login/font/icomoon/style.css">
 
-    <link rel="stylesheet" href="/login/css/owl.carousel.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="/login/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/login/font/icomoon/style.css">
 
-    <!-- Style -->
-    <link rel="stylesheet" href="/login/css/style.css">
+  <link rel="stylesheet" href="/login/css/owl.carousel.min.css">
 
-    <style>
-      .btn-login {
-        background-color: #6c757d;
-      }
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="/login/css/bootstrap.min.css">
 
-      .btn-login:hover {
-        background-color: rgb(245, 245, 245);
-      }
+  <!-- Style -->
+  <link rel="stylesheet" href="/login/css/style.css">
 
-      .content {
-        background-image: url('../../../login/image/h1_hero.jpg.webp');
-        background-repeat: no-repeat;
-        background-size: cover;
-      }
+  <style>
+    .btn-login {
+      background-color: #6c757d;
+    }
 
-      .grey-link {
-  color: rgb(255, 247, 247);
-  text-decoration: none;
+    .btn-login:hover {
+      background-color: rgb(245, 245, 245);
+    }
+
+    .content {
+      background-image: url('../../../login/image/h1_hero.jpg.webp');
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    .grey-link {
+      color: rgb(255, 247, 247);
+      text-decoration: none;
+    }
+
+    .grey-link:hover {
+      color: #f8f3f3;
+    }
+
+    .icon-round {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: #fbfbfb;
+      text-align: center;
+      line-height: 30px;
+    }
+
+    .icon-mobile {
+      font-size: 2em;
+      color: #606060;
+    }
+    html, body {
+  height: 100%;
+  overflow: hidden;
 }
-
-.grey-link:hover {
-  color: #f8f3f3;
-}
-.icon-round {
-    display: inline-block;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: #fbfbfb;
-    text-align: center;
-    line-height: 30px;
-  }
-  .icon-mobile {
-    font-size: 2em;
-    color: #606060;
+a:hover span {
+    transform: scale(1.2);
   }
 
+  </style>
 
-      
-    </style>
+  <title>Login</title>
+</head>
 
-    <title>Login</title>
-  </head>
+<body>
 
-  <body>
-    <div class="content">
-      <div class="container">
-        <div class="row">
+  <div class="content">
+    <div class="container">
+      <div class="row">
 
-          <div class="col-md-6 contents">
-            <div class="row justify-content-center">
-              <div class="col-md-8">
-                <div class="mb-4">
-                  <h3>Sign In</h3< /p>
-                </div>
-                <% var msg=msg || '' ; %>
-                  <% if (msg) { %>
-                    <span class="text-white">
-                      <%= msg %>
-                    </span>
-                    <% } %>
+        <div class="col-md-6 contents">
+          <div class="row justify-content-center">
 
-                    
+            <div class="col-md-8">
+              <h1 style="font-family: 'Roboto', sans-serif; color: #faf2f2; text-align: center;">
+                Outlooks<span style="color: #fff;">.</span>
+              </h1>
+
+              <br>
+
+              <h3 class="text-align: center;">Sign In</h3>
+
+
+              <% var msg=msg || '' ; %>
+                <% if (msg) { %>
+                  <span class="text-white">
+                    <%= msg %>
+                  </span>
+                  <% } %>
+
+
                     <% var blockmsg=blockmsg || '' ; %>
-                  <% if (blockmsg) { %>
-                    <span class="text-warning">
-                      <%= blockmsg %>
-                    </span>
-                    <% } %>
-                      <br>
-                      <br>
-                      <form action="/login" method="post">
-                        <div class="form-group first">
-                          <label for="email">email </label>
-                          <input type="text" name="email" class="form-control" id="email">
+                      <% if (blockmsg) { %>
+                        <span class="text-warning">
+                          <%= blockmsg %>
+                        </span>
+                        <% } %>
+                          <br>
 
-                        </div>
-                        <br>
-                        <div class="form-group last mb-4">
-                          <label for="password">Password</label>
-                          <input type="password" name="password" class="form-control" id="password">
+                          <form action="/login" method="post">
+                            <div class="form-group first">
+                              <label for="email">email </label>
+                              <input type="text" name="email" class="form-control" id="email">
 
-                        </div>
+                            </div>
+                            <br>
+                            <div class="form-group last mb-4">
+                              <label for="password">Password</label>
+                              <input type="password" name="password" class="form-control" id="password">
 
-
-                        <div class="d-flex mb-5 align-items-center">
-                          <label class="control control--checkbox mb-0 "><span class="caption">Remember me</span>
-                            <input type="checkbox" class="checkbox" checked="checked" />
-                            <div class="control__indicator"></div>
-                          </label>
-                          <span class="ml-auto"><a href="#" class="forgot-pass">Forgot Password</a></span>
-                        </div>
-                        <a href="/signup" class="grey-link">Don't have an account?</a>
+                            </div>
 
 
-                        <br>
-                        <br>
-                        <a href="/home">
-                          <button type="submit" class="btn btn-block btn-login">LOGIN</button>
-                        </a>
-                        <br>
+                            <div class="d-flex mb-5 align-items-center">
+                              <label class="control control--checkbox mb-0 "><span class="caption">Remember me</span>
+                                <input type="checkbox" class="checkbox" checked="checked" />
+                                <div class="control__indicator"></div>
+                              </label>
+                              <span class="ml-auto"><a href="#" class="forgot-pass">Forgot Password</a></span>
+                            </div>
+                           
+                            <a href="/signup" class="text-white" style="text-decoration:none">
+                              <span style="transition: transform .2s; display: inline-block;">Don't have an account?</span>
+                            </a>
+
+                            <br>
+                            <br>
+                            <a href="/home">
+                              <button type="submit"  class="btn btn-block btn-login">LOGIN</button>
+                            </a>
+                            <br>
 
 
-                        <span class="d-block text-left my-4 text-muted">&mdash; or login with &mdash;</span>
+                            <span class="d-block text-left my-4 text-muted">&mdash; or login with &mdash;</span>
 
-                        <div class="social-login">
-                          <a href="#" class="facebook">
-                            <span class="icon-facebook mr-3"></span>
-                          </a>
-                          <a href="#" class="twitter">
-                            <span class="icon-twitter mr-3"></span>
-                          </a>
-                          <a href="#" class="google">
-                            <span class="icon-google mr-3"></span>
-                          </a>
-                          <a href="/otp-send" class="mobile">
-                            <span class="icon-round mr-3">
-                              <span class="icon-mobile"></span>
-                            </span>
-                          </a>
-                        </div>
-                         
-                          
-                        </div>
-                      </form>
-              </div>
+                            <div class="social-login">
+                              <a href="#" class="facebook">
+                                <span class="icon-facebook mr-3"></span>
+                              </a>
+                              <a href="#" class="twitter">
+                                <span class="icon-twitter mr-3"></span>
+                              </a>
+                              <a href="#" class="google">
+                                <span class="icon-google mr-3"></span>
+                              </a>
+                              <a href="/otp-send" class="mobile">
+                                <span class="icon-round mr-3">
+                                  <span class="icon-mobile"></span>
+                                </span>
+                              </a>
+                            </div>
+
+
             </div>
-
+            </form>
           </div>
-
         </div>
+
       </div>
+
     </div>
+  </div>
+  </div>
 
 
-    <script src="/login/js/jquery-3.3.1.min.js"></script>
-    <script src="/login/js/popper.min.js"></script>
-    <script src="/login/js/bootstrap.min.js"></script>
-    <script src="/login/js/main.js"></script>
-  </body>
+  <script src="/login/js/jquery-3.3.1.min.js"></script>
+  <script src="/login/js/popper.min.js"></script>
+  <script src="/login/js/bootstrap.min.js"></script>
+  <script src="/login/js/main.js"></script>
+</body>
 
-  <footer>
-    <%- include('../../partials/user-footer.ejs') %>
-  </footer>
+
 
 </html>

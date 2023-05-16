@@ -250,10 +250,6 @@ export default {
   },
   
 
-
-
-
-
   AdminViewUser: async (req, res) => {
     let userId = req.params.id;
     try {

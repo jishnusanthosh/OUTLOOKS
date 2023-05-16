@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/shop/css/magnific-popup.css" type="text/css">
     <link rel="stylesheet" href="/shop/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="/shop/css/style.css" type="text/css">
-    <link rel="stylesheet" href="/shop/css/bootstrap.min.css.map" >
+    <link rel="stylesheet" href="/shop/css/bootstrap.min.css" >
  
     <!-- Header Section Begin -->
 
@@ -82,12 +82,9 @@
                                             <!-- MAIN SLIDES -->
                                             <div class="product-image-slider">
                                                
-                                                <a class="MagicZoom" title="Product image" href="/uploads/<%=product.productImage%>.jpg"
-                                                    data-zoom-image-2x="/uploads/<%=product.productImage%>.jpg"
-                                                    data-image-2x="/uploads/<%=product.productImage%>.jpg">
-                                                    <img data-hash="product-1" src="/uploads/<%=product.productImage%>.jpg"
-                                                        srcset="/uploads/<%=product.productImage%>.jpg" alt="" />
-                                                </a>
+                                                <a href="/uploads/<%=product.productImage%>.jpg" class="MagicZoom" data-zoom-image="/uploads/<%=product.productImage%>.jpg" data-zoom-image-2x="/uploads/<%=product.productImage%>.jpg">
+                                                    <img src="/uploads/<%=product.productImage%>.jpg" alt="Product Image">
+                                                  </a>
                                              
                                             </div>
                                             <!-- THUMBNAILS -->
@@ -318,6 +315,12 @@
 		</div>
     </footer>
     <!-- Footer Section End -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var zoomImage = document.getElementById('zoomImage');
+            new MagicZoomPlus(zoomImage);
+        });
+    </script>
 
     <!-- Js Plugins -->
     <script src="/shop/js/jquery-3.3.1.min.js"></script>

@@ -10,7 +10,7 @@ import mongoose from 'mongoose';
 import  session  from "express-session";
 import  multer  from "multer";
 import  swal from "sweetalert";
-const toastr = require('toastr');
+
 
 
 

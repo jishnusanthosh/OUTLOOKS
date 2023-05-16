@@ -3,10 +3,12 @@ import twilioFunctions from "../config/twilio";
 import dotenv from "dotenv";
 import userHelpers from "../helpers/userHelpers";
 import User from "../models/userModels";
+import Address from "../models/addressModels"
 import Products from "../models/productModels";
 import mongoose from "mongoose";
 import Cart from "../models/cartModels";
 import Category from "../models/categoryModels"
+import { response } from "express";
 
 dotenv.config();
 
@@ -37,8 +39,20 @@ export default {
     }
   },
 
-  loginPage: (req, res) => {
-    res.render("shop/userlogin/login");
+  loginPage: async (req, res) => {
+    let user = req.session.user;
+   
+    const allcategory=await Category.find();
+    if (user) {
+      let cartCount= await userHelpers.getCartCount(req.session.user._id)
+      
+      console.log(cartCount);
+      res.render("shop/userlogin/login", { user,cartCount});
+    } else {
+      let cartCount=null
+      res.render("shop/userlogin/login", { user: false,cartCount,allcategory});
+    }
+   
   },
   GetOtpLogin: (req, res) => {
     res.render("shop/userlogin/otp-login.ejs");
@@ -168,13 +182,14 @@ export default {
 
   GetCart: async (req, res) => {
     
-    let allcategory = await Category.find()
+   
 
     try {
       const user = req.session.user;
     
       let cartCount= await userHelpers.getCartCount(req.session.user._id)
       let total= await userHelpers.getCartTotal(req.session.user)
+      let allcategory = await Category.find()
    
   
      
@@ -183,13 +198,19 @@ export default {
       );
 
       if (!cart) {
-        res.render("shop/emptyCart", { user });
+        res.render("shop/emptyCart", { user ,cartCount,allcategory});
         return;
       }
 
       const products = cart.products;
 
-      res.render("shop/cart", { user, products,cartCount,total,allcategory});
+      res.render("shop/cart", {
+        user,
+        products,
+        cartCount: cartCount ? cartCount : 0,
+        total,
+        allcategory,
+      });
     } catch (error) {
       console.error(error);
       res.render("catchError", {
@@ -294,10 +315,16 @@ getCheckOut : async (req,res)=>{
     let cartCount= await userHelpers.getCartCount(req.session.user._id)
     const subtotal= await userHelpers.getCartTotal(req.session.user)
     let allcategory = await Category.find()
+    let address=await Address.findOne({ user: req.session.user._id }).populate(
+      "address._id"
+    );
+    console.log(address);
+    const Addresses=address.address
   
       const cart = await Cart.findOne({ user: req.session.user._id }).populate(
         "products.productId"
       );
+      
 
       if (!cart) {
         res.render("shop/emptyCart", { user: req.session.user ,allcategory });
@@ -307,7 +334,7 @@ getCheckOut : async (req,res)=>{
       const products = cart.products;
 
     if(cart){
-      res.render("shop/checkOut", { items: cart ,subtotal,products,user,cartCount ,allcategory});
+      res.render("shop/checkOut", { items: cart ,subtotal,products,user,cartCount ,allcategory,Addresses});
       }else{
         res.redirect("/shop/login");
         }
@@ -341,9 +368,56 @@ getCheckOut : async (req,res)=>{
       console.error(error);
     }
   },
+  addAddress:async(req,res)=>{
+    let userId = req.session.user._id;
+    let address = req.body
+    
+    console.log(address);
+    try {
+      const user = await User.findById(userId);
+      const result= await userHelpers.addAddress(userId,address,user)
+      if (result) {
+        res.redirect('/GetcheckOut')  
+        
+      } else {
+        
+        res.json({message:"address not added"})  
+      }
+      
+     
+    } catch (error) {
+      console.log(error);
+    }
+    
+  },
+  placeOrderPost: async (req, res) => {
+    try {
+      let userId = req.session.user._id;
   
-
+      const cartItems = await Cart.findOne({ user: req.session.user._id }).populate(
+        "products.productId"
+      );
   
+      const totalAmount = await userHelpers.getCartTotal(req.session.user);
+  
+      if (req.body.payment_method == "COD") {
+        const placeOrder = await userHelpers.placeOrder(req.body, totalAmount, cartItems, userId);
+        res.json({ success: true });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Failed to place the order: " + error.message);
+    }
+  },
+  getOrderPlaced: async (req,res)=>{
 
+    const user=req.session.user
+    let allcategory = await Category.find();
+    let cartCount= await userHelpers.getCartCount(req.session.user._id)
+    res.render('shop/orderPlaced',{user,cartCount,allcategory});
+
+  }
+  
+  
 
 };

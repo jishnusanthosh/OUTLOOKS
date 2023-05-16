@@ -50,8 +50,11 @@ router.post("/login",userController.loginPost);
 
  router.post('/update-product-quantity',userController.updateProductQuantity)
 
+ router.post("/addAddress",userController.addAddress)
 
+ router.post("/placeOrder",userController.placeOrderPost)
 
+ router.get("/orderPlaced",userController.getOrderPlaced)
 
 export default router;
 

@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<%- include('../../partials/user-header') %>
+
 
   <head>
     <!-- Required meta tags -->
@@ -32,6 +32,16 @@
         background-repeat: no-repeat;
         background-size: cover;
       }
+      html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+a:hover span {
+    transform: scale(1.2);
+  }
+
+
     </style>
 
     <title>SignUp</title>
@@ -46,7 +56,11 @@
             <div class="row justify-content-center">
               <div class="col-md-8">
                 <div class="mb-4">
-                  <h3>Sign up</h3>
+                  <h1 style="font-family: 'Roboto', sans-serif; color: #faf2f2; text-align: center;">
+                    Outlooks<span style="color: #fff;">.</span>
+                  </h1>
+                  <br>
+                  <h5 class="text-align: center">Sign Up</h5>
                 </div>
                 <div>
                   <% var msg1=msg1 || '' ; %>
@@ -110,7 +124,18 @@
                                   <!-- form fields -->
                                   <button type="submit" class="btn btn-block btn-login"
                                     formaction="/signup">REGISTER</button>
+                                    <br>
+                                  
+                                    
                                 </form>
+                                <a href="/login" class="text-white" style="text-decoration:none">
+                                  <span style="transition: transform .2s; display: inline-block;">Back to Login</span>
+                                </a>
+
+
+
+
+
 
                                 <span class="d-block text-left my-4 text-muted">&mdash; or login with &mdash;</span>
 
@@ -227,9 +252,5 @@
         })
       </script>
   </body>
-
-  <footer>
-    <%- include('../../partials/user-footer.ejs') %>
-  </footer>
 
 </html>

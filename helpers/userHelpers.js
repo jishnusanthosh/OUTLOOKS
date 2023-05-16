@@ -3,11 +3,15 @@ import twilioFunctions from "../config/twilio";
 import User from "../models/userModels";
 import Product from "../models/productModels";
 import Cart from "../models/cartModels";
+import Address from "../models/addressModels";
+import Order from "../models/orderModels";
 
 import bcrypt from "bcrypt";
 
 import dotenv from "dotenv";
 import Category from "../models/categoryModels";
+import { ObjectId } from "mongodb";
+import { response } from "express";
 dotenv.config();
 
 export default {
@@ -255,7 +259,74 @@ export default {
           return { status: false, message: "cart not found" };
         }
       },
-     
+      addAddress:async(userId,address,user)=>{
+        try{
+          const result=await Address.updateOne({user:userId},
+            {$push:{address:{
+              firstname:address.firstname,
+              lastname:address.lastname,
+              streetname:address.streetname,
+              apartmentnumber:address.apartmentnumber,
+              city:address.city,
+              state:address.state,
+              zipcode:address.zipcode,
+              phone:address.phone,
+              email:address.email,
+              user:user
+  
+            }}},
+            {upsert:true}
+            )
+            if (result) {
+              return true     
+              
+            } else {
+              
+              return false     
+            }
+        
+        }catch(error){
+         console.log(error);
+        }
+        },
 
+        placeOrder: async (order, totalAmount, cartItems, user) => {
+          const orderDate = () => {
+            return new Date();
+          };
+        
+          try {
+            let status = order.payment == 'COD' ? 'placed' : 'pending';
+            let date = orderDate();
+            let userId = user;
+            let addressId = order.address_id;
+            let orderedItems = cartItems;
+          
+            let ordered = new Order({
+              user: userId,
+              address: addressId,
+              orderDate: date,
+              totalAmount: totalAmount,
+              paymentMethod: 'COD',
+              orderStatus: status,
+              orderedItems: orderedItems
+            });
+            await ordered.save();
+            console.log("uploaded to db");
+        
+            // Clear the user's cart
+            await Cart.deleteMany({ user: userId });
+        
+            return ordered;
+          } catch (error) {
+            console.error(error);
+            throw new Error("Failed to place the order");
+          }
+        }
+        
+        
+  
+        
+       
   
 };
