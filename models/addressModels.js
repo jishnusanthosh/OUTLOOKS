@@ -3,14 +3,14 @@ import mongoose from "mongoose";
 
 const AddressSchema = new mongoose.Schema({
    
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    address:[
-      {
 
+  
+
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
         firstname: {
           type: String,
           required: true,
@@ -47,8 +47,8 @@ const AddressSchema = new mongoose.Schema({
           type: String,
           
         },
-      }
-    ]
+     
+    
   
   });
   

@@ -70,9 +70,7 @@
         </div>
     </section>
 
-    <%= console.log("================="); %>
-    <%= console.log(Addresses[0]); %>
-    <%= console.log("================="); %>
+    
 
     <section class=" mt-50 mb-50">
         <div class="container">
@@ -82,7 +80,10 @@
                         <h5 class="mb-0">Billing Address</h5>
                     </div>
                     <br>
-                    <%= console.log(Addresses[0]._id); %>
+                   <% if (Addresses==null) { %>
+                    <button class="btn btn-sm mt-30" data-toggle="modal" data-target="#exampleModal">Add New
+                        Address</button>
+                   <% } %>
                         <% for(let i=0; i < Addresses.length; i++) { %>
                             <div class="card mb-4 mb-lg-1">
                                 <div class="card-body">

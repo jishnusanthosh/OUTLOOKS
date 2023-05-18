@@ -56,6 +56,10 @@ router.post("/login",userController.loginPost);
 
  router.get("/orderPlaced",userController.getOrderPlaced)
 
+ router.get("/GetMyOrders",userController.getMyOrders)
+
+ router.get("/viewOrderDetails/:id",userController.getOrderDetails)
+
 export default router;
 
 

@@ -1,5 +1,28 @@
 <%- include('../shop/layout/user-header.ejs') %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+
+
+<style>
+    #toastr-container > .toast-error {
+        background-color: #ebdbdb;
+    }
+    #toastr-container > .toast-success {
+        opacity: 0.9; /* Adjust the opacity value as desired */
+        color: green; /* Set the text color to green */
+    }
+</style>
+
+  
+
+<div id="toastr-container"></div>
+
     <!-- Header Section Begin -->
+<!-- Add the following lines in your HTML/EJS file -->
+
+
+
     <link rel="stylesheet" href="/profile/css/magiczoomplus.css">
     <link rel="stylesheet" href="/shop/css/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="/shop/css/font-awesome.min.css" type="text/css">
@@ -14,7 +37,7 @@
     <!-- Header Info Begin -->
     <div class="header-info">
         <div class="container-fluid">
-            <div class="row">
+            <div class="row">   
                 <div class="col-md-4">
                     <div class="header-item">
                         <img src="/shop/img/icons/delivery.png" alt="">
@@ -177,9 +200,28 @@
                                                     <span class="old-price">$245.8</span>
                                                 </div>
                                                 <div class="product-action-1 show">
-                                                    <a aria-label="Add To Cart" class="action-btn hover-up"
-                                                        href="/addToCart/<%= products[i]._id %>"><i class="fi-rs-shopping-bag-add"></i></a>
+                                                    <% if (products[i].productQuantity > 0) { %>
+                                                        <a aria-label="Add To Cart" class="action-btn hover-up" href="/addToCart/<%= products[i]._id %>"
+                                                            onclick="addToCart(event, '<%= products[i]._id %>')">
+                                                            <i class="fi-rs-shopping-bag-add"></i>
+                                                        </a>
+                                                    <% } else { %>
+                                                        <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html">
+                                                            <i class="fi-rs-heart"></i>
+                                                        </a>
+                                                    <% } %>
                                                 </div>
+                                                
+                                                  <ul class="product-meta font-xs color-grey">
+                                                    <% if (products[i].productQuantity > 0) { %>
+                                                        <li>Availability:<span class="in-stock text-success ml-5"><%= products[i].productQuantity %> Items In Stock</span></li>
+                                                    <% } else { %>
+                                                        <li>Availability:<span class="out-of-stock text-danger ml-5">Out of Stock</span></li>
+                                                    <% } %>
+                                                </ul>
+                                                
+                                                
+                                                  
                                             </div>
                                         </div>
                                     </div>
@@ -308,8 +350,33 @@
     <script src="/profile/js/plugins/jquery.theia.sticky.js"></script>
     <script src="/profile/js/magiczoomplus.js"></script>
     <script src="/profile/js/magiczoomplus.min.js"></script>
+
+
     <!-- Template  JS -->
     <script src="/profile/js/main.js"></script>
+
+
+
+    <script>
+        function addToCart(event, productId) {
+          event.preventDefault();
+          $.ajax({
+            url: '/addToCart/' + productId,
+            method: 'GET',
+            success: function(response) {
+              if (response.status) {
+                toastr.success(response.message, '', { "toastClass": "toast-success" });
+              } else {
+                toastr.error(response.message);
+              }
+            },
+            error: function() {
+              toastr.error('An error occurred while adding the product to cart.');
+            }
+          });
+        }
+    </script>
+      
 </body>
 
 
@@ -425,7 +492,13 @@
     </div>
 </footer>
 <!-- Footer Section End -->
-
+<script>
+    toastr.options = {
+      positionClass: "toast-top-right", // Adjust the position as needed
+      progressBar: true
+    };
+  </script>
+  
 <!-- Js Plugins -->
 <script src="/shop/js/jquery-3.3.1.min.js"></script>
 <script src="/shop/js/bootstrap.min.js"></script>

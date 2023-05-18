@@ -5,7 +5,7 @@
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:32:35 GMT -->
 <head>
     <meta charset="utf-8">
-    <title>OUTLOOKS Dashboard</title>
+    <title>Outlooks | Admin </title>
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,7 +16,7 @@
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="/admin/imgs/theme/favicon.svg">
     <!-- Template CSS -->
-    <link href="css/main.css" rel="stylesheet" type="text/css" />
+    <link href="/admin/css/main.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -32,45 +32,45 @@
         </div>
         <nav>
             <ul class="menu-aside">
-                <li class="menu-item active">
-                    <a class="menu-link" href="/admin"> <i class="icon material-icons md-home"></i>
-                        <span class="text">Dashboard</span>
+                <li class="menu-item page-dashboard">
+                    <a class="menu-link active" href="/admin">
+                
                     </a>
                 </li>
                 <li class="menu-item has-submenu">
-                    <a class="menu-link" href="/admin"> <i class="icon material-icons md-shopping_bag"></i>
+                    <a class="menu-link" href="/admin/admin-productss-list">
+                        
+        
+                        <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Products</span>
-
                     </a>
                     <div class="submenu">
+                        
                         <a href="/admin/admin-productss-list">Product List</a>
-                       
                         <a href="/admin/admin-categories">Categories</a>
                     </div>
                 </li>
                 <li class="menu-item has-submenu">
-                    <a class="menu-link" href="page-orders-1.html"> <i class="icon material-icons md-shopping_cart"></i>
+                    <a class="menu-link" href="/admin/getOrders">
+                        <i class="icon material-icons md-shopping_cart"></i>
                         <span class="text">Orders</span>
                     </a>
                     <div class="submenu">
-                        <a href="page-orders-1.html">Order list 1</a>
-                        <a href="page-orders-2.html">Order list 2</a>
-                        <a href="page-orders-detail.html">Order detail</a>
+                        <a href="/admin/getOrders">Orders</a>
                     </div>
                 </li>
                 <li class="menu-item has-submenu">
-                    <a class="menu-link" href="/admin/admin-users-list"> <i class="icon material-icons md-person"></i>
+                    <a class="menu-link" href="/admin/admin-users-list">
+                        <i class="icon material-icons md-person"></i>
                         <span class="text">Users</span>
                     </a>
                     <div class="submenu">
-    
                         <a href="/admin/admin-users-list">Users list</a>
-                 
                     </div>
                 </li>
-               
                 <li class="menu-item has-submenu">
-                    <a class="menu-link" href="page-transactions-1.html"> <i class="icon material-icons md-monetization_on"></i>
+                    <a class="menu-link" href="page-transactions-1.html">
+                        <i class="icon material-icons md-monetization_on"></i>
                         <span class="text">Transactions</span>
                     </a>
                     <div class="submenu">
@@ -78,27 +78,15 @@
                         <a href="page-transactions-2.html">Transaction 2</a>
                     </div>
                 </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="#"> <i class="icon material-icons md-person"></i>
-                        <span class="text">Account</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="page-account-login.html">User login</a>
-                        <a href="page-account-register.html">User registration</a>
-                        <a href="page-error-404.html">Error 404</a>
-                    </div>
-                </li>
                 <li class="menu-item">
-                    <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
+                    <a class="menu-link" href="page-reviews.html">
+                        <i class="icon material-icons md-comment"></i>
                         <span class="text">Reviews</span>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
-                        <span class="text">Brands</span> </a>
-                </li>
-                <li class="menu-item">
-                    <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
+                    <a class="menu-link" disabled href="#">
+                        <i class="icon material-icons md-pie_chart"></i>
                         <span class="text">Statistics</span>
                     </a>
                 </li>
@@ -179,3 +167,24 @@
                 </ul>
             </div>
         </header>
+
+     <script>
+        // Get the current page URL
+        var currentURL = window.location.pathname;
+
+        // Get all the menu links
+        var menuLinks = document.querySelectorAll('.menu-link');
+
+        // Loop through the menu links
+        for (var i = 0; i < menuLinks.length; i++) {
+            var link = menuLinks[i];
+
+            // Check if the link's href matches the current URL
+            if (link.getAttribute('href') === currentURL) {
+                // Add the "active" class to the parent menu item
+                link.parentNode.classList.add('active');
+            }
+        }
+    </script>
+        
+    </body>

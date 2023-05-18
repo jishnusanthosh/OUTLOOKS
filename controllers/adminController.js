@@ -1,8 +1,17 @@
 import dotenv from "dotenv";
 import adminHelper from "../helpers/adminHelpers";
+const mongoose = require('mongoose');
+import {generateSalesReport} from "../config/pdfKit"
+const ObjectId = mongoose.Types.ObjectId;
+
+
+
 
 import User from "../models/userModels";
 import Product from "../models/productModels";
+import Order from "../models/orderModels";
+import Address from "../models/addressModels";
+
 
 dotenv.config();
 
@@ -71,8 +80,8 @@ export default {
 
   blockProduct: async (req, res) => {
     let proId = req.params.id;
-    console.log(proId);
-    console.log('👶👶👶');
+ 
+ 
     let product = await Product.findById(proId);
 
     try {
@@ -261,4 +270,108 @@ export default {
       console.error(error);
     }
   },
+  GetAllOrder: async (req, res) => {
+    try {
+      const Orders = await Order.aggregate([
+        {
+          $lookup: {
+            from: "users", 
+            localField: "user",
+            foreignField: "_id",
+            as: "user",
+          },
+        }
+    
+      ]);
+  
+      if (req.session.admin) {
+        res.render("admin/admin-orders", { Orders: Orders });
+      } else {
+        res.redirect("/admin/login");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  getOneOrderDetails: async (req, res) => {
+    
+    let orderId = req.params.id;
+   
+    try {
+      const order = await Order.aggregate([
+        { $match: { _id: new ObjectId(orderId) } },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'user',
+            foreignField: '_id',
+            as: 'user'
+          }
+        },
+        { $unwind: '$user' },
+        {
+          $lookup: {
+            from: 'products',
+            localField: 'orderedItems.productId',
+            foreignField: '_id',
+            as: 'orderedItems.productId'
+          }
+        },
+        {
+          $lookup: {
+            from: 'addresses',
+            localField: 'address',
+            foreignField: '_id',
+            as: 'address'
+          }
+        },
+       
+      ]);
+     
+      res.render("admin/admin-orders-detail", { Order: order[0] });
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+
+  GetSalesReport: async (req, res) => {
+    try {
+      
+      const orders = await Order.find({ orderStatus: 'placed' })
+        .populate({
+          path: 'orderedItems.productId',
+          model: Product,
+        })
+        .populate('address')
+        
+
+      const reportData = [];
+      for (const order of orders) {
+        for (const item of order.orderedItems) {
+          const { productId, quantity } = item;
+   console.log(item);
+          const product = productId; 
+
+          const entry = {
+            date: order.orderDate,
+            product: product.productName,
+            quantity,
+            price: product.productPrice,
+          };
+
+          reportData.push(entry);
+        }
+      }
+
+      generateSalesReport(reportData, res);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Oops! Something went wrong while fetching order data' });
+    }
+  },
+
+  
+  
 };

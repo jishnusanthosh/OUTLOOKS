@@ -99,34 +99,45 @@ export default {
   },
   addToCart: async (userId, productId) => {
     try {
-        const product = await Product.findById(productId);
-        if (!product) {
-            throw new Error("Product not found");
-        }
-        const quantity = product.productQuantity;
-        if (quantity <= 0) {
-            return false;
-        }
-        let cart = await Cart.findOne({ user: userId });
-        if (!cart) {
-            // if cart doesn't exist for the user, create a new one
-            cart = new Cart({ user: userId, products: [] });
-        }
-        // check if the product is already present in the cart
-        const index = cart.products.findIndex((p) => p.productId == productId);
-        if (index === -1) {
-            // if the product is not present in the cart, add a new entry
-            cart.products.push({ productId, quantity: 1 });
-        } else {
-            // if the product is already present, increase its quantity
-            cart.products[index].quantity += 1;
-        }
-        await cart.save();
-        return true;
+      const product = await Product.findById(productId);
+  
+      if (!product) {
+        throw new Error("Product not found");
+      }
+  
+      const quantity = product.productQuantity;
+  
+      if (quantity <= 0) {
+        return false;
+      }
+  
+      let cart = await Cart.findOne({ user: userId });
+  
+      if (!cart) {
+        // If cart doesn't exist for the user, create a new one
+        cart = new Cart({ user: userId, products: [] });
+      }
+  
+      // Check if the product is already present in the cart
+      const index = cart.products.findIndex((p) => p.productId == productId);
+  
+      if (index === -1) {
+        // If the product is not present in the cart, add a new entry
+        cart.products.push({ productId, quantity: 1 });
+      } else {
+        // If the product is already present, increase its quantity
+        cart.products[index].quantity += 1;
+      }
+  
+      await cart.save();
+      return true;
     } catch (error) {
-        console.error(error);
+      console.error(error);
+      return false;
     }
-},
+  }
+  ,
+  
 
   getCartProducts: async (userId) => {
     try {
@@ -259,10 +270,10 @@ export default {
           return { status: false, message: "cart not found" };
         }
       },
-      addAddress:async(userId,address,user)=>{
+      addAddress:async(userId,address)=>{
         try{
-          const result=await Address.updateOne({user:userId},
-            {$push:{address:{
+          const result=await Address.create(
+           {
               firstname:address.firstname,
               lastname:address.lastname,
               streetname:address.streetname,
@@ -272,10 +283,10 @@ export default {
               zipcode:address.zipcode,
               phone:address.phone,
               email:address.email,
-              user:user
+              user:userId
   
-            }}},
-            {upsert:true}
+            },
+           
             )
             if (result) {
               return true     
@@ -296,11 +307,12 @@ export default {
           };
         
           try {
-            let status = order.payment == 'COD' ? 'placed' : 'pending';
+            let status = order.payment_method === 'COD' ? 'placed' : 'pending';
             let date = orderDate();
             let userId = user;
             let addressId = order.address_id;
-            let orderedItems = cartItems;
+            let orderedItems = cartItems
+            console.log(orderedItems+"orderedItems");
           
             let ordered = new Order({
               user: userId,
@@ -309,7 +321,8 @@ export default {
               totalAmount: totalAmount,
               paymentMethod: 'COD',
               orderStatus: status,
-              orderedItems: orderedItems
+              orderedItems: orderedItems.products
+             
             });
             await ordered.save();
             console.log("uploaded to db");

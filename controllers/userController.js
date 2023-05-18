@@ -8,7 +8,10 @@ import Products from "../models/productModels";
 import mongoose from "mongoose";
 import Cart from "../models/cartModels";
 import Category from "../models/categoryModels"
+import Orders from "../models/orderModels";
 import { response } from "express";
+const toastr = require('toastr');
+const ObjectId = mongoose.Types.ObjectId;
 
 dotenv.config();
 
@@ -221,23 +224,29 @@ export default {
   },
 
   
-  addToCart: async (req, res) => {
-    let user = req.session.user._id;
-    let productId = req.params.id;
-    console.log(productId);
-    console.log("api call");
+  // Add the toastr CSS and JavaScript files in your HTML
 
-    try {
-      const response = await userHelpers.addToCart(user, productId);
-      if (response) {
-        console.log("product added to cart");
-        res.json({status:true})
-      } else {
-      res.redirect("/cart");
-        console.log("product not added");
-      }
-    } catch (error) {}
-  },
+// Controller
+addToCart: async (req, res) => {
+  let user = req.session.user._id;
+  let productId = req.params.id;
+
+  try {
+    const response = await userHelpers.addToCart(user, productId);
+    if (response) {
+      console.log("product added to cart");
+      res.json({ status: true, message: "Product added to cart" });
+    } else {
+      console.log("product not added");
+      res.json({ status: false, message: "Product not added" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.json({ status: false, message: "An error occurred" });
+  }
+},
+
+  
 
   getProductView: async (req, res) => {
     let productId = req.params.id;
@@ -261,13 +270,21 @@ export default {
 
   getUserProfile: async (req, res) => {
     let userid = req.params.id;
-   
-    let cartCount= await userHelpers.getCartCount(req.session.user._id)
-    let allcategory = await Category.find()
+    let userId = req.session.user._id;
+  
+    let cartCount = await userHelpers.getCartCount(req.session.user._id);
+    let allcategory = await Category.find();
+    
     try {
+      const address = await Address.find({ user: userId });
+
+      const orders= await Orders.find({ user: userId })
+      console.log(orders);
+
       const response = await userHelpers.getUserDetails(userid);
+      
       if (response) {
-        res.render("shop/userProfile", { user: response ,cartCount,allcategory});
+        res.render("shop/userProfile", { user: response, cartCount, allcategory ,address,orders});
       } else {
         res.redirect("/shop/login");
       }
@@ -315,11 +332,9 @@ getCheckOut : async (req,res)=>{
     let cartCount= await userHelpers.getCartCount(req.session.user._id)
     const subtotal= await userHelpers.getCartTotal(req.session.user)
     let allcategory = await Category.find()
-    let address=await Address.findOne({ user: req.session.user._id }).populate(
-      "address._id"
-    );
-    console.log(address);
-    const Addresses=address.address
+    let Addresses=await Address.find({ user: req.session.user._id })
+    
+
   
       const cart = await Cart.findOne({ user: req.session.user._id }).populate(
         "products.productId"
@@ -371,11 +386,9 @@ getCheckOut : async (req,res)=>{
   addAddress:async(req,res)=>{
     let userId = req.session.user._id;
     let address = req.body
-    
-    console.log(address);
     try {
-      const user = await User.findById(userId);
-      const result= await userHelpers.addAddress(userId,address,user)
+      
+      const result= await userHelpers.addAddress(userId,address)
       if (result) {
         res.redirect('/GetcheckOut')  
         
@@ -394,16 +407,32 @@ getCheckOut : async (req,res)=>{
     try {
       let userId = req.session.user._id;
   
-      const cartItems = await Cart.findOne({ user: req.session.user._id }).populate(
-        "products.productId"
-      );
+      const cartItems = await Cart.findOne({ user: req.session.user._id })
   
       const totalAmount = await userHelpers.getCartTotal(req.session.user);
   
       if (req.body.payment_method == "COD") {
         const placeOrder = await userHelpers.placeOrder(req.body, totalAmount, cartItems, userId);
+        
+        // Update product quantities
+      const orderItems = cartItems.products;
+
+      for (const item of orderItems) {
+        const productId = item.productId._id;
+        const quantity = item.quantity;
+
+        // Find the product in the database
+        const product = await Products.findById(productId);
+
+        // Decrease the product quantity by the ordered quantity
+        product.productQuantity -= quantity;
+
+        // Save the updated product to the database
+        await product.save();
+      }
         res.json({ success: true });
       }
+      
     } catch (error) {
       console.log(error);
       res.status(500).send("Failed to place the order: " + error.message);
@@ -416,7 +445,65 @@ getCheckOut : async (req,res)=>{
     let cartCount= await userHelpers.getCartCount(req.session.user._id)
     res.render('shop/orderPlaced',{user,cartCount,allcategory});
 
+  },
+  getMyOrders:async(req,res)=>{
+    const user= req.session.user
+
+    const order = await Orders.findOne({ user: req.session.user._id })
+    
+    console.log(order);
+    let allcategory = await Category.find();
+    let cartCount= await userHelpers.getCartCount(req.session.user._id)
+
+
+    res.render('shop/userProfile',{user,cartCount,allcategory});
+    
+    
+
+  },
+  getOrderDetails: async (req, res) => {
+    const user = req.session.user;
+    const orderId = req.params.id;
+  
+    try {
+      const order = await Orders.aggregate([
+        { $match: { _id: new ObjectId(orderId) } },
+        {
+          $lookup: {
+            from: "products", // The name of the products collection
+            localField: "orderedItems.productId",
+            foreignField: "_id",
+            as: "orderedItems.product",
+          },
+        },
+        { $unwind: "$orderedItems.product" },
+      ]);
+  
+      if (order.length > 0) {
+        let allcategory = await Category.find();
+        let cartCount = await userHelpers.getCartCount(user._id);
+        res.render("shop/viewOrderDetails", {
+          user,
+          cartCount,
+          allcategory,
+          order: order[0],
+        });
+      } else {
+        // Handle case when order is not found
+        res.redirect("/");
+      }
+    } catch (error) {
+      console.error(error);
+      res.redirect("/");
+    }
   }
+  
+  
+  
+  
+  
+  
+
   
   
 

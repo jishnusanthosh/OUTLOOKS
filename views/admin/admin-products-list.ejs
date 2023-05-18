@@ -51,7 +51,7 @@
                     </div>
                 </header> <!-- card-header end// -->
 
-                <table class="table">
+                <table class="table" id="product-list">
                     <thead>
                         <tr>
                             <th>No.</th>
@@ -238,7 +238,17 @@
 }
 
 
+
         </script>
+        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        <!--addind data table cdn-->
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+        <!--initializing datatable-->
+        <script>
+            $(document).ready(function () {
+             $('#product-list').DataTable();
+            });
+      </script>
     </body>
 
 

@@ -125,28 +125,17 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <tr>
-                                                                    <td>#1357</td>
-                                                                    <td>March 45, 2020</td>
-                                                                    <td>Processing</td>
-                                                                    <td>$125.00 for 2 item</td>
-                                                                    <td><a href="#" class="btn-small d-block">View</a></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>#2468</td>
-                                                                    <td>June 29, 2020</td>
-                                                                    <td>Completed</td>
-                                                                    <td>$364.00 for 5 item</td>
-                                                                    <td><a href="#" class="btn-small d-block">View</a></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>#2366</td>
-                                                                    <td>August 02, 2020</td>
-                                                                    <td>Completed</td>
-                                                                    <td>$280.00 for 3 item</td>
-                                                                    <td><a href="#" class="btn-small d-block">View</a></td>
-                                                                </tr>
+                                                                <% for (let i = 0; i < orders.length; i++) { %>
+                                                                    <tr>
+                                                                        <td><%= orders[i]._id %></td>
+                                                                        <td><%= orders[i].orderDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) %></td>
+                                                                        <td><%= orders[i].orderStatus %></td>
+                                                                        <td>Rs.<%= orders[i].totalAmount %></td>
+                                                                        <td><a href="/viewOrderDetails/<%= orders[i]._id %>" class="btn-small d-block">View</a></td>
+                                                                    </tr>
+                                                                <% } %>
                                                             </tbody>
+                                                            
                                                         </table>
                                                     </div>
                                                 </div>
@@ -179,33 +168,135 @@
                                         </div>
                                         <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
                                             <div class="row">
-                                                <div class="col-lg-6">
-                                                    <div class="card mb-3 mb-lg-0">
-                                                        <div class="card-header">
-                                                            <h5 class="mb-0">Billing Address</h5>
-                                                        </div>
-                                                        <div class="card-body">
-                                                            <address>3522 Interstate<br> 75 Business Spur,<br> Sault Ste. <br>Marie, MI 49783</address>
-                                                            <p>New York</p>
-                                                            <a href="#" class="btn-small">Edit</a>
-                                                        </div>
+                                                <% if (address.length === 0) { %>
+                                                    <div class="col-lg-12 text-center">
+                                                        <p class="text-center">No address found.</p>
+                                                        <a href="#" class="btn btn-primary stylish-button" data-toggle="modal" data-target="#addAddressModal">Add Address</a>
                                                     </div>
-                                                </div>
-                                                <div class="col-lg-6">
-                                                    <div class="card">
-                                                        <div class="card-header">
-                                                            <h5 class="mb-0">Shipping Address</h5>
+                                                <% } else { %>
+                                                    <% for (let i = 0; i < address.length; i++) { %>
+                                                        <div class="col-lg-6">
+                                                            <div class="card mb-3 mb-lg-0">
+                                                                <div class="card-header">
+                                                                    <h5 class="mb-0">Billing Address</h5>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <h6>Name: <%= address[i].firstname %> <%= address[i].lastname %></h6>
+                                                                    <address>
+                                                                        <p><strong>Street Name:</strong> <%= address[i].streetname %></p>
+                                                                        <p><strong>Apartment Number:</strong> <%= address[i].apartmentnumber %></p>
+                                                                        <p><strong>City:</strong> <%= address[i].city %></p>
+                                                                        <p><strong>State:</strong> <%= address[i].state %></p>
+                                                                        <p><strong>Zip Code:</strong> <%= address[i].zipcode %></p>
+                                                                    </address>
+                                                                    <p><strong>Phone:</strong> <%= address[i].phone %></p>
+                                                                    <a href="#" class="btn btn-primary stylish-button" data-toggle="modal" data-target="#editAddressModal">Edit</a>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <div class="card-body">
-                                                            <address>4299 Express Lane<br>
-                                                                Sarasota, <br>FL 34249 USA <br>Phone: 1.941.227.4444</address>
-                                                            <p>Sarasota</p>
-                                                            <a href="#" class="btn-small">Edit</a>
-                                                        </div>
+                                                    <% } %>
+                                                <% } %>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Add Address Modal -->
+                                        <div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="addAddressModalLabel">Add Address</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form method="post" action="/addAddress" id="placeOrder-form">
+                                                            <div class="form-group">
+                                                                <label for="firstname">First name *</label>
+                                                                <input type="text" required="" name="firstname" placeholder="First name *"
+                                                                    id="firstname">
+                                                                <div class="invalid-feedback"></div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="lastname">Last name *</label>
+                                                                <input type="text" required="" name="lastname" placeholder="Last name *"
+                                                                    id="lastname">
+                                                                <div class="invalid-feedback"></div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="phone">Phone *</label>
+                                                                <input required="" type="text" name="phone" placeholder="Phone *" id="phone">
+                                                                <div class="invalid-feedback"></div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="email">Email address *</label>
+                                                                <input required="" type="text" name="email" placeholder="Email address *"
+                                                                    id="email">
+                                                                <div class="invalid-feedback"></div>
+                                                            </div>
+                            
+                                                            <div class="form-group">
+                                                                <label for="address">Apartment Number *</label>
+                                                                <input type="text" name="apartmentnumber" required=""
+                                                                    placeholder="Apartment Number *" id="address">
+                                                                <div class="invalid-feedback"></div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="address2">Street Name</label>
+                                                                <input type="text" name="streetname" required="" placeholder="Street Name"
+                                                                    id="address2">
+                                                                <div class="invalid-feedback"></div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="city">City / Town *</label>
+                                                                <input required="" type="text" name="city" placeholder="City / Town *" id="city">
+                                                                <div class="invalid-feedback"></div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="state">State / County *</label>
+                                                                <input required="" type="text" name="state" placeholder="State / County *"
+                                                                    id="state">
+                                                                <div class="invalid-feedback"></div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="zipcode">Postcode / ZIP *</label>
+                                                                <input required="" type="text" name="zipcode" placeholder="Postcode / ZIP *"
+                                                                    id="zipcode">
+                                                                <div class="invalid-feedback"></div>
+                                                            </div>
+                            
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        <button type="button" class="btn btn-primary">Save Address</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        
+                                        <!-- Edit Address Modal -->
+                                        <div class="modal fade" id="editAddressModal" tabindex="-1" role="dialog" aria-labelledby="editAddressModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="editAddressModalLabel">Edit Address</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <!-- Edit address form goes here -->
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        <button type="button" class="btn btn-primary">Save Changes</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        
                                         <div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
                                             <div class="card">
                                                 <div class="card-header">
@@ -276,9 +367,10 @@
                                                                 <h6><%= user.phonenumber %></h6>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-6 text-center">
-                                                            <img src="<%= user.photo_url %>" alt="User photo" class="img-thumbnail">
+                                                        <div class="col-md-4 text-center">
+                                                            <img src="/uploads/avatar.png" alt="User photo" class="img-thumbnail" style="max-width: 150px;">
                                                         </div>
+                                                        
                                                     </div>
                                                 </div>
                                             </div>

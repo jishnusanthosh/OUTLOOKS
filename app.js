@@ -16,7 +16,6 @@ import  swal from "sweetalert";
 
 
 
-
 import connectDB from './config/database.js';
 
 // Import routers

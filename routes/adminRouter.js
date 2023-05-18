@@ -48,6 +48,12 @@ router.post("/edit-product-post/:id",isloggedInadmin,adminController.postEditPro
 
 router.post("/add-product",isloggedInadmin,adminController.addProductPost)
 
+router.get("/getOrders",isloggedInadmin,adminController.GetAllOrder)
+
+router.get("/getOneOrderDetail/:id",isloggedInadmin,adminController.getOneOrderDetails)
+
+router.get("/getSalesReport",isloggedInadmin,adminController.GetSalesReport)
+
 
 export default router;
 
