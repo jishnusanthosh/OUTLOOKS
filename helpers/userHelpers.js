@@ -100,27 +100,27 @@ export default {
   addToCart: async (userId, productId) => {
     try {
       const product = await Product.findById(productId);
-  
+
       if (!product) {
         throw new Error("Product not found");
       }
-  
+
       const quantity = product.productQuantity;
-  
+
       if (quantity <= 0) {
         return false;
       }
-  
+
       let cart = await Cart.findOne({ user: userId });
-  
+
       if (!cart) {
         // If cart doesn't exist for the user, create a new one
         cart = new Cart({ user: userId, products: [] });
       }
-  
+
       // Check if the product is already present in the cart
       const index = cart.products.findIndex((p) => p.productId == productId);
-  
+
       if (index === -1) {
         // If the product is not present in the cart, add a new entry
         cart.products.push({ productId, quantity: 1 });
@@ -128,17 +128,14 @@ export default {
         // If the product is already present, increase its quantity
         cart.products[index].quantity += 1;
       }
-  
+
       await cart.save();
       return true;
     } catch (error) {
       console.error(error);
       return false;
     }
-  }
-  ,
-  
-
+  },
   getCartProducts: async (userId) => {
     try {
       const cart = await Cart.findOne({ user: userId });
@@ -181,13 +178,15 @@ export default {
 
   deleteProductFromCart: async (userId, productId) => {
     try {
-      const userProduct = await Product.findById(productId).select("productPrice");
+      const userProduct = await Product.findById(productId).select(
+        "productPrice"
+      );
       if (!userProduct) {
         return { status: false, message: "product not found" };
       }
 
       const cart = await Cart.findOne({ user: userId });
-     
+
       if (cart) {
         const itemIndex = cart.products.findIndex((item) =>
           item.productId.equals(productId)
@@ -196,150 +195,137 @@ export default {
         console.log(itemIndex);
 
         if (itemIndex > -1) {
-          
           cart.products.splice(itemIndex, 1);
           await cart.save();
-          return { status: true, message: 'product removed from cart' };
+          return { status: true, message: "product removed from cart" };
         } else {
-          return { status: false, message: 'product not found in cart' };
+          return { status: false, message: "product not found in cart" };
         }
-  
-      }  else {
-        return { status: false, message: 'cart not found' };
+      } else {
+        return { status: false, message: "cart not found" };
       }
-  
     } catch (error) {
       console.error(error);
     }
   },
-  getCartCount: async(userId)=>{
+  getCartCount: async (userId) => {
     try {
-      const cart = await Cart.findOne({ user: userId});
+      const cart = await Cart.findOne({ user: userId });
       if (!cart) {
         return { status: false, message: "cart not found" };
       }
       return cart.products.length;
-      
     } catch (error) {
       console.error(error);
       return { status: false, message: "cart not found" };
-      }
+    }
   },
-  updateProductQuantity: async(productId,count,userId)=>{
+  updateProductQuantity: async (productId, count, userId) => {
+    console.log(count);
 
- 
     try {
-      const cart = await Cart.findOne({user:userId});
+      const cart = await Cart.findOne({ user: userId });
 
-
-      const product = cart.products.find(
+      const productFromCart = cart.products.find(
         (p) => p.productId.toString() === productId
       );
-        if (!product) {
-          console.log("product not found");
-        } 
-        else{
-          product.quantity = count;
+
+
+      if (!productFromCart) {
+        console.log("product not found");
+      } else {
+        const product = await Product.findOne({ _id: productId });
+        console.log(productFromCart);
+        if (product.productQuantity >= count) {
+          console.log(product.productQuantity);
+          productFromCart.quantity = count;
           await cart.save();
           return { status: true, message: "product quantity updated" };
+        } else {
+          return { status: false, message: "product out of stock" };
         }
+      }
     } catch (error) {
       console.error(error);
     }
-    
-      },
+  },
 
+  getCartTotal: async (user) => {
+    try {
+      const cart = await Cart.findOne({ user: user._id }).populate(
+        "products.productId"
+      );
+      console.log(cart);
+      if (!cart) {
+        return { status: false, message: "cart not found" };
+      }
+      let total = 0;
+      cart.products.forEach((item) => {
+        total += item.productId.productPrice * item.quantity;
+      });
+      console.log(total);
+      return total;
+    } catch (error) {
+      console.error(error);
+      return { status: false, message: "cart not found" };
+    }
+  },
+  addAddress: async (userId, address) => {
+    try {
+      const result = await Address.create({
+        firstname: address.firstname,
+        lastname: address.lastname,
+        streetname: address.streetname,
+        apartmentnumber: address.apartmentnumber,
+        city: address.city,
+        state: address.state,
+        zipcode: address.zipcode,
+        phone: address.phone,
+        email: address.email,
+        user: userId,
+      });
+      if (result) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
 
+  placeOrder: async (order, totalAmount, cartItems, user) => {
+    const orderDate = () => {
+      return new Date();
+    };
 
-      getCartTotal: async(user)=>{
-        try {
-          const cart = await Cart.findOne({ user: user._id }).populate('products.productId')
-          console.log(cart);
-          if (!cart) {
-            return { status: false, message: "cart not found" };
-          }
-          let total = 0;
-          cart.products.forEach((item) => {
-          
-            total += item.productId.productPrice * item.quantity;
-          });
-          console.log(total);
-          return total;
-        } catch (error) {
-          console.error(error);
-          return { status: false, message: "cart not found" };
-        }
-      },
-      addAddress:async(userId,address)=>{
-        try{
-          const result=await Address.create(
-           {
-              firstname:address.firstname,
-              lastname:address.lastname,
-              streetname:address.streetname,
-              apartmentnumber:address.apartmentnumber,
-              city:address.city,
-              state:address.state,
-              zipcode:address.zipcode,
-              phone:address.phone,
-              email:address.email,
-              user:userId
-  
-            },
-           
-            )
-            if (result) {
-              return true     
-              
-            } else {
-              
-              return false     
-            }
-        
-        }catch(error){
-         console.log(error);
-        }
-        },
+    try {
+      let status = order.payment_method === "COD" ? "placed" : "pending";
+      let date = orderDate();
+      let userId = user;
+      let addressId = order.address_id;
+      let orderedItems = cartItems;
+      console.log(orderedItems + "orderedItems");
 
-        placeOrder: async (order, totalAmount, cartItems, user) => {
-          const orderDate = () => {
-            return new Date();
-          };
-        
-          try {
-            let status = order.payment_method === 'COD' ? 'placed' : 'pending';
-            let date = orderDate();
-            let userId = user;
-            let addressId = order.address_id;
-            let orderedItems = cartItems
-            console.log(orderedItems+"orderedItems");
-          
-            let ordered = new Order({
-              user: userId,
-              address: addressId,
-              orderDate: date,
-              totalAmount: totalAmount,
-              paymentMethod: 'COD',
-              orderStatus: status,
-              orderedItems: orderedItems.products
-             
-            });
-            await ordered.save();
-            console.log("uploaded to db");
-        
-            // Clear the user's cart
-            await Cart.deleteMany({ user: userId });
-        
-            return ordered;
-          } catch (error) {
-            console.error(error);
-            throw new Error("Failed to place the order");
-          }
-        }
-        
-        
-  
-        
-       
-  
+      let ordered = new Order({
+        user: userId,
+        address: addressId,
+        orderDate: date,
+        totalAmount: totalAmount,
+        paymentMethod: "COD",
+        orderStatus: status,
+        orderedItems: orderedItems.products,
+      });
+      await ordered.save();
+      console.log("uploaded to db");
+
+      // Clear the user's cart
+      await Cart.deleteMany({ user: userId });
+
+      return ordered;
+    } catch (error) {
+      console.error(error);
+      throw new Error("Failed to place the order");
+    }
+  },
 };

@@ -1,16 +1,27 @@
 <%- include('../shop/layout/user-header.ejs') %>
     <!-- Header Info Begin -->
-
+    <link href="
+    https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css
+    " rel="stylesheet">
     <style>
         .clear-bt {
-margin-top: 10px;
-  padding: 10px 20px; /* adjust padding to change button size */
-  font-size: 16px; /* adjust font size to change button text size */
-  height: 45px; /* adjust height to change button height */
-  
-}
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            height: 45px;
+        }
 
+        #toastr-container>.toast-error {
+            background-color: #FFDDDD;
+            color: red;
+        }
+
+        #toastr-container>.toast-success {
+            background-color: #DDFFDD;
+            color: green;
+        }
     </style>
+    <div id="toastr-container"></div>
     <div class="header-info">
         <div class="container-fluid">
             <div class="row">
@@ -45,7 +56,7 @@ margin-top: 10px;
                 <div class="col-lg-4">
                     <div class="page-breadcrumb">
                         <h2>Cart<span>.</span></h2>
-                        
+
                     </div>
                 </div>
                 <div class="col-lg-8">
@@ -74,57 +85,58 @@ margin-top: 10px;
                     <tbody>
                         <%= console.log(products); %>
 
-                        <% products.forEach(product=> { %>
-                            <input id="<%= product.productId._id %>" type="text" hidden
-                                value="<%= product.productId._id %>">
-                            <tr>
-                                <td class="product-col">
-                                    <div class="product-images">
-                                        <% product.productId.productImage.forEach(image=> { %>
-                                            <img src="/uploads/<%= product.productId.productImage %>.jpg" alt=""
-                                                width="130" height="150">
-                                            <% }) %>
-                                    </div>
-                                    <%= console.log(product.quantity) %>
-                                        <div class="p-title">
-                                            <h5>
-                                                <%= product.productId.productName %>
-                                            </h5>
+                            <% products.forEach(product=> { %>
+                                <input id="<%= product.productId._id %>" type="text" hidden
+                                    value="<%= product.productId._id %>">
+                                <tr>
+                                    <td class="product-col">
+                                        <div class="product-images">
+                                            <% product.productId.productImage.forEach(image=> { %>
+                                                <img src="/uploads/<%= product.productId.productImage %>.jpg" alt=""
+                                                    width="130" height="150">
+                                                <% }) %>
                                         </div>
-                                </td>
-                                <td class="price-col"><span id="rate-<%= product.productId._id %>">
-                                    <%= product.productId.productPrice %>
-                                </span>
-   
-                                    
-                                </td>
-                                <td class="quantity-col">
-
-                                    <div class="pro-qty" data-product-id="<%= product.productId._id %>">
-                                        <input type="text" value=<%=product.quantity %>>
-
-                                    </div>
-                                </td>
-
-<input id="total-<%= product.productId._id %>" type="text" hidden>
-
-                                <input id="total-<%= product.productId.productPrice * product.quantity %>" type="text" hidden
-                            >
-                         
-
-
-
-                                <td class="total"><span id="qty-<%= product.productId._id %>">
-                                    <%= product.productId.productPrice * product.quantity %>
-                                    </span></td>
-                                <a>
-
-                                    <td onclick="productRemove('<%= product.productId._id %>')" class="product-close">x
+                                        <%= console.log(product.quantity) %>
+                                            <div class="p-title">
+                                                <h5>
+                                                    <%= product.productId.productName %>
+                                                </h5>
+                                            </div>
                                     </td>
-                                </a>
+                                    <td class="price-col"><span id="rate-<%= product.productId._id %>">
+                                            <%= product.productId.productPrice %>
+                                        </span>
 
-                            </tr>
-                            <% }) %>
+
+                                    </td>
+                                    <td class="quantity-col">
+
+                                        <div class="pro-qty" data-product-id="<%= product.productId._id %>">
+                                            <input type="text" value=<%=product.quantity %>>
+
+                                        </div>
+                                    </td>
+
+                                    <input id="total-<%= product.productId._id %>" type="text" hidden>
+
+                                    <input id="total-<%= product.productId.productPrice * product.quantity %>"
+                                        type="text" hidden>
+
+
+
+
+                                    <td class="total"><span id="qty-<%= product.productId._id %>">
+                                            <%= product.productId.productPrice * product.quantity %>
+                                        </span></td>
+                                    <a>
+
+                                        <td onclick="productRemove('<%= product.productId._id %>')"
+                                            class="product-close">x
+                                        </td>
+                                    </a>
+
+                                </tr>
+                                <% }) %>
                     </tbody>
 
                 </table>
@@ -134,10 +146,10 @@ margin-top: 10px;
                     <div class="col-lg-6">
                         <div class="coupon-input">
                             <input type="text" placeholder="Enter cupone code">
-                            <div class="site-btn clear-bt" >Apply Coupon</div>
+                            <div class="site-btn clear-bt">Apply Coupon</div>
                         </div>
                     </div>
-                  
+
                     <div class="col-lg-6 offset-lg-6 text-left text-lg-right">
                         <div class="site-btn ">Clear Cart</div>
                         <div class="site-btn ">Continue Shopping</div>
@@ -179,25 +191,27 @@ margin-top: 10px;
                                     <thead>
                                         <tr>
                                             <th>Total</th>
-                                     
+
                                             <th>Shipping</th>
                                             <th class="total-cart">Total Cart</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td  > Rs.<span id="total-value1" > 
-                                                
-                                                <%= total  %> </span></td>
+                                            <td> Rs.<span id="total-value1">
+
+                                                    <%= total %>
+                                                </span></td>
 
 
 
                                             <td class="shipping">Free</td>
-                                            
-                                            <td class="total-cart-p"> Rs.<span id="total-value2" > 
-                                                
-                                               <%= total  %> </span></td>
-                                              
+
+                                            <td class="total-cart-p"> Rs.<span id="total-value2">
+
+                                                    <%= total %>
+                                                </span></td>
+
                                         </tr>
                                     </tbody>
                                 </table>
@@ -261,36 +275,27 @@ margin-top: 10px;
             }
         </script>
 
-
         <script>
             var proQty = $('.pro-qty');
-            proQty.prepend('<span class="dec qtybtn" >-</span>');
+            proQty.prepend('<span class="dec qtybtn">-</span>');
             proQty.append('<span class="inc qtybtn">+</span>');
             proQty.on('click', '.qtybtn', function () {
                 console.log('Button clicked!');
                 var $button = $(this);
                 var $quantityInput = $button.parent().find('input');
                 var oldValue = $quantityInput.val();
-
                 var productId = $button.parent().data('product-id');
-
-var qtyspan = document.getElementById(`qty-${productId}`);
-var ratespan = document.getElementById(`rate-${productId}`);
-var totalspan1 = document.getElementById('total-value1');
-var totalspan2 = document.getElementById('total-value2');
-
-console.log(totalspan1);
-
-var price = parseInt(qtyspan.textContent);
-var rate = parseInt(ratespan.textContent);
-var total = parseInt(totalspan1.textContent);
-
+                var qtyspan = document.getElementById(`qty-${productId}`);
+                var ratespan = document.getElementById(`rate-${productId}`);
+                var totalspan1 = document.getElementById('total-value1');
+                var totalspan2 = document.getElementById('total-value2');
+                var price = parseInt(qtyspan.textContent);
+                var rate = parseInt(ratespan.textContent);
+                var total = parseInt(totalspan1.textContent);
 
                 if ($button.hasClass('inc')) {
                     var newVal = parseFloat(oldValue) + 1;
-                    qtyspan.innerHTML = newVal * rate
-                    totalspan1.innerHTML = rate + total
-                    totalspan2.innerHTML = rate + total
+                    var totalspan = rate + total;
                     if (newVal > 10) {
                         newVal = 10;
                     }
@@ -300,22 +305,20 @@ var total = parseInt(totalspan1.textContent);
                     } else {
                         proQty.find('.inc.qtybtn').prop('disabled', false);
                     }
+                    // Enable decrement button when incrementing
+                    proQty.find('.dec.qtybtn').prop('disabled', false);
                 } else {
                     if (oldValue > 1) {
                         var newVal = parseFloat(oldValue) - 1;
-                        qtyspan.innerHTML = newVal * rate
-                          totalspan1.innerHTML =   total - rate
-                          totalspan2.innerHTML =   total - rate
+
+                        var totalspan = total - rate;
+
                         // Enable increment button when decrementing
                         proQty.find('.inc.qtybtn').prop('disabled', false);
                     } else {
-                        newVal = 0;
-                    }
-                    // Disable decrement button if quantity reaches minimum limit
-                    if (newVal <= 1) {
+                        newVal = 1; // Set minimum quantity to 1
+                        // Disable decrement button if quantity is already 1
                         proQty.find('.dec.qtybtn').prop('disabled', true);
-                    } else {
-                        proQty.find('.dec.qtybtn').prop('disabled', false);
                     }
                 }
 
@@ -328,23 +331,42 @@ var total = parseInt(totalspan1.textContent);
                     data: { productId: productId, quantity: newVal },
                     success: function (response) {
                         console.log('Product quantity updated successfully!');
+                        // Update count and total price only if the response is successful
+                        // Modify the following lines to update the count and total price elements based on the AJAX response
+                        // For example:
+                        var newCount = response.count;
+                        var newTotalPrice = response.totalPrice;
+                        totalspan1.innerHTML = totalspan;
+                        totalspan2.innerHTML = totalspan;
+                        qtyspan.innerHTML = newVal * rate;
+                        // Update the count element
+                        // var countElement = document.getElementById('count');
+                        // countElement.innerHTML = newCount;
+                        // Update the total price elements
+                        // var totalPriceElement1 = document.getElementById('total-value1');
+                        // var totalPriceElement2 = document.getElementById('total-value2');
+                        // totalPriceElement1.innerHTML = newTotalPrice;
+                        // totalPriceElement2.innerHTML = newTotalPrice;
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         console.error('Error updating product quantity:', errorThrown);
+                        toastr.error('Product is out of stock', { "toastClass": "toast-error" });
+
                         // Rollback quantity input field value to previous value
                         $quantityInput.val(oldValue);
                     }
                 });
-                // Disable decrease button if quantity is 1
-                if (newVal == 1) {
-                    proQty.find('.dec.qtybtn').prop('disabled', true);
-                } else {
-                    proQty.find('.dec.qtybtn').prop('disabled', false);
-                }
             });
-
-
-
-
+            toastr.options = {
+                "positionClass": "toast-top-right",
+                "timeOut": "5000",
+                "extendedTimeOut": "2000",
+                "closeButton": true,
+                "toastClass": "toast"
+            };
         </script>
+
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script src="
+https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js
+"></script>

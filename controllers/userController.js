@@ -3,14 +3,14 @@ import twilioFunctions from "../config/twilio";
 import dotenv from "dotenv";
 import userHelpers from "../helpers/userHelpers";
 import User from "../models/userModels";
-import Address from "../models/addressModels"
+import Address from "../models/addressModels";
 import Products from "../models/productModels";
 import mongoose from "mongoose";
 import Cart from "../models/cartModels";
-import Category from "../models/categoryModels"
+import Category from "../models/categoryModels";
 import Orders from "../models/orderModels";
-import { response } from "express";
-const toastr = require('toastr');
+
+const toastr = require("toastr");
 const ObjectId = mongoose.Types.ObjectId;
 
 dotenv.config();
@@ -23,19 +23,27 @@ export default {
   homePage: async (req, res, next) => {
     let user = req.session.user;
     const allproducts = await Products.find();
-    const allcategory=await Category.find();
-   
- 
+    const allcategory = await Category.find();
 
     try {
       if (user) {
-        let cartCount= await userHelpers.getCartCount(req.session.user._id)
-        
+        let cartCount = await userHelpers.getCartCount(req.session.user._id);
+
         console.log(cartCount);
-        res.render("shop/home.ejs", { user, allproducts ,cartCount,allcategory});
+        res.render("shop/home.ejs", {
+          user,
+          allproducts,
+          cartCount,
+          allcategory,
+        });
       } else {
-        let cartCount=null
-        res.render("shop/home.ejs", { user: false, allproducts,cartCount,allcategory});
+        let cartCount = null;
+        res.render("shop/home.ejs", {
+          user: false,
+          allproducts,
+          cartCount,
+          allcategory,
+        });
       }
     } catch (error) {
       console.error(error);
@@ -44,18 +52,21 @@ export default {
 
   loginPage: async (req, res) => {
     let user = req.session.user;
-   
-    const allcategory=await Category.find();
+
+    const allcategory = await Category.find();
     if (user) {
-      let cartCount= await userHelpers.getCartCount(req.session.user._id)
-      
+      let cartCount = await userHelpers.getCartCount(req.session.user._id);
+
       console.log(cartCount);
-      res.render("shop/userlogin/login", { user,cartCount});
+      res.render("shop/userlogin/login", { user, cartCount });
     } else {
-      let cartCount=null
-      res.render("shop/userlogin/login", { user: false,cartCount,allcategory});
+      let cartCount = null;
+      res.render("shop/userlogin/login", {
+        user: false,
+        cartCount,
+        allcategory,
+      });
     }
-   
   },
   GetOtpLogin: (req, res) => {
     res.render("shop/userlogin/otp-login.ejs");
@@ -64,33 +75,31 @@ export default {
     res.render("shop/userlogin/otp-send.ejs");
   },
 
-
-
-
   //signup
   signUpPage: (req, res) => {
     res.render("shop/userlogin/signup.ejs");
   },
   signUpPost: (req, res) => {
     userHelper.doSignUp(req.body).then((userData) => {
-      let user = userData.user;
-      console.log(user);
-
       if (userData.emailStatus) {
         const msg = "Email already exists";
         res.render("shop/userlogin/signup", { msg });
-      } else if (userData.emailStatus == false) {
-        const msg = "phonenumber already exists";
-        res.render("shop/userlogin/signup", { msg });
-      } else {
-        if (userData.user) {
-          req.session.login = true;
-          req.session.user = userData.user;
-          res.redirect("/");
-        }
+      } else if (userData.phoneStatus) {
+        const msg2 = "Phone number already exists";
+        res.render("shop/userlogin/signup", { msg2 });
+      } else if (userData.user) {
+        req.session.login = true;
+        req.session.user = userData.user;
+        res.redirect("/");
       }
+    }).catch((error) => {
+      // Handle any errors that occur during the signup process
+      console.log(error);
+      // Render an error page or redirect to an appropriate route
+      res.render("error");
     });
   },
+  
   loginPost: async (req, res) => {
     try {
       const response = await userHelper.doLogin(req.body);
@@ -112,7 +121,6 @@ export default {
       res.status(500).send("Internal Server Error");
     }
   },
-  
 
   generateOtp: (req, res) => {
     userHelpers.generateOtp(req.body.phonenumber).then((user) => {
@@ -184,24 +192,19 @@ export default {
   },
 
   GetCart: async (req, res) => {
-    
-   
-
     try {
       const user = req.session.user;
-    
-      let cartCount= await userHelpers.getCartCount(req.session.user._id)
-      let total= await userHelpers.getCartTotal(req.session.user)
-      let allcategory = await Category.find()
-   
-  
-     
+
+      let cartCount = await userHelpers.getCartCount(req.session.user._id);
+      let total = await userHelpers.getCartTotal(req.session.user);
+      let allcategory = await Category.find();
+
       const cart = await Cart.findOne({ user: user._id }).populate(
         "products.productId"
       );
 
       if (!cart) {
-        res.render("shop/emptyCart", { user ,cartCount,allcategory});
+        res.render("shop/emptyCart", { user, cartCount, allcategory });
         return;
       }
 
@@ -223,42 +226,49 @@ export default {
     }
   },
 
-  
   // Add the toastr CSS and JavaScript files in your HTML
 
-// Controller
-addToCart: async (req, res) => {
-  let user = req.session.user._id;
-  let productId = req.params.id;
-
-  try {
-    const response = await userHelpers.addToCart(user, productId);
-    if (response) {
-      console.log("product added to cart");
-      res.json({ status: true, message: "Product added to cart" });
-    } else {
-      console.log("product not added");
-      res.json({ status: false, message: "Product not added" });
+  // Controller
+  addToCart: async (req, res) => {
+    if (!req.session.user) {
+      // Redirect to the login page
+      return res.json({ status: false, message: "User not logged in", redirect: '/login' });
     }
-  } catch (error) {
-    console.error(error);
-    res.json({ status: false, message: "An error occurred" });
-  }
-},
-
   
+    try {
+      let userId = req.session.user._id;
+      let productId = req.params.id;
+      const response = await userHelpers.addToCart(userId, productId);
+      if (response) {
+        console.log("Product added to cart");
+        res.json({ status: true, message: "Product added to cart" });
+      } else {
+        console.log("Product not added");
+        res.json({ status: false, message: "Product not added" });
+      }
+    } catch (error) {
+      console.error(error);
+      res.json({ status: false, message: "An error occurred" });
+    }
+  },
+  
+
 
   getProductView: async (req, res) => {
     let productId = req.params.id;
     let user = req.session.user || null;
-    let allcategory = await Category.find()
+    let allcategory = await Category.find();
     try {
-      
-      let cartCount= await userHelpers.getCartCount(req.session.user._id)
-     
+      let cartCount = await userHelpers.getCartCount(req.session.user._id);
+
       const response = await userHelpers.getProductView(productId);
       if (response) {
-        res.render("shop/product-details", { product: response, user,cartCount,allcategory });
+        res.render("shop/product-details", {
+          product: response,
+          user,
+          cartCount,
+          allcategory,
+        });
       } else {
         res.redirect("/shop");
       }
@@ -271,20 +281,26 @@ addToCart: async (req, res) => {
   getUserProfile: async (req, res) => {
     let userid = req.params.id;
     let userId = req.session.user._id;
-  
+
     let cartCount = await userHelpers.getCartCount(req.session.user._id);
     let allcategory = await Category.find();
-    
+
     try {
       const address = await Address.find({ user: userId });
 
-      const orders= await Orders.find({ user: userId })
+      const orders = await Orders.find({ user: userId });
       console.log(orders);
 
       const response = await userHelpers.getUserDetails(userid);
-      
+
       if (response) {
-        res.render("shop/userProfile", { user: response, cartCount, allcategory ,address,orders});
+        res.render("shop/userProfile", {
+          user: response,
+          cartCount,
+          allcategory,
+          address,
+          orders,
+        });
       } else {
         res.redirect("/shop/login");
       }
@@ -293,70 +309,79 @@ addToCart: async (req, res) => {
     }
   },
   deleteCartProduct: async (req, res) => {
-    let { productId }= req.body;
+    let { productId } = req.body;
     let userId = req.session.user._id;
-    try{
-      const response = await userHelpers.deleteProductFromCart(userId, productId);
-      if(response.status){
-        res.json({success:true,message:response.message})
-      }else{
-        res.json({success:false,message:response.message})
+    try {
+      const response = await userHelpers.deleteProductFromCart(
+        userId,
+        productId
+      );
+      if (response.status) {
+        res.json({ success: true, message: response.message });
+      } else {
+        res.json({ success: false, message: response.message });
       }
-    
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
-
   },
   updateProductQuantity: async (req, res) => {
     let productId = req.body.productId;
     let quantity = req.body.quantity;
     let userId = req.session.user._id;
-    console.log(productId,quantity);
+    console.log(productId, quantity);
     try {
-        let response = await userHelpers.updateProductQuantity(productId, quantity,userId)
-        if(response.status){
-            res.json({success:true,message:response.message})
-        } else {
-            res.json({success:false,message:response.message})
-        }
+      let response = await userHelpers.updateProductQuantity(
+        productId,
+        quantity,
+        userId
+      );
+      if (response.status) {
+        res.json({ success: true, message: response.message });
+      } else {
+        res.status(400).json({ success: false, message: response.message });
+      }
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
-},
+  },
 
-getCheckOut : async (req,res)=>{
-  let user = req.session.user;
+  getCheckOut: async (req, res) => {
+    let user = req.session.user;
 
-  try{
-    let cartCount= await userHelpers.getCartCount(req.session.user._id)
-    const subtotal= await userHelpers.getCartTotal(req.session.user)
-    let allcategory = await Category.find()
-    let Addresses=await Address.find({ user: req.session.user._id })
-    
+    try {
+      let cartCount = await userHelpers.getCartCount(req.session.user._id);
+      const subtotal = await userHelpers.getCartTotal(req.session.user);
+      let allcategory = await Category.find();
+      let Addresses = await Address.find({ user: req.session.user._id });
 
-  
       const cart = await Cart.findOne({ user: req.session.user._id }).populate(
         "products.productId"
       );
-      
 
       if (!cart) {
-        res.render("shop/emptyCart", { user: req.session.user ,allcategory });
+        res.render("shop/emptyCart", { user: req.session.user, allcategory });
         return;
       }
 
       const products = cart.products;
 
-    if(cart){
-      res.render("shop/checkOut", { items: cart ,subtotal,products,user,cartCount ,allcategory,Addresses});
-      }else{
+      if (cart) {
+        res.render("shop/checkOut", {
+          items: cart,
+          subtotal,
+          products,
+          user,
+          cartCount,
+          allcategory,
+          Addresses,
+        });
+      } else {
         res.redirect("/shop/login");
-        }
       }
-      catch(error){
-        console.log(error);
-        }
+    } catch (error) {
+      console.log(error);
+    }
   },
 
   getShopView: async (req, res, next) => {
@@ -365,14 +390,14 @@ getCheckOut : async (req,res)=>{
     let userId = null;
     let cartCount = null;
     let allcategory = await Category.find();
-  
+
     if (req.session.user) {
       userId = req.session.user._id;
       cartCount = await userHelpers.getCartCount(userId);
     }
-  
+
     console.log(catId);
-  
+
     try {
       const products = await Products.find({ category: catId }).populate(
         "category"
@@ -383,128 +408,107 @@ getCheckOut : async (req,res)=>{
       console.error(error);
     }
   },
-  addAddress:async(req,res)=>{
+  addAddress: async (req, res) => {
     let userId = req.session.user._id;
-    let address = req.body
+    let address = req.body;
     try {
-      
-      const result= await userHelpers.addAddress(userId,address)
+      const result = await userHelpers.addAddress(userId, address);
       if (result) {
-        res.redirect('/GetcheckOut')  
-        
+        res.redirect("/GetcheckOut");
       } else {
-        
-        res.json({message:"address not added"})  
+        res.json({ message: "address not added" });
       }
-      
-     
     } catch (error) {
       console.log(error);
     }
-    
   },
   placeOrderPost: async (req, res) => {
     try {
       let userId = req.session.user._id;
-  
-      const cartItems = await Cart.findOne({ user: req.session.user._id })
-  
+
+      const cartItems = await Cart.findOne({ user: req.session.user._id });
+
       const totalAmount = await userHelpers.getCartTotal(req.session.user);
-  
+
       if (req.body.payment_method == "COD") {
-        const placeOrder = await userHelpers.placeOrder(req.body, totalAmount, cartItems, userId);
-        
+        const placeOrder = await userHelpers.placeOrder(
+          req.body,
+          totalAmount,
+          cartItems,
+          userId
+        );
+
         // Update product quantities
-      const orderItems = cartItems.products;
+        const orderItems = cartItems.products;
 
-      for (const item of orderItems) {
-        const productId = item.productId._id;
-        const quantity = item.quantity;
+        for (const item of orderItems) {
+          const productId = item.productId._id;
+          const quantity = item.quantity;
 
-        // Find the product in the database
-        const product = await Products.findById(productId);
+          // Find the product in the database
+          const product = await Products.findById(productId);
 
-        // Decrease the product quantity by the ordered quantity
-        product.productQuantity -= quantity;
+          // Decrease the product quantity by the ordered quantity
+          product.productQuantity -= quantity;
 
-        // Save the updated product to the database
-        await product.save();
-      }
+          // Save the updated product to the database
+          await product.save();
+        }
         res.json({ success: true });
       }
-      
     } catch (error) {
       console.log(error);
       res.status(500).send("Failed to place the order: " + error.message);
     }
   },
-  getOrderPlaced: async (req,res)=>{
-
-    const user=req.session.user
+  getOrderPlaced: async (req, res) => {
+    const user = req.session.user;
     let allcategory = await Category.find();
-    let cartCount= await userHelpers.getCartCount(req.session.user._id)
-    res.render('shop/orderPlaced',{user,cartCount,allcategory});
-
+    let cartCount = await userHelpers.getCartCount(req.session.user._id);
+    res.render("shop/orderPlaced", { user, cartCount, allcategory });
   },
-  getMyOrders:async(req,res)=>{
-    const user= req.session.user
+  getMyOrders: async (req, res) => {
+    const user = req.session.user;
 
-    const order = await Orders.findOne({ user: req.session.user._id })
+    const order = await Orders.findOne({ user: req.session.user._id });
+
     
-    console.log(order);
     let allcategory = await Category.find();
-    let cartCount= await userHelpers.getCartCount(req.session.user._id)
+    let cartCount = await userHelpers.getCartCount(req.session.user._id);
 
-
-    res.render('shop/userProfile',{user,cartCount,allcategory});
-    
-    
-
+    res.render("shop/userProfile", { user, cartCount, allcategory });
   },
   getOrderDetails: async (req, res) => {
     const user = req.session.user;
     const orderId = req.params.id;
   
     try {
-      const order = await Orders.aggregate([
-        { $match: { _id: new ObjectId(orderId) } },
-        {
-          $lookup: {
-            from: "products", // The name of the products collection
-            localField: "orderedItems.productId",
-            foreignField: "_id",
-            as: "orderedItems.product",
-          },
-        },
-        { $unwind: "$orderedItems.product" },
-      ]);
+      const order = await Orders.findOne({ _id: orderId }).populate('orderedItems.productId');
+      if (order) {
+        const orderedItems = order.orderedItems.map(item => item.quantity);
   
-      if (order.length > 0) {
         let allcategory = await Category.find();
         let cartCount = await userHelpers.getCartCount(user._id);
         res.render("shop/viewOrderDetails", {
           user,
           cartCount,
           allcategory,
-          order: order[0],
+          order,
+          orderedItems,
         });
       } else {
-        // Handle case when order is not found
         res.redirect("/");
       }
     } catch (error) {
       console.error(error);
       res.redirect("/");
     }
-  }
+  },
   
   
   
   
   
   
-
   
-  
-
 };

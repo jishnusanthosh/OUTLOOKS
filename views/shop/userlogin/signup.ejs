@@ -1,256 +1,235 @@
 <!doctype html>
 <html lang="en">
 
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
 
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/login/font/icomoon/style.css">
 
-    <link rel="stylesheet" href="/login/font/icomoon/style.css">
+  <link rel="stylesheet" href="/login/css/owl.carousel.min.css">
 
-    <link rel="stylesheet" href="/login/css/owl.carousel.min.css">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="/login/css/bootstrap.min.css">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="/login/css/bootstrap.min.css">
+  <!-- Style -->
+  <link rel="stylesheet" href="/login/css/style.css">
 
-    <!-- Style -->
-    <link rel="stylesheet" href="/login/css/style.css">
+  <style>
+    .btn-login {
+      background-color: #6c757d;
+    }
 
-    <style>
-      .btn-login {
-        background-color: #6c757d;
-      }
+    .btn-login:hover {
+      background-color: rgb(245, 245, 245);
+    }
 
-      .btn-login:hover {
-        background-color: rgb(245, 245, 245);
-      }
+    .content {
+      background-image: url('../../../login/image/h1_hero.jpg.webp');
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
 
-      .content {
-        background-image: url('../../../login/image/h1_hero.jpg.webp');
-        background-repeat: no-repeat;
-        background-size: cover;
-      }
-      html, body {
-  height: 100%;
-  overflow: hidden;
-}
+    html,
+    body {
+      height: 100%;
+      overflow: hidden;
+    }
 
-a:hover span {
-    transform: scale(1.2);
-  }
+    a:hover span {
+      transform: scale(1.2);
+    }
+  </style>
 
+  <title>SignUp</title>
+</head>
 
-    </style>
+<body>
+  <div class="content">
+    <div class="container">
+      <div class="row">
 
-    <title>SignUp</title>
-  </head>
+        <div class="col-md-6 contents">
+          <div class="row justify-content-center">
+            <div class="col-md-8">
+              <div class="mb-4">
+                <h1 style="font-family: 'Roboto', sans-serif; color: #faf2f2; text-align: center;">
+                  Outlooks<span style="color: #fff;">.</span>
+                </h1>
+                <br>
+                <h5 class="text-align: center">Sign Up</h5>
+              </div>
+              <div>
+                <% var msg1=msg1 || '' ; %>
+                <% if (msg1) { %>
+                <span class="text-white ">
+                  <%= msg1 %>
+                </span>
+                <% } %>
 
-  <body>
-    <div class="content">
-      <div class="container">
-        <div class="row">
+                <form action="/signup" method="post" id="signup-form">
+                  <div class="form-group first">
+                    <label for="username">Fullname<span class="text-color-danger">*</span></label>
+                    <input type="text" class="form-control" id="username" name="username" value="">
+                  </div>
+                  <span class="text-warning d-none" style="font-size: 14px; margin-left: 10px;" id="usernameError"></span>
 
-          <div class="col-md-6 contents">
-            <div class="row justify-content-center">
-              <div class="col-md-8">
-                <div class="mb-4">
-                  <h1 style="font-family: 'Roboto', sans-serif; color: #faf2f2; text-align: center;">
-                    Outlooks<span style="color: #fff;">.</span>
-                  </h1>
                   <br>
-                  <h5 class="text-align: center">Sign Up</h5>
-                </div>
-                <div>
-                  <% var msg1=msg1 || '' ; %>
-                    <% if (msg1) { %>
-                      <span class="text-white ">
-                        <%= msg1 %>
-                      </span>
-                      <% } %>
 
-                        <form action="/signup" method="post" id="signup-form">
-                          <div class="form-group first">
-                            <label for="username">Fullname<span class="text-color-danger">*</span></label>
-                            <input type="text" class="form-control" id="username" name="username" value="">
-                          </div>
-                          <span class="text-warning d-none" style="font-size: 14px; margin-left: 10px;" id="usernameError"></span>
+                  <div class="form-group first">
+                    <label for="email">Email<span class="text-color-danger">*</span></label>
+                    <input type="text" class="form-control" id="email" name="email" value="">
 
-                          <br>
-                          
-                                <div class="form-group first">
-                                  <label for="email">Email<span class="text-color-danger">*</span></label>
-                                  <input type="text" class="form-control" id="email" name="email" value="">
-                                 
-                                </div>
-                                <% var msg=msg || '' ; %>
-                            <% if (msg) { %>
-                              <span class="text-warning">
-                                <%= msg %>
-                              </span>
-                              <% } %>
-                                <span class="text-warning d-none" style="font-size: 14px; margin-left: 10px;"
-                                id="emailError"></span>
-                                <br>
+                  </div>
+                  <% var msg=msg || '' ; %>
+                  <% if (msg) { %>
+                  <span class="text-warning">
+                    <%= msg %>
+                  </span>
+                  <% } %>
+                  <span class="text-warning d-none" style="font-size: 14px; margin-left: 10px;" id="emailError"></span>
+                  <br>
 
-                                <div class="form-group last mb-2">
-                                  <label for="phonenumber">Phone Number<span class="text-color-danger">*</span></label>
-                                  <input type="number" class="form-control" id="phonenumber" name="phonenumber"
-                                    value="">
-                                 
+                  <div class="form-group last mb-2">
+                    <label for="phonenumber">Phone Number<span class="text-color-danger">*</span></label>
+                    <input type="number" class="form-control" id="phonenumber" name="phonenumber" value="">
 
-                                </div>
-                                <% if (msg) { %>
-                                  <span class="text-warning">
-                                    <%= msg %>
-                                  </span>
-                                  <% } %>
-                                <span class="text-warning d-none" style="font-size: 14px; margin-left: 10px;"
-                                id="phonenumberError"></span>
-                                <br>
-                                <div class="form-group last mb-2">
-                                  <label for="password">Password<span class="text-color-danger">*</span></label>
-                                  <input type="password" class="form-control" id="password" name="password" value="">
-                                 
+                  </div>
+                  <% var msg2=msg2|| '' ; %>
+                  <% if (msg2) { %>
+                  <span class="text-warning">
+                    <%= msg2 %>
+                  </span>
+                  <% } %>
+                  <span class="text-warning d-none" style="font-size: 14px; margin-left: 10px;" id="phonenumberError"></span>
+                  <br>
+                  <div class="form-group last mb-2">
+                    <label for="password">Password<span class="text-color-danger">*</span></label>
+                    <input type="password" class="form-control" id="password" name="password" value="">
 
+                  </div>
+                  <span class="text-warning d-none" style="font-size: 14px; margin-left: 10px;" id="passwordError"></span>
+                  <br>
+                  <div class="form-group last mb-2">
+                    <label for="password2">Confirm Password<span class="text-color-danger">*</span></label>
+                    <input type="password" class="form-control" id="password2" name="password2" value="">
 
-                                </div>
-                                <span class="text-warning d-none" style="font-size: 14px; margin-left: 10px;"
-                                id="passwordError"></span>
-                                <br>
+                  </div>
+                  <span class="text-warning d-none" style="font-size: 14px; margin-left: 10px;" id="password2Error"></span>
 
-                                <form>
-                                  <!-- form fields -->
-                                  <button type="submit" class="btn btn-block btn-login"
-                                    formaction="/signup">REGISTER</button>
-                                    <br>
-                                  
-                                    
-                                </form>
-                                <a href="/login" class="text-white" style="text-decoration:none">
-                                  <span style="transition: transform .2s; display: inline-block;">Back to Login</span>
-                                </a>
+                  <br>
 
+                  <button type="submit" class="btn btn-block btn-login" formaction="/signup">REGISTER</button>
+                  <br>
 
+                </form>
+                <a href="/login" class="text-white" style="text-decoration:none">
+                  <span style="transition: transform .2s; display: inline-block;">Back to Login</span>
+                </a>
 
+                <span class="d-block text-left my-4 text-muted">&mdash; or login with &mdash;</span>
 
-
-
-                                <span class="d-block text-left my-4 text-muted">&mdash; or login with &mdash;</span>
-
-                                <div class="social-login">
-                                  <a href="#" class="facebook">
-                                    <span class="icon-facebook mr-3"></span>
-                                  </a>
-                                  <a href="#" class="twitter">
-                                    <span class="icon-twitter mr-3"></span>
-                                  </a>
-                                  <a href="#" class="google">
-                                    <span class="icon-google mr-3"></span>
-                                  </a>
-                                </div>
-                        </form>
+                <div class="social-login">
+                  <a href="#" class="facebook">
+                    <span class="icon-facebook mr-3"></span>
+                  </a>
+                  <a href="#" class="twitter">
+                    <span class="icon-twitter mr-3"></span>
+                  </a>
+                  <a href="#" class="google">
+                    <span class="icon-google mr-3"></span>
+                  </a>
                 </div>
               </div>
-
             </div>
-
           </div>
         </div>
       </div>
+    </div>
+  </div>
 
+  <script src="/login/js/jquery-3.3.1.min.js"></script>
+  <script src="/login/js/popper.min.js"></script>
+  <script src="/login/js/bootstrap.min.js"></script>
+  <script src="/login/js/main.js"></script>
+  <script>
+    const signupForm = document.getElementById("signup-form");
 
+    const username = document.getElementById("username");
+    const email = document.getElementById("email");
+    const phoneNumber = document.getElementById("phonenumber");
+    const password = document.getElementById("password");
+    const password2 = document.getElementById("password2");
 
+    const usernameRegex = /^[a-zA-Z0-9_]+$/;
+    const emailRegex = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+    const phoneNumberRegex = /^\d{10}$/;
+    const passwordRegex = /^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]{6,}$/;
 
+    signupForm.addEventListener('submit', (e) => {
+      if (username.value === "" || username.value === null) {
+        e.preventDefault();
+        document.getElementById("usernameError").classList.remove('d-none');
+        document.getElementById("usernameError").textContent = "Username is required.";
+      } else if (!usernameRegex.test(username.value)) {
+        e.preventDefault();
+        document.getElementById("usernameError").classList.remove('d-none');
+        document.getElementById("usernameError").textContent = "Invalid username.";
+      } else {
+        document.getElementById("usernameError").classList.add('d-none');
+      }
 
-      <script src="/login/js/jquery-3.3.1.min.js"></script>
-      <script src="/login/js/popper.min.js"></script>
-      <script src="/login/js/bootstrap.min.js"></script>
-      <script src="/login/js/main.js"></script>
-      <script>
-        const loginForm = document.getElementById("signup-form");
+      if (email.value === "" || email.value === null) {
+        e.preventDefault();
+        document.getElementById("emailError").classList.remove('d-none');
+        document.getElementById("emailError").textContent = "Email is required.";
+      } else if (!emailRegex.test(email.value)) {
+        e.preventDefault();
+        document.getElementById("emailError").classList.remove('d-none');
+        document.getElementById("emailError").textContent = "Invalid email address.";
+      } else {
+        document.getElementById("emailError").classList.add('d-none');
+      }
 
-        const userName = document.getElementById("username");
-        const email = document.getElementById("email");
-        const mobile = document.getElementById("phonenumber");
-        const password = document.getElementById("password")
-        //   const password2 = document.getElementById("password2")
+      if (phoneNumber.value === "" || phoneNumber.value === null) {
+        e.preventDefault();
+        document.getElementById("phonenumberError").classList.remove('d-none');
+        document.getElementById("phonenumberError").textContent = "Phone number is required.";
+      } else if (!phoneNumberRegex.test(phoneNumber.value)) {
+        e.preventDefault();
+        document.getElementById("phonenumberError").classList.remove('d-none');
+        document.getElementById("phonenumberError").textContent = "Invalid phone number.";
+      } else {
+        document.getElementById("phonenumberError").classList.add('d-none');
+      }
 
+      if (password.value === "" || password.value === null) {
+        e.preventDefault();
+        document.getElementById("passwordError").classList.remove('d-none');
+        document.getElementById("passwordError").textContent = "Password is required.";
+      } else if (!passwordRegex.test(password.value)) {
+        e.preventDefault();
+        document.getElementById("passwordError").classList.remove('d-none');
+        document.getElementById("passwordError").textContent = "Invalid password. It must contain at least 6 characters and special characters.";
+      } else {
+        document.getElementById("passwordError").classList.add('d-none');
+      }
 
-        const usernameRegex = /^[a-zA-Z0-9_]+$/;
-        const emailRegX = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
-        const mobileRegex = /^\d{10}$/;
-        const passRegX = /^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]{6,}$/;
-
-        loginForm.addEventListener('submit', (e) => {
-          if (userName.value === "" || userName.value === null) {
-            e.preventDefault();
-            document.getElementById("usernameError").classList.remove('d-none');
-            document.getElementById("usernameError").innerHTML = "Name must be filled!"
-          } else if (!userName.value.match(usernameRegex)) {
-            e.preventDefault();
-            document.getElementById("usernameError").classList.remove('d-none');
-            document.getElementById("usernameError").innerHTML = "invalid name"
-          } else if (userName.value.match(usernameRegex)) {
-            document.getElementById('usernameError').innerHTML = "";
-            document.getElementById('usernameError').classList.add('d-none')
-          }
-
-
-          if (email.value === "" || email.value === null) {
-            e.preventDefault();
-            document.getElementById("emailError").classList.remove('d-none');
-            document.getElementById("emailError").innerHTML = "Email must be filled!"
-          } else if (!email.value.match(emailRegX)) {
-            e.preventDefault();
-            document.getElementById("emailError").classList.remove('d-none');
-            document.getElementById("emailError").innerHTML = "Invalid Email Address";
-          } else if (email.value.match(emailRegX)) {
-            document.getElementById("emailError").classList.remove('d-none');
-            document.getElementById("emailError").innerHTML = ""
-          }
-
-
-          if (mobile.value === "" || mobile.value === null) {
-            e.preventDefault();
-            document.getElementById("phonenumberError").classList.remove('d-none');
-            document.getElementById("phonenumberError").innerHTML = "Phone number must be filled!"
-          } else if (!mobile.value.match(mobileRegex)) {
-            e.preventDefault();
-            document.getElementById("phonenumberError").classList.remove('d-none');
-            document.getElementById("phonenumberError").innerHTML = "Invalid Phone Number";
-          } else if (mobile.value.match(mobileRegex)) {
-            document.getElementById("phonenumberError").classList.remove('d-none');
-            document.getElementById("phonenumberError").innerHTML = ""
-          }
-
-          if (password.value === "" || password.value === null) {
-            e.preventDefault();
-            document.getElementById("passwordError").classList.remove('d-none');
-            document.getElementById("passwordError").innerHTML = "password number must be filled!"
-          } else if (!password.value.match(passRegX)) {
-            e.preventDefault();
-            document.getElementById("passwordError").classList.remove('d-none');
-            document.getElementById("passwordError").innerHTML = "Password must contain at least 6 characters including one uppercase letter,<br> one lowercase letter, one number and one special character.";
-          } else if (password.value.match(passRegX)) {
-            document.getElementById("passwordError").classList.remove('d-none');
-            document.getElementById("passwordError").innerHTML = ""
-          }
-          // if (password2.value === "" || password2.value === null) {
-          //     e.preventDefault();
-          //     document.getElementById("password2Error").classList.remove('d-none');
-          //     document.getElementById("password2Error").innerHTML = "password number must be filled!"
-          // } else if (!password.value.match(passRegX)) {
-          //     e.preventDefault();
-          //     document.getElementById("password2Error").classList.remove('d-none');
-          //     document.getElementById("password2Error").innerHTML = "Password must contain at least 6 characters including one uppercase letter,<br> one lowercase letter, one number and one special character.";
-          // } else if (password.value.match(passRegX)) {
-          //     document.getElementById("password2Error").classList.remove('d-none');
-          //     document.getElementById("password2Error").innerHTML = ""
-          // }
-        })
-      </script>
-  </body>
+      if (password2.value === "" || password2.value === null) {
+        e.preventDefault();
+        document.getElementById("password2Error").classList.remove('d-none');
+        document.getElementById("password2Error").textContent = "Confirm password is required.";
+      } else if (password.value !== password2.value) {
+        e.preventDefault();
+        document.getElementById("password2Error").classList.remove('d-none');
+        document.getElementById("password2Error").textContent = "Passwords do not match.";
+      } else {
+        document.getElementById("password2Error").classList.add('d-none');
+      }
+    });
+  </script>
+</body>
 
 </html>

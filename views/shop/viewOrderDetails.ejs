@@ -52,9 +52,25 @@
         <!-- Template CSS -->
         <link rel="stylesheet" href="/profile/css/main.css">
     </head>
+<%= console.log("====================="); %>
 
+  <%= console.log(orderedItems); %>
+  <%= console.log(order); %>
+
+ 
+  <%= console.log("====================="); %>
+  <% orderedItems.forEach((item) => { %>
+    Product Name: <%= item.product.productName %>
+    Product Color: <%= item.product.productColor %>
+    Product Size: <%= item.product.productSize %>
+    Product Brand: <%= item.product.productBrand %>
+    Product Price: <%= item.product.productPrice %>
+    Product Description: <%= item.product.productDescription %>
+    <!-- Access other product details as needed -->
+  <% }) %>
+  
     <body>
-        <%= console.log(order); %>
+      
             <div class="container text-center mt-4">
                 <div class="col-md-6 mx-auto">
                     <div class="order_review">
@@ -71,21 +87,8 @@
                                 </thead>
                                 <tbody>
 
-                                    <tr>
-                                        <td class="image product-thumbnail"><img
-                                                src="/uploads/<%=order.orderedItems.product.productImage %>.jpg"
-                                                alt="#"></td>
-                                        <td><i class="ti-check-box font-small text-muted mr-10"></i>
-                                            <h5><a href="shop-product-full.html">
-                                                    <%= order.orderedItems.product.productName %>
-                                                </a></h5> <span class="product-qty">x <%=
-                                                    order.orderedItems.product.productQuantity %></span>
-                                        </td>
-                                        <td>Rs. <%= order.orderedItems.product.productQuantity *
-                                                order.orderedItems.product.productPrice %>
-                                        </td>
-                                    </tr>
-
+                                   
+                                    
 
 
 

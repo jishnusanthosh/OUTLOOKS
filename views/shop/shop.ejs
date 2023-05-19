@@ -367,7 +367,12 @@
               if (response.status) {
                 toastr.success(response.message, '', { "toastClass": "toast-success" });
               } else {
-                toastr.error(response.message);
+                if (response.redirect) {
+                  // Redirect to the login page
+                  window.location.href = response.redirect;
+                } else {
+                  toastr.error(response.message);
+                }
               }
             },
             error: function() {
@@ -375,7 +380,9 @@
             }
           });
         }
-    </script>
+      </script>
+      
+      
       
 </body>
 
