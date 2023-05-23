@@ -9,29 +9,33 @@
     <link rel="stylesheet" href="/shop/css/magnific-popup.css" type="text/css">
     <link rel="stylesheet" href="/shop/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="/shop/css/style.css" type="text/css">
-    <link rel="stylesheet" href="/shop/css/bootstrap.min.css" >
+    <link rel="stylesheet" href="/shop/css/bootstrap.min.css">
     <script src="/profile/js/magiczoomplus.js"></script>
 
 
- 
+
     <!-- Header Section Begin -->
     <style>
-        #toastr-container > .toast-error {
+        #toastr-container>.toast-error {
             background-color: #ebdbdb;
         }
-        #toastr-container > .toast-success {
-            opacity: 0.9; /* Adjust the opacity value as desired */
-            color: green; /* Set the text color to green */
-        }
-        .not-available-text {
-    color: red;
-    
-}
 
+        #toastr-container>.toast-success {
+            opacity: 0.9;
+            /* Adjust the opacity value as desired */
+            color: green;
+            /* Set the text color to green */
+        }
+
+        .not-available-text {
+            color: red;
+
+
+        }
     </style>
-    
-      
-    
+
+
+
     <div id="toastr-container"></div>
 
     <!-- Header Info Begin -->
@@ -52,9 +56,9 @@
                 </div>
                 <div class="col-md-4 text-left text-xl-right">
                     <div class="header-item">
-                    <img src="/shop/img/icons/sales.png" alt="">
-                    <p>30% off on dresses. Use code: 30OFF</p>
-                </div>
+                        <img src="/shop/img/icons/sales.png" alt="">
+                        <p>30% off on dresses. Use code: 30OFF</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -63,9 +67,10 @@
 
     <!DOCTYPE html>
     <html class="no-js" lang="en">
-    
-    
+
+
     <!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/page-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:27:15 GMT -->
+
     <head>
         <meta charset="utf-8">
         <title>Outlooks</title>
@@ -81,6 +86,7 @@
         <!-- Template CSS -->
         <link rel="stylesheet" href="/profile/css/main.css">
     </head>
+
     <body>
         <main class="main">
             <div class="page-header breadcrumb-wrap">
@@ -92,8 +98,8 @@
                     </div>
                 </div>
             </div>
-            
-            <section class="mt-50 mb-50 " >
+
+            <section class="mt-50 mb-50 ">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
@@ -101,19 +107,28 @@
                                 <div class="row mb-50">
                                     <div class="col-md-6 col-sm-12 col-xs-12">
                                         <div class="detail-gallery">
-                                          
+                                            <span class="zoom-icon"><i class="fi-rs-search"></i></span>
                                             <!-- MAIN SLIDES -->
                                             <div class="product-image-slider">
-                                               
-                                                   
-                                                <a href="/uploads/<%=product.productImage%>.jpg"  data-options="zoomMode: magnifier; variableZoom: true" class="MagicZoom"  >
-                                                    <img src="/uploads/<%=product.productImage%>.jpg" alt="Product Image">
-                                                  </a>
-                                             
+                                                <figure class="border-radius-10">
+                                                    <a href="/uploads/<%= product.productImage[0] %>.jpg" data-options="zoomMode: magnifier; variableZoom: true" class="MagicZoom">
+                                                        <img id="mainImage" src="/uploads/<%= product.productImage[0] %>.jpg" alt="Product Image">
+                                                    </a>
+                                                </figure>
                                             </div>
+                                            <br>
                                             <!-- THUMBNAILS -->
-                                            
+                                            <div class="slider-nav-thumbnails pl-15 pr-15 row">
+                                                <% for (let i = 0; i < product.productImage.length; i++) { %>
+                                                    <div class="col-md-4 col-sm-3 col-xs-4">
+                                                        <div class="thumbnail-item">
+                                                            <img src="/uploads/<%= product.productImage[i] %>.jpg" alt="Product Thumbnail" onclick="changeMainImage('<%= product.productImage[i] %>')" class="img-thumbnail">
+                                                        </div>
+                                                    </div>
+                                                <% } %>
+                                            </div>
                                         </div>
+
                                         <!-- End Gallery -->
                                     </div>
                                     <div class="col-md-6 col-sm-12 col-xs-12">
@@ -121,7 +136,9 @@
                                             <h2 class="title-detail"> </h2>
                                             <div class="product-detail-rating">
                                                 <div class="pro-details-brand">
-                                                    <span> Brands: <a href="shop-grid-right.html"><%=product.productBrand%></a></span>
+                                                    <span> Brands: <a href="shop-grid-right.html">
+                                                            <%=product.productBrand%>
+                                                        </a></span>
                                                 </div>
                                                 <div class="product-rate-cover text-end">
                                                     <div class="product-rate d-inline-block">
@@ -133,32 +150,45 @@
                                             </div>
                                             <div class="clearfix product-price-cover">
                                                 <div class="product-price primary-color float-left">
-                                                    <ins><span class="text-brand">Rs. <%=product.productPrice%></span></ins>
+                                                    <ins><span class="text-brand">Rs. <%=product.productPrice%>
+                                                        </span></ins>
                                                     <ins><span class="old-price font-md ml-15">Rs.2000.00</span></ins>
                                                     <span class="save-price  font-md color3 ml-15">25% Off</span>
                                                 </div>
                                             </div>
                                             <div class="bt-1 border-color-1 mt-15 mb-15"></div>
                                             <div class="short-desc mb-30">
-                                                <p><%=product.productDescription%></p>
+                                                <p>
+                                                    <%=product.productDescription%>
+                                                </p>
                                             </div>
                                             <div class="product_sort_info font-xs mb-30">
                                                 <ul>
-                                                    <li class="mb-10"><i class="fi-rs-crown mr-5"></i> 1 Year AL Jazeera Brand Warranty</li>
-                                                    <li class="mb-10"><i class="fi-rs-refresh mr-5"></i> 30 Day Return Policy</li>
-                                                    <li><i class="fi-rs-credit-card mr-5"></i> Cash on Delivery available</li>
+                                                    <li class="mb-10"><i class="fi-rs-crown mr-5"></i> 1 Year AL Jazeera
+                                                        Brand Warranty</li>
+                                                    <li class="mb-10"><i class="fi-rs-refresh mr-5"></i> 30 Day Return
+                                                        Policy</li>
+                                                    <li><i class="fi-rs-credit-card mr-5"></i> Cash on Delivery
+                                                        available</li>
                                                 </ul>
                                             </div>
                                             <div class="attr-detail attr-color mb-15">
                                                 <strong class="mr-10">Color</strong>
                                                 <ul class="list-filter color-filter">
-                                                    <li><a href="#" data-color="Red"><span class="product-color-red"></span></a></li>
-                                                    <li><a href="#" data-color="Yellow"><span class="product-color-yellow"></span></a></li>
-                                                    <li ><a href="#" data-color="White"><span class="product-color-white"></span></a></li>
-                                                    <li><a href="#" data-color="Orange"><span class="product-color-orange"></span></a></li>
-                                                    <li><a href="#" data-color="Cyan"><span class="product-color-cyan"></span></a></li>
-                                                    <li><a href="#" data-color="Green"><span class="product-color-green"></span></a></li>
-                                                    <li><a href="#" data-color="Purple"><span class="product-color-purple"></span></a></li>
+                                                    <li><a href="#" data-color="Red"><span
+                                                                class="product-color-red"></span></a></li>
+                                                    <li><a href="#" data-color="Yellow"><span
+                                                                class="product-color-yellow"></span></a></li>
+                                                    <li><a href="#" data-color="White"><span
+                                                                class="product-color-white"></span></a></li>
+                                                    <li><a href="#" data-color="Orange"><span
+                                                                class="product-color-orange"></span></a></li>
+                                                    <li><a href="#" data-color="Cyan"><span
+                                                                class="product-color-cyan"></span></a></li>
+                                                    <li><a href="#" data-color="Green"><span
+                                                                class="product-color-green"></span></a></li>
+                                                    <li><a href="#" data-color="Purple"><span
+                                                                class="product-color-purple"></span></a></li>
                                                 </ul>
                                             </div>
                                             <div class="attr-detail attr-size">
@@ -173,41 +203,55 @@
                                             </div>
                                             <div class="bt-1 border-color-1 mt-30 mb-30"></div>
                                             <div class="detail-extralink">
-                                                <% if (product.productQuantity > 0) { %>
+                                                <% if (product.productQuantity> 0) { %>
                                                     <div class="detail-qty border radius">
-                                                        <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
+                                                        <a href="#" class="qty-down"><i
+                                                                class="fi-rs-angle-small-down"></i></a>
                                                         <span class="qty-val">1</span>
-                                                        <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
+                                                        <a href="#" class="qty-up"><i
+                                                                class="fi-rs-angle-small-up"></i></a>
                                                     </div>
                                                     <div class="product-extra-link2">
-                                                        <button type="submit" class="button button-add-to-cart" onclick="addToCart(event, '<%= product._id %>')">Add to cart</button>
-                                                        <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-                                                        <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+                                                        <button type="submit" class="button button-add-to-cart"
+                                                            onclick="addToCart(event, '<%= product._id %>')">Add to
+                                                            cart</button>
+                                                        <a aria-label="Add To Wishlist" class="action-btn hover-up"
+                                                            href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
+                                                        <a aria-label="Compare" class="action-btn hover-up"
+                                                            href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
                                                     </div>
-                                                <% } else { %>
-                                                    <div class="product-extra-link2">
-                                                        <p class="not-available-text" disabled>Product Not Available</p>
-                                                        <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-                                                        <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
-                                                    </div>
-                                                    
-                                                <% } %>
+                                                    <% } else { %>
+                                                        <div class="product-extra-link2">
+                                                            <p class="not-available-text" disabled>Product Not Available
+                                                            </p>
+                                                            <a aria-label="Add To Wishlist" class="action-btn hover-up"
+                                                                href="shop-wishlist.html"><i
+                                                                    class="fi-rs-heart"></i></a>
+                                                            <a aria-label="Compare" class="action-btn hover-up"
+                                                                href="shop-compare.html"><i
+                                                                    class="fi-rs-shuffle"></i></a>
+                                                        </div>
+
+                                                        <% } %>
                                             </div>
-                                            
+
                                             <ul class="product-meta font-xs color-grey">
-                                                <% if (product.productQuantity > 0) { %>
-                                                    <li>Availability:<span class="in-stock text-success ml-5"><%= product.productQuantity %> Items In Stock</span></li>
-                                                <% } else { %>
-                                                    <li>Availability:<span class="out-of-stock text-danger ml-5">Out of Stock</span></li>
-                                                <% } %>
+                                                <% if (product.productQuantity> 0) { %>
+                                                    <li>Availability:<span class="in-stock text-success ml-5">
+                                                            <%= product.productQuantity %> Items In Stock
+                                                        </span></li>
+                                                    <% } else { %>
+                                                        <li>Availability:<span class="out-of-stock text-danger ml-5">Out
+                                                                of Stock</span></li>
+                                                        <% } %>
                                             </ul>
                                         </div>
                                         <!-- Detail Info -->
                                     </div>
                                 </div>
-                                
-                                
-                                
+
+
+
                             </div>
                         </div>
                     </div>
@@ -216,9 +260,9 @@
         </main>
 
 
-  
-            <!-- Preloader Start -->
-      
+
+        <!-- Preloader Start -->
+
         <!-- Vendor JS-->
         <script src="/profile/js/vendor/modernizr-3.6.0.min.js"></script>
         <script src="/profile/js/vendor/jquery-3.6.0.min.js"></script>
@@ -247,28 +291,29 @@
 
         <script>
             function addToCart(event, productId) {
-              event.preventDefault();
-              $.ajax({
-                url: '/addToCart/' + productId,
-                method: 'GET',
-                success: function(response) {
-                  if (response.status) {
-                    toastr.success(response.message, '', { "toastClass": "toast-success" });
-                  } else {
-                    toastr.error(response.message);
-                  }
-                },
-                error: function() {
-                  toastr.error('An error occurred while adding the product to cart.');
-                }
-              });
+                event.preventDefault();
+                $.ajax({
+                    url: '/addToCart/' + productId,
+                    method: 'GET',
+                    success: function (response) {
+                        if (response.status) {
+                            toastr.success(response.message, '', { "toastClass": "toast-success" });
+                        } else {
+                            toastr.error(response.message);
+                        }
+                    },
+                    error: function () {
+                        toastr.error('An error occurred while adding the product to cart.');
+                    }
+                });
             }
         </script>
-          
+
     </body>
-    
-    
+
+
     <!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/page-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:27:15 GMT -->
+
     </html>
 
 
@@ -355,27 +400,31 @@
             </div>
         </div>
         <div class="social-links-warp">
-			<div class="container">
-				<div class="social-links">
-					<a href="" class="instagram"><i class="fa fa-instagram"></i><span>instagram</span></a>
-					<a href="" class="pinterest"><i class="fa fa-pinterest"></i><span>pinterest</span></a>
-					<a href="" class="facebook"><i class="fa fa-facebook"></i><span>facebook</span></a>
-					<a href="" class="twitter"><i class="fa fa-twitter"></i><span>twitter</span></a>
-					<a href="" class="youtube"><i class="fa fa-youtube"></i><span>youtube</span></a>
-					<a href="" class="tumblr"><i class="fa fa-tumblr-square"></i><span>tumblr</span></a>
-				</div>
-			</div>
-
-<div class="container text-center pt-5">
-                <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart color-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+            <div class="container">
+                <div class="social-links">
+                    <a href="" class="instagram"><i class="fa fa-instagram"></i><span>instagram</span></a>
+                    <a href="" class="pinterest"><i class="fa fa-pinterest"></i><span>pinterest</span></a>
+                    <a href="" class="facebook"><i class="fa fa-facebook"></i><span>facebook</span></a>
+                    <a href="" class="twitter"><i class="fa fa-twitter"></i><span>twitter</span></a>
+                    <a href="" class="youtube"><i class="fa fa-youtube"></i><span>youtube</span></a>
+                    <a href="" class="tumblr"><i class="fa fa-tumblr-square"></i><span>tumblr</span></a>
+                </div>
             </div>
 
-		</div>
+            <div class="container text-center pt-5">
+                <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    Copyright &copy;
+                    <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is
+                    made with <i class="icon-heart color-danger" aria-hidden="true"></i> by <a
+                        href="https://colorlib.com" target="_blank">Colorlib</a>
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                </p>
+            </div>
+
+        </div>
     </footer>
     <!-- Footer Section End -->
-   
+
 
     <!-- Js Plugins -->
     <script src="/shop/js/jquery-3.3.1.min.js"></script>
@@ -386,7 +435,13 @@
     <script src="/shop/js/jquery.nice-select.min.js"></script>
     <script src="/shop/js/mixitup.min.js"></script>
     <script src="/shop/js/main.js"></script>
+    <script>
+        function changeMainImage(imageUrl) {
+            var mainImage = document.getElementById("mainImage");
+            mainImage.src = "/uploads/" + imageUrl + ".jpg";
+        }
+    </script>
 
-</body>
+    </body>
 
-</html>
+    </html>

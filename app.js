@@ -10,7 +10,7 @@ import mongoose from 'mongoose';
 import  session  from "express-session";
 import  multer  from "multer";
 import  swal from "sweetalert";
-
+const flash = require('connect-flash');
 
 
 
@@ -45,13 +45,13 @@ app.use(multer({
   dest: 'uploads',
   storage: storage,
   limits: { fileSize: 1024 * 1024 } // 1MB
-}).single('productImage'));
+}).array('productImage',3));
 
 
 // Set up middleware
 
 
-
+app.use(flash());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

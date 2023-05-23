@@ -2,6 +2,7 @@ import userHelper from "../helpers/userHelpers";
 import twilioFunctions from "../config/twilio";
 import dotenv from "dotenv";
 import userHelpers from "../helpers/userHelpers";
+import adminHelpers from "../helpers/adminHelpers";
 import User from "../models/userModels";
 import Address from "../models/addressModels";
 import Products from "../models/productModels";
@@ -9,6 +10,8 @@ import mongoose from "mongoose";
 import Cart from "../models/cartModels";
 import Category from "../models/categoryModels";
 import Orders from "../models/orderModels";
+const hmac_sha256 = require('crypto-js/hmac-sha256');
+const { generateRazorpay } = require("../config/razorpay");
 
 const toastr = require("toastr");
 const ObjectId = mongoose.Types.ObjectId;
@@ -26,7 +29,7 @@ export default {
     const allcategory = await Category.find();
 
     try {
-      if (user) {
+      if (req.session.user) {
         let cartCount = await userHelpers.getCartCount(req.session.user._id);
 
         console.log(cartCount);
@@ -54,7 +57,7 @@ export default {
     let user = req.session.user;
 
     const allcategory = await Category.find();
-    if (user) {
+    if (req.session.user) {
       let cartCount = await userHelpers.getCartCount(req.session.user._id);
 
       console.log(cartCount);
@@ -80,32 +83,37 @@ export default {
     res.render("shop/userlogin/signup.ejs");
   },
   signUpPost: (req, res) => {
-    userHelper.doSignUp(req.body).then((userData) => {
-      if (userData.emailStatus) {
-        const msg = "Email already exists";
-        res.render("shop/userlogin/signup", { msg });
-      } else if (userData.phoneStatus) {
-        const msg2 = "Phone number already exists";
-        res.render("shop/userlogin/signup", { msg2 });
-      } else if (userData.user) {
-        req.session.login = true;
-        req.session.user = userData.user;
-        res.redirect("/");
-      }
-    }).catch((error) => {
-      // Handle any errors that occur during the signup process
-      console.log(error);
-      // Render an error page or redirect to an appropriate route
-      res.render("error");
-    });
+    userHelper
+      .doSignUp(req.body)
+      .then((userData) => {
+        if (userData.emailStatus) {
+          const msg = "Email already exists";
+          res.render("shop/userlogin/signup", { msg });
+        } else if (userData.phoneStatus) {
+          const msg2 = "Phone number already exists";
+          res.render("shop/userlogin/signup", { msg2 });
+        } else if (userData.user) {
+          req.session.login = true;
+          req.session.user = userData.user;
+          res.redirect("/");
+        }
+      })
+      .catch((error) => {
+        // Handle any errors that occur during the signup process
+        console.log(error);
+        // Render an error page or redirect to an appropriate route
+        res.render("error");
+      });
   },
-  
+
   loginPost: async (req, res) => {
     try {
-      const response = await userHelper.doLogin(req.body);
+      const response = await userHelpers.doLogin(req.body);
       if (response.status && response.user.isActive) {
-        req.session.login = true;
+        req.session.loggedIn = true;
+
         req.session.user = response.user;
+        
         res.redirect("/");
       } else {
         if (response.status == false) {
@@ -232,9 +240,13 @@ export default {
   addToCart: async (req, res) => {
     if (!req.session.user) {
       // Redirect to the login page
-      return res.json({ status: false, message: "User not logged in", redirect: '/login' });
+      return res.json({
+        status: false,
+        message: "User not logged in",
+        redirect: "/login",
+      });
     }
-  
+
     try {
       let userId = req.session.user._id;
       let productId = req.params.id;
@@ -251,8 +263,6 @@ export default {
       res.json({ status: false, message: "An error occurred" });
     }
   },
-  
-
 
   getProductView: async (req, res) => {
     let productId = req.params.id;
@@ -278,36 +288,6 @@ export default {
     }
   },
 
-  getUserProfile: async (req, res) => {
-    let userid = req.params.id;
-    let userId = req.session.user._id;
-
-    let cartCount = await userHelpers.getCartCount(req.session.user._id);
-    let allcategory = await Category.find();
-
-    try {
-      const address = await Address.find({ user: userId });
-
-      const orders = await Orders.find({ user: userId });
-      console.log(orders);
-
-      const response = await userHelpers.getUserDetails(userid);
-
-      if (response) {
-        res.render("shop/userProfile", {
-          user: response,
-          cartCount,
-          allcategory,
-          address,
-          orders,
-        });
-      } else {
-        res.redirect("/shop/login");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  },
   deleteCartProduct: async (req, res) => {
     let { productId } = req.body;
     let userId = req.session.user._id;
@@ -422,25 +402,36 @@ export default {
       console.log(error);
     }
   },
+  async deleteAddress(req, res) {
+    const addressId = req.params.id;
+    try {
+      await Address.findByIdAndUpdate(addressId, { addStatus: true });
+
+      res.status(200).json({ message: "Address deleted successfully" });
+
+    } catch (error) {
+      res.status(500).json({ message: "Error deleting address" });
+    }
+  },
+
   placeOrderPost: async (req, res) => {
     try {
       let userId = req.session.user._id;
-
       const cartItems = await Cart.findOne({ user: req.session.user._id });
-
       const totalAmount = await userHelpers.getCartTotal(req.session.user);
 
-      if (req.body.payment_method == "COD") {
-        const placeOrder = await userHelpers.placeOrder(
-          req.body,
-          totalAmount,
-          cartItems,
-          userId
-        );
+      console.log(req.body);
 
+      const placeOrder = await userHelpers.placeOrder(
+        req.body,
+        totalAmount,
+        cartItems,
+        userId
+      );
+
+      if (req.body.payment_method === "COD") {
         // Update product quantities
         const orderItems = cartItems.products;
-
         for (const item of orderItems) {
           const productId = item.productId._id;
           const quantity = item.quantity;
@@ -454,61 +445,196 @@ export default {
           // Save the updated product to the database
           await product.save();
         }
-        res.json({ success: true });
+
+        // Clear the user's cart
+        await Cart.deleteMany({ user: userId });
+
+        return res.json({ cod_success: true, orderId: placeOrder.orderId });
+      } else {
+        const razorPayOrder = await generateRazorpay(
+          placeOrder.orderId.toString(),
+          totalAmount,
+          userId
+        );
+        await Cart.deleteMany({ user: userId });
+        res.json({ ...razorPayOrder, orderId: placeOrder.orderId });
       }
     } catch (error) {
       console.log(error);
       res.status(500).send("Failed to place the order: " + error.message);
     }
   },
-  getOrderPlaced: async (req, res) => {
-    const user = req.session.user;
-    let allcategory = await Category.find();
-    let cartCount = await userHelpers.getCartCount(req.session.user._id);
-    res.render("shop/orderPlaced", { user, cartCount, allcategory });
-  },
-  getMyOrders: async (req, res) => {
-    const user = req.session.user;
 
-    const order = await Orders.findOne({ user: req.session.user._id });
-
-    
-    let allcategory = await Category.find();
-    let cartCount = await userHelpers.getCartCount(req.session.user._id);
-
-    res.render("shop/userProfile", { user, cartCount, allcategory });
-  },
-  getOrderDetails: async (req, res) => {
-    const user = req.session.user;
-    const orderId = req.params.id;
-  
+  verifyPaymentPost:  async (req, res) => {
+    const userId = req.session.user._id;
     try {
-      const order = await Orders.findOne({ _id: orderId }).populate('orderedItems.productId');
-      if (order) {
-        const orderedItems = order.orderedItems.map(item => item.quantity);
-  
-        let allcategory = await Category.find();
-        let cartCount = await userHelpers.getCartCount(user._id);
-        res.render("shop/viewOrderDetails", {
-          user,
+      const { order_id, payment_id, razorpay_signature } = req.body;
+
+      const isPaymentVerified = await userHelpers.verifyRazorpayPayment(
+        order_id,
+        payment_id,
+        razorpay_signature,
+        process.env.RAZORPAY_KEY_SECRET,userId      
+      );
+
+      if (isPaymentVerified) {
+        // Update the order status to "placed" or any other appropriate status
+        await userHelpers.updatePaymentStatus(order_id, 'placed');
+
+        // Clear the user's cart
+        
+        await Cart.deleteMany({ user: userId });
+
+        return res.json({ success: true, message: 'Payment verification successful' });
+      } else {
+        return res.json({ success: false, message: 'Payment verification failed' });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).send('Failed to verify the Razorpay payment: ' + error.message);
+    }
+  },
+
+
+  getOrderPlaced: async (req, res) => {
+    let orderId = req.params.id;
+    const user = req.session.user;
+    let allcategory = await Category.find();
+    let cartCount = await userHelpers.getCartCount(req.session.user._id);
+    res.render("shop/orderPlaced", { user, cartCount, allcategory, orderId });
+  },
+
+  getUserProfile: async (req, res) => {
+    let userid = req.params.id;
+    let userId = req.session.user._id;
+
+    let cartCount = await userHelpers.getCartCount(req.session.user._id);
+    let allcategory = await Category.find();
+
+    try {
+      const address = await Address.find({ user: userId });
+
+      const orders = await Orders.find({ user: userId });
+
+      const response = await userHelpers.getUserDetails(userid);
+
+      if (response) {
+        res.render("shop/userProfile", {
+          user: response,
           cartCount,
           allcategory,
-          order,
-          orderedItems,
+          address,
+          orders,
         });
       } else {
-        res.redirect("/");
+        res.redirect("/shop/login");
       }
     } catch (error) {
       console.error(error);
-      res.redirect("/");
     }
   },
-  
-  
-  
-  
-  
-  
+
+  viewOrderDetails: async (req, res) => {
+    const orderId = req.params.id;
+    console.log(orderId + " order id in view order details");
+
+    const user = req.session.user;
+    const order = await Orders.findOne({
+      _id: orderId,
+      user: req.session.user._id,
+    });
+    const address = await Address.findOne({ _id: order.address });
+
+    if (!order) {
+      console.log("Order not found");
+      return res.redirect("/"); // Redirect to home page or handle the error as needed
+    }
+
+    let orderedItems = [];
+    for (let item of order.orderedItems) {
+      let product = await Products.findOne({ _id: item.productId });
+
+      // Fetch product details
+      const productName = product.productName;
+      const productColor = product.productColor;
+      const productSize = product.productSize;
+      const productBrand = product.productBrand;
+      const productPrice = product.productPrice;
+      const productDescription = product.productDescription;
+      const productImage = product.productImage;
+
+      orderedItems.push({
+        product: {
+          name: productName,
+          color: productColor,
+          size: productSize,
+          brand: productBrand,
+          price: productPrice,
+          description: productDescription,
+          image: productImage,
+        },
+        quantity: item.quantity,
+        price: item.price,
+      });
+    }
+
+    let allcategory = await Category.find();
+    let cartCount = await userHelpers.getCartCount(req.session.user._id);
+
+    res.render("shop/viewOrderDetails", {
+      user,
+      cartCount,
+      allcategory,
+      order,
+      orderedItems,
+      address,
+    });
+  },
+
+  cancelOrderPost: async (req, res) => {
+    console.log(req.params.id);
+    try {
+      const order = await Orders.findOne({ _id: req.params.id });
+      if (!order) {
+        console.log("Order not found");
+        return res.redirect("/"); // Redirect to home page or handle the error as needed
+      }
+      if (order.orderStatus === "cancelled") {
+        console.log("Order already cancelled");
+        return res.redirect("/"); // Redirect to home page or handle the error as needed
+      }
+
+      // Get the canceled order's details
+      const canceledItems = order.orderedItems;
+
+      // Update the product stock for each canceled item
+      for (const item of canceledItems) {
+        const product = await Products.findOne({ _id: item.productId });
+
+        // Increment the product stock by the canceled quantity
+        product.productQuantity += item.quantity;
+
+        // Save the updated product
+        await product.save();
+      }
+
+      // Update the order status to "cancelled"
+      const cancelOrder = await Orders.updateOne(
+        { _id: req.params.id },
+        { orderStatus: "cancelled" }
+      );
+
+      if (cancelOrder.nModified === 0) {
+        console.log("Order not cancelled");
+        return res.status(400).json({ error: "Order cancellation failed" });
+      }
+
+      res.redirect(`/viewOrderDetails/${req.params.id}`);
+    } catch (error) {
+      console.log(error);
+      // Handle the error as needed, such as showing an error page or redirecting to an error page
+    }
+  },
+
   
 };

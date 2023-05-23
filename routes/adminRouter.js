@@ -52,7 +52,12 @@ router.get("/getOrders",isloggedInadmin,adminController.GetAllOrder)
 
 router.get("/getOneOrderDetail/:id",isloggedInadmin,adminController.getOneOrderDetails)
 
+router.post("/updateOrderStatus/:id",isloggedInadmin,adminController.updateOrderStatus);
+
+
 router.get("/getSalesReport",isloggedInadmin,adminController.GetSalesReport)
+
+
 
 
 export default router;

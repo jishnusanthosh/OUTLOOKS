@@ -1,18 +1,18 @@
+export function isLoggedIn(req, res, next) {
+  if (req.session.user) {
+    res.redirect("/");
+  } else {
+    next();
+  }
+}
 
-// export function isLoggedIn(req, res, next) {
-//     if (req.session.loggedIn) {
-//       res.redirect("/");
-//     } else {
-//       next();
-//     }
-//   }
-//   export function isUser(req, res, next) {
-//     if (req.session.loggedIn) {
-//       next();
-//     } else {
-//       res.redirect("/");
-//     }
-//   }
+export function isloggedInUser(req, res, next) {
+  if (req.session.user) {
+    next();
+  } else {
+    res.redirect("/");
+  }
+}
 
 export function isloggedInadmin(req, res, next) {
   
@@ -23,13 +23,6 @@ export function isloggedInadmin(req, res, next) {
     }
 }
 
-// export function islogged(req, res, next) {
-  
-//   if (req.session.admin=false) {
-//     next();
-//   } else {
-//     res.redirect('/admin');
-//   }
-// }
+
 
 

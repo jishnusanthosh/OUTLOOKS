@@ -16,6 +16,10 @@ const orderSchema = mongoose.Schema(
         quantity: {
           type: Number,
         },
+        address: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Address',
+        },
       },
     ],
     address: {
@@ -30,6 +34,12 @@ const orderSchema = mongoose.Schema(
     },
     paymentMethod: {
       type: String,
+      enum: ["COD", "RazorPay", "wallet"],
+    },
+    paymentStatus: {
+      type: String,
+      enum: ["paid", "pending", "cancelled"],
+      default: "pending",
     },
     orderStatus: {
       type: String,

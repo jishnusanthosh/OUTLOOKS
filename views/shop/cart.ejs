@@ -316,6 +316,7 @@
                         // Enable increment button when decrementing
                         proQty.find('.inc.qtybtn').prop('disabled', false);
                     } else {
+                        var totalspan = total
                         newVal = 1; // Set minimum quantity to 1
                         // Disable decrement button if quantity is already 1
                         proQty.find('.dec.qtybtn').prop('disabled', true);
@@ -323,6 +324,7 @@
                 }
 
                 $quantityInput.val(newVal);
+                console.log(newVal);
 
                 // Send AJAX request to update product quantity on server-side
                 $.ajax({

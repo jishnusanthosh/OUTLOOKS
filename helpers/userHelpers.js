@@ -5,6 +5,7 @@ import Product from "../models/productModels";
 import Cart from "../models/cartModels";
 import Address from "../models/addressModels";
 import Order from "../models/orderModels";
+import Razorpay from "razorpay";
 
 import bcrypt from "bcrypt";
 
@@ -230,7 +231,6 @@ export default {
         (p) => p.productId.toString() === productId
       );
 
-
       if (!productFromCart) {
         console.log("product not found");
       } else {
@@ -283,6 +283,7 @@ export default {
         phone: address.phone,
         email: address.email,
         user: userId,
+        
       });
       if (result) {
         return true;
@@ -293,39 +294,66 @@ export default {
       console.log(error);
     }
   },
-
-  placeOrder: async (order, totalAmount, cartItems, user) => {
+  placeOrder: async (order, totalAmount, cartItems, userId) => {
+    console.log(order);
     const orderDate = () => {
       return new Date();
     };
-
+  
     try {
       let status = order.payment_method === "COD" ? "placed" : "pending";
       let date = orderDate();
-      let userId = user;
       let addressId = order.address_id;
-      let orderedItems = cartItems;
+      let orderedItems = cartItems.products;
       console.log(orderedItems + "orderedItems");
-
+  
+      // Create a new order document
       let ordered = new Order({
         user: userId,
         address: addressId,
         orderDate: date,
         totalAmount: totalAmount,
-        paymentMethod: "COD",
+        paymentMethod: order.payment_method,
         orderStatus: status,
-        orderedItems: orderedItems.products,
+        orderedItems: orderedItems,
       });
+  
+      // Save the order to the database
       await ordered.save();
       console.log("uploaded to db");
-
-      // Clear the user's cart
-      await Cart.deleteMany({ user: userId });
-
-      return ordered;
+  
+      // Clear the user's cart if the payment method is not COD
+      if (order.payment_method !== "COD") {
+        // Update product quantities
+        for (const item of orderedItems) {
+          const productId = item.productId._id;
+          const quantity = item.quantity;
+  
+          // Find the product in the database
+          const product = await Product.findById(productId);
+  
+          // Decrease the product quantity by the ordered quantity
+          product.productQuantity -= quantity;
+  
+          // Save the updated product to the database
+          await product.save();
+        }
+      }
+  
+      return { ordered, orderId: ordered._id };
     } catch (error) {
       console.error(error);
       throw new Error("Failed to place the order");
     }
   },
+  
+  updatePaymentStatus:(orderId)=>{
+   return new Promise(async(resolve, reject) => {
+    const order = await Order.findByIdAndUpdate(
+      orderId,
+      { orderStatus },
+      { new: true }
+    );
+   })
+  }
 };

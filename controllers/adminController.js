@@ -198,8 +198,10 @@ export default {
   },
   addProductPost: async (req, res) => {
     let productDetails = req.body;
-    let image = req.file;
-    console.log(image);
+    let image = req.files;
+    console.log("=============");
+    console.log(productDetails,image);
+    console.log("=============");
 
     try {
       await adminHelper.addProductPost(productDetails, image);
@@ -230,7 +232,7 @@ export default {
       // get the product id, details, and image from the request
       const productId = req.params.id;
       const productDetails = req.body;
-      const image = req.file;
+      const image = req.files;
   
       // call the editProductPost function to update the product details
       const updatedProduct = await adminHelper.postEditProduct(
@@ -332,8 +334,43 @@ export default {
       res.render("admin/admin-orders-detail", { Order: order[0] });
     } catch (err) {
       console.log(err);
+      res.status(500).json({ error: 'An error occurred' });
     }
   },
+  updateOrderStatus: async (req, res) => {
+    try {
+      const orderId = req.params.id;
+      const { orderStatus } = req.body;
+      console.log(orderStatus);
+      console.log(orderId);
+  
+      const order = await Order.findByIdAndUpdate(
+        orderId,
+        { orderStatus },
+        { new: true }
+      );
+  
+      if (!order) {
+        return res.status(404).json({ error: 'Order not found' });
+      }
+  
+      res.redirect(`/admin/getOneOrderDetail/${orderId}`)
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ error: 'An error occurred' });
+    }
+  },
+  
+
+
+
+
+
+
+
+
+
+
 
 
   GetSalesReport: async (req, res) => {
@@ -351,7 +388,7 @@ export default {
       for (const order of orders) {
         for (const item of order.orderedItems) {
           const { productId, quantity } = item;
-   console.log(item);
+          console.log(item);
           const product = productId; 
 
           const entry = {
@@ -371,6 +408,7 @@ export default {
       res.status(500).json({ error: 'Oops! Something went wrong while fetching order data' });
     }
   },
+
 
   
   

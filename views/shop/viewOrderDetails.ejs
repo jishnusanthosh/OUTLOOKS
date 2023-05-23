@@ -1,261 +1,375 @@
 <%- include('../shop/layout/user-header.ejs') %>
-    <!-- Header Section Begin -->
+  <!-- Header Section Begin -->
 
-    <!-- Header Info Begin -->
-    <div class="header-info">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="header-item">
-                        <img src="/shop/img/icons/delivery.png" alt="">
-                        <p>Free shipping on orders over $30 in USA</p>
-                    </div>
-                </div>
-                <div class="col-md-4 text-left text-lg-center">
-                    <div class="header-item">
-                        <img src="/shop/img/icons/voucher.png" alt="">
-                        <p>20% Student Discount</p>
-                    </div>
-                </div>
-                <div class="col-md-4 text-left text-xl-right">
-                    <div class="header-item">
-                        <img src="/shop/img/icons/sales.png" alt="">
-                        <p>30% off on dresses. Use code: 30OFF</p>
-                    </div>
-                </div>
-            </div>
+  <!-- Header Info Begin -->
+  <div class="header-info">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="header-item">
+            <img src="/shop/img/icons/delivery.png" alt="">
+            <p>Free shipping on orders over $30 in USA</p>
+          </div>
         </div>
+        <div class="col-md-4 text-left text-lg-center">
+          <div class="header-item">
+            <img src="/shop/img/icons/voucher.png" alt="">
+            <p>20% Student Discount</p>
+          </div>
+        </div>
+        <div class="col-md-4 text-left text-xl-right">
+          <div class="header-item">
+            <img src="/shop/img/icons/sales.png" alt="">
+            <p>30% off on dresses. Use code: 30OFF</p>
+          </div>
+        </div>
+      </div>
     </div>
-    <!-- Header Info End -->
+  </div>
+  <!-- Header Info End -->
+<style>
+.order-status.placed {
+    color: green;
+}
+
+
+</style>
 
 
 
+  <!DOCTYPE html>
+  <html class="no-js" lang="en">
 
-    <!DOCTYPE html>
-    <html class="no-js" lang="en">
 
+  <!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/page-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:27:15 GMT -->
 
-    <!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/page-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:27:15 GMT -->
+  <head>
+    <meta charset="utf-8">
+    <title>Outlooks</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/profile/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="/profile/css/main.css">
+  </head>
+  <%= console.log("============================="); %>
+    <%= console.log(order); %>
+    <%= console.log("============================="); %>
 
-    <head>
-        <meta charset="utf-8">
-        <title>Outlooks</title>
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta property="og:title" content="">
-        <meta property="og:type" content="">
-        <meta property="og:url" content="">
-        <meta property="og:image" content="">
-        <!-- Favicon -->
-        <link rel="shortcut icon" type="image/x-icon" href="/profile/imgs/theme/favicon.svg">
-        <!-- Template CSS -->
-        <link rel="stylesheet" href="/profile/css/main.css">
-    </head>
-<%= console.log("====================="); %>
+    <%= console.log(orderedItems); %>
 
-  <%= console.log(orderedItems); %>
-  <%= console.log(order); %>
-
- 
-  <%= console.log("====================="); %>
-  <% orderedItems.forEach((item) => { %>
-    Product Name: <%= item.product.productName %>
-    Product Color: <%= item.product.productColor %>
-    Product Size: <%= item.product.productSize %>
-    Product Brand: <%= item.product.productBrand %>
-    Product Price: <%= item.product.productPrice %>
-    Product Description: <%= item.product.productDescription %>
-    <!-- Access other product details as needed -->
-  <% }) %>
+    <%= console.log("=============================") %>
+   <%= console.log( address) %>
   
-    <body>
-      
-            <div class="container text-center mt-4">
-                <div class="col-md-6 mx-auto">
-                    <div class="order_review">
-                        <div class="mb-20">
-                            <h4>Your Order</h4>
-                        </div>
-                        <div class="table-responsive order_table text-center">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th colspan="2">Product</th>
-                                        <th>Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                   
-                                    
-
-
-
-                                    <tr>
-                                        <th>Delivery</th>
-                                        <td colspan="2"><em>Free Shipping</em></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Order Status</th>
-                                        <td colspan="2"><em><span style="color: green;">
-                                                    <%= order.orderStatus %>
-                                                </span></em></td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>Total</th>
-                                        <td colspan="2" class="product-subtotal"><span
-                                                class="font-xl text-brand fw-900">Rs.<%= order.totalAmount %></span>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="bt-1 border-color-1 mt-30 mb-30"></div>
-
-                        <a href="#" class="btn btn-danger mt-30"
-                            style="background-color: red; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none;">Cancel
-                            Order</a>
-
-
-                    </div>
-                </div>
+    
+   <main class="main">
+    <section class="mt-50 mb-50">
+      <div class="container">
+        <div class="row">
+  
+          <div class="col-lg-6">
+  
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="divider mt-50 mb-50"></div>
+          </div>
+        </div>
+        <div class="row">
+  
+          <div class="col-md-6">
+            <div class="order_review">
+              <div class="mb-20">
+                <h4>Your Orders</h4>
+              </div>
+              <div class="table-responsive order_table text-center">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th colspan="2">Product</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% for (let i=0; i < orderedItems.length; i++) { %>
+                    <tr>
+                      <td class="image product-thumbnail">
+                        <img src="/uploads/<%= orderedItems[i].product.image[0] %>.jpg" alt="#">
+                      </td>
+                      <td>
+                        <i class="ti-check-box font-small text-muted mr-10"></i>
+                        <h5>
+                          <a href="/viewProduct/<%= order.orderedItems[i].productId %>">
+                            <%= orderedItems[i].product.name %>
+                          </a>
+                        </h5>
+                        <p>Color: <%= orderedItems[i].product.color %></p>
+                        <p>Size: <%= orderedItems[i].product.size %></p>
+                        <p>Brand: <%= orderedItems[i].product.brand %></p>
+                        <p>Description: <%= orderedItems[i].product.description %></p>
+                        <span class="product-qty">x <%= orderedItems[i].quantity %></span>
+                      </td>
+                      <td>Rs. <%= orderedItems[i].quantity * orderedItems[i].product.price %></td>
+                    </tr>
+                    <% } %>
+  
+                    <tr>
+                      <th>SubTotal</th>
+                      <td class="product-subtotal" colspan="2">Rs. <%= order.totalAmount %></td>
+                    </tr>
+                    <tr>
+                      <th>Shipping</th>
+                      <td colspan="2"><em>Free Shipping</em></td>
+                    </tr>
+                    <tr>
+                      <th>Total</th>
+                      <td colspan="2" class="product-subtotal"><span class="font-xl text-brand fw-900">Rs. <%= order.totalAmount %></span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+              <div class="payment_method"></div>
             </div>
+          </div>
+  
+          <div class="col-md-6">
+            <div class="mb-25">
+              <h4>Shipping to</h4>
+            </div>
+            <div class="col-md-6">
+              <article class="icontext align-items-start">
+                <span class="icon icon-sm rounded-circle bg-primary-light">
+                  <i class="text-primary material-icons md-place"></i>
+                </span>
+                <div class="text">
+                  <p class="mb-1">
+                    <br> Full Name: <%= address.firstname %> <%= address.lastname %><br>
+                    City: <%= address.city %><br>
+                    Street Name: <%= address.streetname %><br>
+                    House: <%= address.apartmentnumber %><br>
+                    Zipcode: <%= address.zipcode %><br>
+                    State: <%= address.state %>
+                  </p>
+                </div>
+              </article>
+  
+              <br>
+              <br>
+  
+            </div> <!-- col// -->
+            <article class="icontext align-items-start">
+              <span class="icon icon-sm rounded-circle bg-primary-light">
+                <i class="text-primary material-icons md-local_shipping"></i>
+              </span>
+              <div class="text">
+                <h4 class="mb-1">Payment</h4>
+                <p class="mb-1">
+                  <br> Pay method: <%= order.paymentMethod %><br>
+                  Order Status:
+                  <% if (order.orderStatus === 'placed') { %>
+                    <span class="badge bg-success">Placed</span>
+                    <br>
+                    <div class="text-end">
+                      <a href="#" class="btn btn-primary">Print Invoice</a>
+                    </div>
+                  <% } else if (order.orderStatus === 'cancelled') { %>
+                    <span class="badge bg-danger">Cancelled</span>
+                  <% } %>
+                </p>
+              </div>
+            </article>
+            
+  
+  
+            <br>
+            <form method="post">
+              <% if (order.orderStatus !== 'cancelled') { %>
+              <div class="form-group">
+                <div class="checkbox">
+                  <label class="form-check-label label_info" data-bs-toggle="collapse" href="#collapsePassword" data-target="#collapsePassword" aria-controls="collapsePassword">
+                    <a style="color: rgb(232, 60, 60); font-size: 18px;">Cancel this Order?</a>
+                  </label>
+                </div>
+              </div>
+              <% } %>
+  
+              <% if (order.orderStatus !== 'cancelled') { %>
+                <div id="collapsePassword" class="form-group create-account collapse in">
+                  <span>Reason to Cancel this order</span>
+                  <textarea id="cancelReason" rows="5" placeholder="Cancel notes"></textarea>
+                  <% if (order.orderStatus === 'delivered') { %>
+                  <a href="/returnOrder/<%= order._id %>" class="btn btn-fill btn-block mt-30" style="background-color: rgb(220, 67, 67); color: white;">Return</a>
+                  <% } else { %>
+                  <a href="/cancelOrder/<%= order._id %>" class="btn btn-fill btn-block mt-30" style="background-color: rgb(220, 67, 67); color: white;" onclick="validateCancelReason(event)">Cancel Order</a>
+                  <% } %>
+                </div>
+                <% if (order.orderStatus !== 'delivered') { %>
+                <script>
+                  function validateCancelReason(event) {
+                    const cancelReason = document.getElementById('cancelReason').value;
+                    if (cancelReason.trim() === '') {
+                      event.preventDefault();
+                      toastr.error('Please enter a reason to cancel the order.');
+                    }
+                  }
+                </script>
+              <% } %>
+              <% } %>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <!-- Toastr JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  <!-- Toastr CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+  <!-- Toastr Configuration -->
 
 
 
-            <!-- Vendor JS-->
-            <script src="/profile/js/vendor/modernizr-3.6.0.min.js"></script>
-            <script src="/profile/js/vendor/jquery-3.6.0.min.js"></script>
-            <script src="/profile/js/vendor/jquery-migrate-3.3.0.min.js"></script>
-            <script src="/profile/js/vendor/bootstrap.bundle.min.js"></script>
-            <script src="/profile/js/plugins/slick.js"></script>
-            <script src="/profile/js/plugins/jquery.syotimer.min.js"></script>
-            <script src="/profile/js/plugins/wow.js"></script>
-            <script src="/profile/js/plugins/jquery-ui.js"></script>
-            <script src="/profile/js/plugins/perfect-scrollbar.js"></script>
-            <script src="/profile/js/plugins/magnific-popup.js"></script>
-            <script src="/profile/js/plugins/select2.min.js"></script>
-            <script src="/profile/js/plugins/waypoints.js"></script>
-            <script src="/profile/js/plugins/counterup.js"></script>
-            <script src="/profile/js/plugins/jquery.countdown.min.js"></script>
-            <script src="/profile/js/plugins/images-loaded.js"></script>
-            <script src="/profile/js/plugins/isotope.js"></script>
-            <script src="/profile/js/plugins/scrollup.js"></script>
-            <script src="/profile/js/plugins/jquery.vticker-min.js"></script>
-            <script src="/profile/js/plugins/jquery.theia.sticky.js"></script>
-            <!-- Template  JS -->
-            <script src="/profile/js/main.js"></script>
+
+    <!-- Vendor JS-->
+    <script src="/profile/js/vendor/modernizr-3.6.0.min.js"></script>
+    <script src="/profile/js/vendor/jquery-3.6.0.min.js"></script>
+    <script src="/profile/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+    <script src="/profile/js/vendor/bootstrap.bundle.min.js"></script>
+    <script src="/profile/js/plugins/slick.js"></script>
+    <script src="/profile/js/plugins/jquery.syotimer.min.js"></script>
+    <script src="/profile/js/plugins/wow.js"></script>
+    <script src="/profile/js/plugins/jquery-ui.js"></script>
+    <script src="/profile/js/plugins/perfect-scrollbar.js"></script>
+    <script src="/profile/js/plugins/magnific-popup.js"></script>
+    <script src="/profile/js/plugins/select2.min.js"></script>
+    <script src="/profile/js/plugins/waypoints.js"></script>
+    <script src="/profile/js/plugins/counterup.js"></script>
+    <script src="/profile/js/plugins/jquery.countdown.min.js"></script>
+    <script src="/profile/js/plugins/images-loaded.js"></script>
+    <script src="/profile/js/plugins/isotope.js"></script>
+    <script src="/profile/js/plugins/scrollup.js"></script>
+    <script src="/profile/js/plugins/jquery.vticker-min.js"></script>
+    <script src="/profile/js/plugins/jquery.theia.sticky.js"></script>
+    <!-- Template  JS -->
+    <script src="/profile/js/main.js"></script>
     </body>
 
 
     <!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/page-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:27:15 GMT -->
 
-    </html>
+  </html>
 
 
-    <!-- Footer Section Begin -->
-    <footer class="footer-section spad">
-        <div class="container">
-            <div class="newslatter-form">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <form action="#">
-                            <input type="text" placeholder="Your email address">
-                            <button type="submit">Subscribe to our newsletter</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-widget">
-                <div class="row">
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-footer-widget">
-                            <h4>About us</h4>
-                            <ul>
-                                <li>About Us</li>
-                                <li>Community</li>
-                                <li>Jobs</li>
-                                <li>Shipping</li>
-                                <li>Contact Us</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-footer-widget">
-                            <h4>Customer Care</h4>
-                            <ul>
-                                <li>Search</li>
-                                <li>Privacy Policy</li>
-                                <li>2019 Lookbook</li>
-                                <li>Shipping & Delivery</li>
-                                <li>Gallery</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-footer-widget">
-                            <h4>Our Services</h4>
-                            <ul>
-                                <li>Free Shipping</li>
-                                <li>Free Returnes</li>
-                                <li>Our Franchising</li>
-                                <li>Terms and conditions</li>
-                                <li>Privacy Policy</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-footer-widget">
-                            <h4>Information</h4>
-                            <ul>
-                                <li>Payment methods</li>
-                                <li>Times and shipping costs</li>
-                                <li>Product Returns</li>
-                                <li>Shipping methods</li>
-                                <li>Conformity of the products</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <!-- Footer Section Begin -->
+  <footer class="footer-section spad">
+    <div class="container">
+      <div class="newslatter-form">
+        <div class="row">
+          <div class="col-lg-12">
+            <form action="#">
+              <input type="text" placeholder="Your email address">
+              <button type="submit">Subscribe to our newsletter</button>
+            </form>
+          </div>
         </div>
-        <div class="social-links-warp">
-            <div class="container">
-                <div class="social-links">
-                    <a href="" class="instagram"><i class="fa fa-instagram"></i><span>instagram</span></a>
-                    <a href="" class="pinterest"><i class="fa fa-pinterest"></i><span>pinterest</span></a>
-                    <a href="" class="facebook"><i class="fa fa-facebook"></i><span>facebook</span></a>
-                    <a href="" class="twitter"><i class="fa fa-twitter"></i><span>twitter</span></a>
-                    <a href="" class="youtube"><i class="fa fa-youtube"></i><span>youtube</span></a>
-                    <a href="" class="tumblr"><i class="fa fa-tumblr-square"></i><span>tumblr</span></a>
-                </div>
+      </div>
+      <div class="footer-widget">
+        <div class="row">
+          <div class="col-lg-3 col-sm-6">
+            <div class="single-footer-widget">
+              <h4>About us</h4>
+              <ul>
+                <li>About Us</li>
+                <li>Community</li>
+                <li>Jobs</li>
+                <li>Shipping</li>
+                <li>Contact Us</li>
+              </ul>
             </div>
-
-            <div class="container text-center pt-5">
-                <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    Copyright &copy;
-                    <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is
-                    made with <i class="icon-heart color-danger" aria-hidden="true"></i> by <a
-                        href="https://colorlib.com" target="_blank">Colorlib</a>
-                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                </p>
+          </div>
+          <div class="col-lg-3 col-sm-6">
+            <div class="single-footer-widget">
+              <h4>Customer Care</h4>
+              <ul>
+                <li>Search</li>
+                <li>Privacy Policy</li>
+                <li>2019 Lookbook</li>
+                <li>Shipping & Delivery</li>
+                <li>Gallery</li>
+              </ul>
             </div>
-
+          </div>
+          <div class="col-lg-3 col-sm-6">
+            <div class="single-footer-widget">
+              <h4>Our Services</h4>
+              <ul>
+                <li>Free Shipping</li>
+                <li>Free Returnes</li>
+                <li>Our Franchising</li>
+                <li>Terms and conditions</li>
+                <li>Privacy Policy</li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-3 col-sm-6">
+            <div class="single-footer-widget">
+              <h4>Information</h4>
+              <ul>
+                <li>Payment methods</li>
+                <li>Times and shipping costs</li>
+                <li>Product Returns</li>
+                <li>Shipping methods</li>
+                <li>Conformity of the products</li>
+              </ul>
+            </div>
+          </div>
         </div>
-    </footer>
-    <!-- Footer Section End -->
+      </div>
+    </div>
+    <div class="social-links-warp">
+      <div class="container">
+        <div class="social-links">
+          <a href="" class="instagram"><i class="fa fa-instagram"></i><span>instagram</span></a>
+          <a href="" class="pinterest"><i class="fa fa-pinterest"></i><span>pinterest</span></a>
+          <a href="" class="facebook"><i class="fa fa-facebook"></i><span>facebook</span></a>
+          <a href="" class="twitter"><i class="fa fa-twitter"></i><span>twitter</span></a>
+          <a href="" class="youtube"><i class="fa fa-youtube"></i><span>youtube</span></a>
+          <a href="" class="tumblr"><i class="fa fa-tumblr-square"></i><span>tumblr</span></a>
+        </div>
+      </div>
 
-    <!-- Js Plugins -->
-    <script src="/shop/js/jquery-3.3.1.min.js"></script>
-    <script src="/shop/js/bootstrap.min.js"></script>
-    <script src="/shop/js/jquery.magnific-popup.min.js"></script>
-    <script src="/shop/js/jquery.slicknav.js"></script>
-    <script src="/shop/js/owl.carousel.min.js"></script>
-    <script src="/shop/js/jquery.nice-select.min.js"></script>
-    <script src="/shop/js/mixitup.min.js"></script>
-    <script src="/shop/js/main.js"></script>
-    </body>
+      <div class="container text-center pt-5">
+        <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+          Copyright &copy;
+          <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is
+          made with <i class="icon-heart color-danger" aria-hidden="true"></i> by <a href="https://colorlib.com"
+            target="_blank">Colorlib</a>
+          <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+        </p>
+      </div>
 
-    </html>
+    </div>
+  </footer>
+  <!-- Footer Section End -->
+
+  <!-- Js Plugins -->
+  <script src="/shop/js/jquery-3.3.1.min.js"></script>
+  <script src="/shop/js/bootstrap.min.js"></script>
+  <script src="/shop/js/jquery.magnific-popup.min.js"></script>
+  <script src="/shop/js/jquery.slicknav.js"></script>
+  <script src="/shop/js/owl.carousel.min.js"></script>
+  <script src="/shop/js/jquery.nice-select.min.js"></script>
+  <script src="/shop/js/mixitup.min.js"></script>
+  <script src="/shop/js/main.js"></script>
+  </body>
+
+  </html>

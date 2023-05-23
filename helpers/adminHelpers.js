@@ -89,9 +89,10 @@ export default {
   },  
 
 
-  addProductPost: async (productDetails,image) => {
+  addProductPost: async (productDetails,images) => {
 
     try {
+      const imageFilenames = images.map(image => image.filename);
       const newproduct = new product({
         productName: productDetails.productName,
         productColor: productDetails.productColor,
@@ -101,7 +102,7 @@ export default {
         productSize: productDetails.productSize,
         category: productDetails.viewCategoryId,
         productQuantity: productDetails.productQuantity,
-        productImage:image.filename
+        productImage:imageFilenames
         
       });
       await newproduct.save();
@@ -110,11 +111,12 @@ export default {
       console.error(err);
     }
   },
-  postEditProduct: async (productDetails, image, productId) => {
+  postEditProduct: async (productDetails, images, productId) => {
     try {
       let updatedProduct;
   
-      if (image) {
+      if (images) {
+        const imageFilenames = images.map(image => image.filename);
         // If an image is uploaded, update the product with the image filename
         updatedProduct = await product.findByIdAndUpdate(
           productId,
@@ -127,7 +129,7 @@ export default {
             productSize: productDetails.productSize,
             category: productDetails.viewCategoryId,
             productQuantity: productDetails.productQuantity,
-            productImage: image.filename,
+            productImage: imageFilenames,
           },
           { new: true }
         );
