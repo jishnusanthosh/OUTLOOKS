@@ -1,11 +1,10 @@
-import mongoose from "mongoose";
 import twilioFunctions from "../config/twilio";
 import User from "../models/userModels";
 import Product from "../models/productModels";
 import Cart from "../models/cartModels";
 import Address from "../models/addressModels";
 import Order from "../models/orderModels";
-import Razorpay from "razorpay";
+import Coupon from "../models/couponModel";
 
 import bcrypt from "bcrypt";
 
@@ -25,14 +24,11 @@ export default {
         });
 
         if (oldUser) {
-          // If an existing user with the same email is found, return an object with emailStatus=true
-          resolve({ emailStatus: true, phoneNumberStatus: false, user: null });
+           resolve({ emailStatus: true, phoneNumberStatus: false, user: null });
         } else if (oldPhoneNumberUser) {
-          // If an existing user with the same phone number is found, return an object with phoneNumberStatus=true
           resolve({ emailStatus: false, phoneNumberStatus: true, user: null });
         } else {
-          // Otherwise, create a new user, save it to the database, and return an object with emailStatus=false, phoneNumberStatus=false, and the saved user object
-          const saltRounds = 10;
+         const saltRounds = 10;
           let password = body.password.toString();
           let newpassword = await bcrypt.hash(password, saltRounds);
           const newUser = new User({
@@ -86,7 +82,6 @@ export default {
         console.log(customer);
         if (customer) {
           twilioFunctions.generateOTP(customer.phonenumber);
-          // const msg1 = "OTP SENT!!";
           resolve({ status: true, body });
         } else {
           console.log("No User Found!");
@@ -115,11 +110,9 @@ export default {
       let cart = await Cart.findOne({ user: userId });
 
       if (!cart) {
-        // If cart doesn't exist for the user, create a new one
         cart = new Cart({ user: userId, products: [] });
       }
 
-      // Check if the product is already present in the cart
       const index = cart.products.findIndex((p) => p.productId == productId);
 
       if (index === -1) {
@@ -283,7 +276,6 @@ export default {
         phone: address.phone,
         email: address.email,
         user: userId,
-        
       });
       if (result) {
         return true;
@@ -299,61 +291,152 @@ export default {
     const orderDate = () => {
       return new Date();
     };
-  
+
     try {
-      let status = order.payment_method === "COD" ? "placed" : "pending";
+      let paymentMethod = order.payment_method;
+      let status;
+      let paymentStatus;
+
+      if (paymentMethod === "COD") {
+        status = "placed";
+        paymentStatus = "pending";
+      } else if (paymentMethod === "RazorPay") {
+        status = "placed";
+        paymentStatus = "paid";
+      } else {
+        status = "pending";
+        paymentStatus = "pending";
+      }
+
       let date = orderDate();
       let addressId = order.address_id;
       let orderedItems = cartItems.products;
       console.log(orderedItems + "orderedItems");
-  
+
       // Create a new order document
       let ordered = new Order({
         user: userId,
         address: addressId,
         orderDate: date,
         totalAmount: totalAmount,
-        paymentMethod: order.payment_method,
+        paymentMethod: paymentMethod,
         orderStatus: status,
+        paymentStatus: paymentStatus,
         orderedItems: orderedItems,
       });
-  
+
       // Save the order to the database
       await ordered.save();
       console.log("uploaded to db");
-  
-      // Clear the user's cart if the payment method is not COD
-      if (order.payment_method !== "COD") {
-        // Update product quantities
-        for (const item of orderedItems) {
-          const productId = item.productId._id;
-          const quantity = item.quantity;
-  
-          // Find the product in the database
-          const product = await Product.findById(productId);
-  
-          // Decrease the product quantity by the ordered quantity
-          product.productQuantity -= quantity;
-  
-          // Save the updated product to the database
-          await product.save();
-        }
+
+      // Update product quantities and delete the cart
+      for (const item of orderedItems) {
+        const productId = item.productId._id;
+        const quantity = item.quantity;
+
+        // Find the product in the database
+        const product = await Product.findById(productId);
+
+        // Decrease the product quantity by the ordered quantity
+        product.productQuantity -= quantity;
+
+        // Save the updated product to the database
+        await product.save();
       }
-  
+
+      // Delete the user's cart
+      await Cart.findOneAndDelete({ user: userId });
+
       return { ordered, orderId: ordered._id };
     } catch (error) {
       console.error(error);
       throw new Error("Failed to place the order");
     }
   },
-  
-  updatePaymentStatus:(orderId)=>{
-   return new Promise(async(resolve, reject) => {
-    const order = await Order.findByIdAndUpdate(
-      orderId,
-      { orderStatus },
-      { new: true }
-    );
-   })
-  }
+  updatePaymentStatus: (orderId) => {
+    return new Promise(async (resolve, reject) => {
+      const order = await Order.findByIdAndUpdate(
+        orderId,
+        { orderStatus },
+        { new: true }
+      );
+    });
+  },
+  applyCoupon: async (user, couponCode, subtotal) => {
+    try {
+      const coupon = await Coupon.findOne({ code: couponCode });
+
+      if (!coupon) {
+        return { success: false, message: "Coupon not found" };
+      }
+      if (coupon.expirationDate < Date.now()) {
+        return { success: false, message: "Coupon has expired" };
+      }
+      if (coupon.usedBy.includes(user._id)) {
+        var discountAmount = {};
+        discountAmount.status = false;
+        return {
+          success: false,
+          message: "Coupon has already Used",
+          discountAmount,
+        };
+      }
+      let discount = (subtotal / coupon.discount) * 100;
+      let maxdiscount = coupon.maxdiscount;
+      if (maxdiscount < discount) {
+        var discountAmount = {};
+        let disPrice = subtotal - maxdiscount;
+        discountAmount.couponCode = coupon.code;
+        discountAmount.disAmount = maxdiscount;
+        discountAmount.disPrice = disPrice;
+        discountAmount.status = true;
+        coupon.usedBy.push(user._id);
+        await coupon.save();
+        return {
+          success: true,
+          message: "Coupon applied successfully",
+          discountAmount,
+        };
+      } else {
+        var discountAmount = {};
+        let disPrice = subtotal - discount;
+        discountAmount.couponCode = coupon.code;
+        discountAmount.disAmount = maxdiscount;
+        discountAmount.disPrice = disPrice;
+        discountAmount.status = true;
+
+        coupon.usedBy.push(user._id);
+        await coupon.save();
+        return {
+          success: true,
+          message: "Coupon applied successfully",
+          discountAmount,
+        };
+      }
+    } catch (error) {
+      console.error("Error applying coupon:", error);
+      return {
+        success: false,
+        message: "An error occurred while applying the coupon",
+      };
+    }
+  },
+  searchQuery: async (query) => {
+    try {
+      const products = await Product.find({
+        $or: [
+          { productName: { $regex: query, $options: "i" } },
+          { productModel: { $regex: query, $options: "i" } },
+          { productDescription: { $regex: query, $options: "i" } },
+        ],
+      }).populate("category");
+      if (products.length > 0) {
+
+        return products;
+      }
+      return [];
+    } catch (err) {
+      console.error(err);
+    }
+  },
 };

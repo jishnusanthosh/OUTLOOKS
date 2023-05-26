@@ -2,7 +2,7 @@ import userHelper from "../helpers/userHelpers";
 import twilioFunctions from "../config/twilio";
 import dotenv from "dotenv";
 import userHelpers from "../helpers/userHelpers";
-import adminHelpers from "../helpers/adminHelpers";
+
 import User from "../models/userModels";
 import Address from "../models/addressModels";
 import Products from "../models/productModels";
@@ -10,7 +10,6 @@ import mongoose from "mongoose";
 import Cart from "../models/cartModels";
 import Category from "../models/categoryModels";
 import Orders from "../models/orderModels";
-const hmac_sha256 = require('crypto-js/hmac-sha256');
 const { generateRazorpay } = require("../config/razorpay");
 
 const toastr = require("toastr");
@@ -50,27 +49,17 @@ export default {
       }
     } catch (error) {
       console.error(error);
+      res.render("catchError", {
+        message: err.message,
+        user: req.session.user,
+      });
     }
   },
 
   loginPage: async (req, res) => {
-    let user = req.session.user;
-
-    const allcategory = await Category.find();
-    if (req.session.user) {
-      let cartCount = await userHelpers.getCartCount(req.session.user._id);
-
-      console.log(cartCount);
-      res.render("shop/userlogin/login", { user, cartCount });
-    } else {
-      let cartCount = null;
-      res.render("shop/userlogin/login", {
-        user: false,
-        cartCount,
-        allcategory,
-      });
-    }
+    res.render("shop/userlogin/login");
   },
+
   GetOtpLogin: (req, res) => {
     res.render("shop/userlogin/otp-login.ejs");
   },
@@ -82,6 +71,12 @@ export default {
   signUpPage: (req, res) => {
     res.render("shop/userlogin/signup.ejs");
   },
+  getForgotPassword:(req,res)=>{
+    res.render("shop/userlogin/forgotPassword.ejs");
+  },
+
+
+
   signUpPost: (req, res) => {
     userHelper
       .doSignUp(req.body)
@@ -99,9 +94,7 @@ export default {
         }
       })
       .catch((error) => {
-        // Handle any errors that occur during the signup process
         console.log(error);
-        // Render an error page or redirect to an appropriate route
         res.render("error");
       });
   },
@@ -110,10 +103,9 @@ export default {
     try {
       const response = await userHelpers.doLogin(req.body);
       if (response.status && response.user.isActive) {
-        req.session.loggedIn = true;
-
+        req.session.user = true;
         req.session.user = response.user;
-        
+
         res.redirect("/");
       } else {
         if (response.status == false) {
@@ -267,9 +259,10 @@ export default {
   getProductView: async (req, res) => {
     let productId = req.params.id;
     let user = req.session.user || null;
+    let userId= req.session.user || null;
     let allcategory = await Category.find();
     try {
-      let cartCount = await userHelpers.getCartCount(req.session.user._id);
+      let cartCount = await userHelpers.getCartCount(userId);
 
       const response = await userHelpers.getProductView(productId);
       if (response) {
@@ -402,13 +395,13 @@ export default {
       console.log(error);
     }
   },
-  async deleteAddress(req, res) {
-    const addressId = req.params.id;
+  deleteAddress: async (req, res) => {
+    const addressId = req.body.addressId;
+    console.log(addressId);
     try {
       await Address.findByIdAndUpdate(addressId, { addStatus: true });
 
       res.status(200).json({ message: "Address deleted successfully" });
-
     } catch (error) {
       res.status(500).json({ message: "Error deleting address" });
     }
@@ -418,46 +411,38 @@ export default {
     try {
       let userId = req.session.user._id;
       const cartItems = await Cart.findOne({ user: req.session.user._id });
-      const totalAmount = await userHelpers.getCartTotal(req.session.user);
-
-      console.log(req.body);
-
-      const placeOrder = await userHelpers.placeOrder(
-        req.body,
-        totalAmount,
-        cartItems,
-        userId
-      );
+      const totalAmount = req.body.amount;
 
       if (req.body.payment_method === "COD") {
         // Update product quantities
         const orderItems = cartItems.products;
-        for (const item of orderItems) {
-          const productId = item.productId._id;
-          const quantity = item.quantity;
 
-          // Find the product in the database
-          const product = await Products.findById(productId);
-
-          // Decrease the product quantity by the ordered quantity
-          product.productQuantity -= quantity;
-
-          // Save the updated product to the database
-          await product.save();
-        }
+        const placeOrder = await userHelpers.placeOrder(
+          req.body,
+          totalAmount,
+          cartItems,
+          userId
+        );
 
         // Clear the user's cart
         await Cart.deleteMany({ user: userId });
 
         return res.json({ cod_success: true, orderId: placeOrder.orderId });
       } else {
+        const placeOrder = await userHelpers.placeOrder(
+          req.body,
+          totalAmount,
+          cartItems,
+          userId
+        );
         const razorPayOrder = await generateRazorpay(
           placeOrder.orderId.toString(),
           totalAmount,
           userId
         );
-        await Cart.deleteMany({ user: userId });
+
         res.json({ ...razorPayOrder, orderId: placeOrder.orderId });
+        await Cart.deleteMany({ user: userId });
       }
     } catch (error) {
       console.log(error);
@@ -465,7 +450,7 @@ export default {
     }
   },
 
-  verifyPaymentPost:  async (req, res) => {
+  verifyPaymentPost: async (req, res) => {
     const userId = req.session.user._id;
     try {
       const { order_id, payment_id, razorpay_signature } = req.body;
@@ -474,27 +459,35 @@ export default {
         order_id,
         payment_id,
         razorpay_signature,
-        process.env.RAZORPAY_KEY_SECRET,userId      
+        process.env.RAZORPAY_KEY_SECRET,
+        userId
       );
 
       if (isPaymentVerified) {
         // Update the order status to "placed" or any other appropriate status
-        await userHelpers.updatePaymentStatus(order_id, 'placed');
+        await userHelpers.updatePaymentStatus(order_id, "placed");
 
         // Clear the user's cart
-        
+
         await Cart.deleteMany({ user: userId });
 
-        return res.json({ success: true, message: 'Payment verification successful' });
+        return res.json({
+          success: true,
+          message: "Payment verification successful",
+        });
       } else {
-        return res.json({ success: false, message: 'Payment verification failed' });
+        return res.json({
+          success: false,
+          message: "Payment verification failed",
+        });
       }
     } catch (error) {
       console.log(error);
-      res.status(500).send('Failed to verify the Razorpay payment: ' + error.message);
+      res
+        .status(500)
+        .send("Failed to verify the Razorpay payment: " + error.message);
     }
   },
-
 
   getOrderPlaced: async (req, res) => {
     let orderId = req.params.id;
@@ -531,6 +524,10 @@ export default {
       }
     } catch (error) {
       console.error(error);
+      res.render("catchError", {
+        message: err.message,
+        user: req.session.user,
+      });
     }
   },
 
@@ -632,9 +629,60 @@ export default {
       res.redirect(`/viewOrderDetails/${req.params.id}`);
     } catch (error) {
       console.log(error);
-      // Handle the error as needed, such as showing an error page or redirecting to an error page
+      res.render("catchError", {
+        message: err.message,
+        user: req.session.user,
+      });
     }
   },
+  applyCoupon: async (req, res) => {
+    const subtotal = req.body.subtotal;
+    const couponCode = req.body.couponCode;
+    const userId = req.session.user._id;
+    console.log(subtotal, couponCode, userId);
+    try {
+      // Find the user by userId
+      const user = await User.findById(userId);
 
+      if (!user) {
+        return { success: false, message: "User not found" };
+      }
+
+      // Apply the coupon using the helper function
+      const result = await userHelpers.applyCoupon(user, couponCode, subtotal);
+      console.log(result);
+      res.json(result);
+    } catch (error) {
+      console.error("Error applying coupon:", error);
+      res.status(500).json({
+        success: false,
+        message: "An error occurred while applying the coupon",
+      });
+    }
+  },
+  search: async (req, res) => {
+    let user = req.session.user || null;
+    let catId = req.params.id;
+    let userId = null;
+    let cartCount = null;
+    let allcategory = await Category.find();
+
+    if (req.session.user) {
+      userId = req.session.user._id;
+      cartCount = await userHelpers.getCartCount(userId);
+    }
+    try {
+      const search = req.query.search;
+      const products = await userHelper.searchQuery(
+        search
+      
+      );
+      res.render("shop/searchedProducts",{products,user,catId,allcategory})
+      console.log(products);
   
+    } catch (err) {
+      console.log(err);
+      
+    }
+  },
 };

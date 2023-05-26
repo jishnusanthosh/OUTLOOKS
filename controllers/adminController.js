@@ -11,6 +11,7 @@ import User from "../models/userModels";
 import Product from "../models/productModels";
 import Order from "../models/orderModels";
 import Address from "../models/addressModels";
+import Coupon from "../models/couponModel"
 
 
 dotenv.config();
@@ -181,27 +182,37 @@ export default {
 
   addCategory: async (req, res) => {
     try {
-      await adminHelper.addCategory(req.body);
-      res.redirect("/admin/admin-categories");
+      const response = await adminHelper.addCategory(req.body);
+      if (response.success) {
+        res.status(200).json({ success: true, message: response.message });
+      } else {
+        res.status(400).json({ success: false, message: response.message });
+      }
     } catch (error) {
       console.error(error);
+      res.status(500).json({ success: false, message: "Failed to add category." });
     }
-  },
+  }
+  ,
   deleteCategory: async (req, res) => {
     let categoryId = req.params.id;
     try {
-      await adminHelper.deleteCategory(categoryId);
-      res.redirect("/admin/admin-categories");
+      const response = await adminHelper.deleteCategory(categoryId);
+      if (response.success) {
+        return res.status(200).json({ success: true, message: 'Category deleted successfully.' });
+      } else {
+        return res.status(500).json({ success: false, message: 'Failed to delete category.' });
+      }
     } catch (error) {
       console.error(error);
+      return res.status(500).json({ success: false, message: 'Failed to delete category.' });
     }
-  },
+  }
+  ,
   addProductPost: async (req, res) => {
     let productDetails = req.body;
     let image = req.files;
-    console.log("=============");
-    console.log(productDetails,image);
-    console.log("=============");
+   
 
     try {
       await adminHelper.addProductPost(productDetails, image);
@@ -360,15 +371,40 @@ export default {
       res.status(500).json({ error: 'An error occurred' });
     }
   },
+
+  getAddNewCoupon: async (req, res) => {
+    try {
+        res.render("admin/admin-add-coupon")
+   
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  addCouponPost: async (req, res) => {
+    console.log(req.body);
+    try {
+      const response = await adminHelper.generateCoupon(req.body);
+      res.json(response);
+    } catch (err) {
+      console.log(err);
+      res.json({ status: false, message: 'An error occurred' });
+    }
+  },
+
+
+  GetCouponList: async (req, res) => {
+    try {
+      const coupons = await adminHelper.getCoupons();
+      
+      console.log(coupons);
+      
+      res.render("admin/admin-coupon-list", { coupons });
+     
+    } catch (err) {
+      console.log(err);
+    }
+  },
   
-
-
-
-
-
-
-
-
 
 
 

@@ -42,46 +42,55 @@
                                     <th>#ID</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Payment Method</th>
+                                    <th scope="col">Payment Status</th>
                                     <th scope="col">Total</th>
-                                    <th scope="col">Status</th>
+                                    <th scope="col">Order Status</th>
                                     <th scope="col">Date</th>
                                     <th scope="col" class="text-end"> Action </th>
                                 </tr>
                             </thead>
-                            <%= console.log(Orders); %>
+                           
                             <tbody>
-                                <% for (let i = 0; i < Orders.length; i++) { %>
-                                  <tr>
-                                    <td><%= Orders[i]._id %></td>
-                                    <td><b><%= Orders[i].user[0].username %></b></td>
-                                    <td><%= Orders[i].paymentMethod %></td>
-                                    <td>Rs.<%= Orders[i].totalAmount %></td>
-                                    <td>
-                                        <% if (Orders[i].orderStatus === 'cancelled') { %>
-                                          <span class="badge rounded-pill alert-danger"><%= Orders[i].orderStatus %></span>
-                                        <% } else if (Orders[i].orderStatus === 'placed') { %>
-                                          <span class="badge rounded-pill alert-success"><%= Orders[i].orderStatus %></span>
-                                        <% } else { %>
-                                          <span class="badge rounded-pill alert-primary"><%= Orders[i].orderStatus %></span>
-                                        <% } %>
-                                      </td>
-                                      
-                                    <td><%= Orders[i].orderDate.toISOString().split('T')[0] %></td>
-                                    <td class="text-end">
-                                      <a href="/admin/getOneOrderDetail/<%= Orders[i]._id %>" class="btn btn-md rounded font-sm">Detail</a>
-                                      <div class="dropdown">
-                                        <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm">
-                                          <i class="material-icons md-more_horiz"></i>
-                                        </a>
-                                        <div class="dropdown-menu">
-                                          <a class="dropdown-item" href="#">Edit info</a>
-
-                                        </div>
-                                      </div> <!-- dropdown //end -->
-                                    </td>
-                                  </tr>
-                                <% } %>
-                              </tbody>
+                              <% for (let i = Orders.length - 1; i >= 0; i--) { %>
+                                <tr>
+                                  <td><%= Orders[i]._id %></td>
+                                  <td><b><%= Orders[i].user[0].username %></b></td>
+                                  <td><%= Orders[i].paymentMethod %></td>
+                                  <td>
+                                    <% if (Orders[i].paymentStatus === 'pending') { %>
+                                      <span class="badge rounded-pill alert-warning"><%= Orders[i].paymentStatus %></span>
+                                    <% } else if (Orders[i].paymentStatus === 'paid') { %>
+                                      <span class="badge rounded-pill alert-success"><%= Orders[i].paymentStatus %></span>
+                                    <% } else { %>
+                                      <span class="badge rounded-pill alert-danger"><%= Orders[i].paymentStatus %></span>
+                                    <% } %>
+                                  </td>
+                                  <td>Rs.<%= Orders[i].totalAmount %></td>
+                                  <td>
+                                    <% if (Orders[i].orderStatus === 'cancelled') { %>
+                                      <span class="badge rounded-pill alert-danger"><%= Orders[i].orderStatus %></span>
+                                    <% } else if (Orders[i].orderStatus === 'placed') { %>
+                                      <span class="badge rounded-pill alert-success"><%= Orders[i].orderStatus %></span>
+                                    <% } else { %>
+                                      <span class="badge rounded-pill alert-primary"><%= Orders[i].orderStatus %></span>
+                                    <% } %>
+                                  </td>
+                                  <td><%= Orders[i].orderDate.toISOString().split('T')[0] %></td>
+                                  <td class="text-end">
+                                    <a href="/admin/getOneOrderDetail/<%= Orders[i]._id %>" class="btn btn-md rounded font-sm">Detail</a>
+                                    <div class="dropdown">
+                                      <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm">
+                                        <i class="material-icons md-more_horiz"></i>
+                                      </a>
+                                      <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="#">Edit info</a>
+                                      </div>
+                                    </div> <!-- dropdown //end -->
+                                  </td>
+                                </tr>
+                              <% } %>
+                            </tbody>
+                            
                               
                         </table>
                     </div> 
@@ -91,10 +100,9 @@
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-start">
                         <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                        <li class="page-item"><a class="page-link" href="#">02</a></li>
-                        <li class="page-item"><a class="page-link" href="#">03</a></li>
+                    
                         <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                        <li class="page-item"><a class="page-link" href="#">16</a></li>
+               
                         <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
                     </ul>
                 </nav>

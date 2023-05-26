@@ -5,9 +5,11 @@ import userController from '../controllers/userController';
 
 router.get('/', userController.homePage);
 
-router.get("/login",isLoggedIn, userController.loginPage);
+router.get("/login",isLoggedIn,userController.loginPage);
 
-router.get("/logout",  userController.logoutGet);
+router.get("/forgotPassword",isLoggedIn,userController.getForgotPassword)
+
+router.get("/logout", userController.logoutGet);
 
 router.get("/signup",isLoggedIn,userController.signUpPage);
 
@@ -17,15 +19,15 @@ router.get("/otp-send", userController.GetOtpSend);
 
 router.get("/cart", isloggedInUser, userController.GetCart);
 
-router.get("/shopView/:id", isloggedInUser, userController.getShopView);
+router.get("/shopView/:id",userController.getShopView);
 
-router.get("/viewProduct/:id", isloggedInUser, userController.getProductView);
+router.get("/viewProduct/:id", userController.getProductView);
 
 router.get("/userProfile/:id", isloggedInUser, userController.getUserProfile);
 
 router.post("/deleteCartProduct",isloggedInUser,userController.deleteCartProduct);
 
-router.get("/addToCart/:id", isloggedInUser, userController.addToCart);
+router.get("/addToCart/:id",userController.addToCart);
 
 router.get("/GetcheckOut", isloggedInUser, userController.getCheckOut);
 
@@ -43,7 +45,8 @@ router.post('/update-product-quantity', isloggedInUser, userController.updatePro
 
 router.post("/addAddress", isloggedInUser, userController.addAddress);
 
-router.get("/deleteAddress/:id",isloggedInUser,userController.deleteAddress)
+router.post("/deleteAddress", isloggedInUser, userController.deleteAddress);
+
 
 router.post("/placeOrder", isloggedInUser, userController.placeOrderPost);
 
@@ -54,5 +57,9 @@ router.post('/verifyPayment', isloggedInUser, userController.verifyPaymentPost);
 router.get("/viewOrderDetails/:id", isloggedInUser, userController.viewOrderDetails);
 
 router.get("/cancelOrder/:id", isloggedInUser, userController.cancelOrderPost);
+
+router.post('/applyCoupon', isloggedInUser, userController.applyCoupon);
+
+router.get("/product-search", userController.search);
 
 export default router;

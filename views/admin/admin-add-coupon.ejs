@@ -1,0 +1,82 @@
+<html>
+
+<body>
+  <%- include('../partials/admin-header.ejs') %>
+
+  <section class="content-main">
+    <div id="ajax-response"></div> <!-- Placeholder for displaying AJAX response -->
+
+    <div class="row">
+      <div class="col-9">
+        <div class="content-header">
+          <h2 class="content-title">Add New Coupon</h2>
+        </div>
+      </div>
+      <div>
+        <div class="card mb-">
+          <div class="card-body">
+            <div class="mb-4">
+              <label for="couponCode" class="form-label">Coupon Code</label>
+              <input type="text" placeholder="Coupon Code" class="form-control" name="couponCode" id="couponCode" required>
+            </div>
+            <div class="row gx-3">
+              <div class="col-md-4  mb-3">
+                <label for="couponDiscount" class="form-label">Discount</label>
+                <input type="number" placeholder="Coupon Discount" class="form-control" name="couponDiscount" id="couponDiscount" required>
+              </div>
+              <div class="col-md-4  mb-3">
+                <label for="maxDiscount" class="form-label">Maximum Discount</label>
+                <input type="number" placeholder="Maximum Discount" class="form-control" id="maxDiscount" name="maxDiscount" required>
+              </div>
+              <div class="col-md-4  mb-3">
+                <label for="expiryDate" class="form-label">Expiry Date</label>
+                <input type="date" min="<%= new Date().toISOString().split('T')[0] %>" placeholder="Type here" class="form-control" id="expiryDate" name="expiryDate">
+              </div>
+            </div>
+          </div>
+        </div> <!-- card end// -->
+        <div>
+          <button class="btn btn-md rounded font-sm hover-up" onclick="addCoupon()">Add Coupon</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <%- include('../partials/admin-footer.ejs') %>
+
+  <script>
+    function addCoupon() {
+      var couponCode = document.getElementById('couponCode').value;
+      var couponDiscount = document.getElementById('couponDiscount').value;
+      var maxDiscount = document.getElementById('maxDiscount').value;
+      var expiryDate = document.getElementById('expiryDate').value;
+
+      var formData = new FormData();
+      formData.append('couponCode', couponCode);
+      formData.append('couponDiscount', couponDiscount);
+      formData.append('maxDiscount', maxDiscount);
+      formData.append('expiryDate', expiryDate);
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/admin/addCouponPost');
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          var response = JSON.parse(xhr.responseText);
+          if (response.status) {
+            // Coupon added successfully
+            document.getElementById('ajax-response').innerHTML = '<div class="alert alert-success">' + response.message + '</div>';
+          } else {
+            // Error adding coupon
+            document.getElementById('ajax-response').innerHTML = '<div class="alert alert-danger">' + response.message + '</div>';
+          }
+        } else {
+          // Error handling the request
+          document.getElementById('ajax-response').innerHTML = '<div class="alert alert-danger">An error occurred while adding the coupon.</div>';
+        }
+      };
+      xhr.send(formData);
+    }
+  </script>
+  
+</body>
+
+</html>

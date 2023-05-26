@@ -1,9 +1,25 @@
 <%- include('../shop/layout/user-header.ejs') %>
 
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+    <div id="toastr-container"></div>
 
+    <style>
+        #toastr-container>.toast-error {
+            opacity: 0.9;
+            /* Adjust the opacity value as desired */
+            color: rgb(230, 90, 8);
+        }
 
+        #toastr-container>.toast-success {
+            opacity: 0.9;
+            /* Adjust the opacity value as desired */
+            color: green;
+            /* Set the text color to green */
+        }
+    </style>
 
     <head>
         <meta charset="utf-8">
@@ -169,15 +185,29 @@
                                                 <td colspan="2"><em>Free Shipping</em></td>
                                             </tr>
                                             <tr>
+                                                <th>Discount</th>
+                                                <td colspan="2" class="product-subtotal">
+                                                    <span id="discountAmount" class="text-brand fw-900">Rs. 0</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
                                                 <th>Total</th>
-                                                <td colspan="2" class="product-subtotal"><span
-                                                        class="font-xl text-brand fw-900"> Rs. <%= subtotal %></span>
+                                                <td colspan="2" class="product-subtotal">
+                                                    <span id="totalAmount" class="font-xl text-brand fw-900">Rs. <%=
+                                                            subtotal %></span>
                                                 </td>
                                             </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+                        <div class="col-lg-6">
+                            <div class="coupon-input">
+                                <input id="coupon-input" type="text" placeholder="Enter Coupon Code">
+                                <div id="apply-coupon-btn" class="btn btn-fill-out btn-block mt-30">Apply Coupon</div>
+                            </div>
+                        </div>
+
+                        <div class="bt-1 border-color-1 mt-40 mb-30"></div>
                         <div class="payment_method">
                             <div class="mb-25">
                                 <h5>Payment</h5>
@@ -499,15 +529,7 @@
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <script>
-        var dataValue;
-        const radioInputs = document.querySelectorAll('.billing-address');
-        radioInputs.forEach(function (radio) {
-            radio.addEventListener('change', function () {
-
-                dataValue = radio.getAttribute('data-value');
-            });
-        });
-
+        var disPrice = 0;
 
         $(document).ready(function () {
             var checkedRadio = document.querySelector('.billing-address:checked');
@@ -517,29 +539,37 @@
                 e.preventDefault();
                 console.log(dataValue);
                 var payment_method = $('input[name="payment_option"]:checked').val();
+                var amount;
+                if (disPrice !== null && disPrice > 0) {
+                    amount = disPrice;
+                } else {
+                    amount = '<%= subtotal %>';
+                }
+
+                var requestData = {
+                    address_id: dataValue,
+                    payment_method: payment_method,
+                    amount: amount,
+                    disPrice: disPrice
+                };
+
                 $.ajax({
                     type: 'POST',
                     url: '/placeOrder',
-                    data: { address_id: dataValue, payment_method: payment_method },
-
+                    data: requestData,
                     success: function (response) {
                         if (response.cod_success) {
                             // Redirect to the order placed page
-
-
-
                             window.location.href = `/orderPlaced/${response.orderId}`;
                         } else {
                             console.log(response);
-                            razorpayPayment(response)
-                            
+                            razorpayPayment(response);
                         }
                     }
-
                 });
             });
-
         });
+
         function razorpayPayment(order) {
             var options = {
                 "key": "rzp_test_UA5XAiyYBPnvtB", // Enter the Key ID generated from the Dashboard
@@ -597,6 +627,68 @@
         }
 
     </script>
+    <script>
+        $(document).ready(function () {
+            var subtotal = '<%= subtotal %>';
+            $('#apply-coupon-btn').click(function () {
+                var couponCode = $('#coupon-input').val();
+                applyCoupon(couponCode, subtotal);
+            });
+        });
+
+        function applyCoupon(couponCode, subtotal) {
+            $.ajax({
+                url: '/applyCoupon',
+                method: 'POST',
+                data: { couponCode: couponCode, subtotal: subtotal },
+                success: function (response) {
+                    const discount = response.discountAmount.disAmount;
+
+                    if (response.success) {
+                        toastr.success(response.message, '', { "toastClass": "toast-success" });
+
+                        // Update the HTML elements based on the response
+                        const discountElement = document.getElementById("discountAmount");
+                        discountElement.textContent = (discount !== null && discount > 0) ? ('Rs. ' + discount) : 'Rs. 0';
+
+                        // Update the disPrice value
+                        disPrice = response.discountAmount.disPrice;
+
+                        const totalElement = document.getElementById("totalAmount");
+                        totalElement.textContent = (disPrice !== null && disPrice > 0) ? ('Rs. ' + disPrice) : ('Rs. ' + subtotal);
+                    } else {
+                        toastr.error(response.message, '', { "toastClass": "toast-success" });
+
+                        // Show zero if the coupon is not applied successfully
+                        const discountElement = document.getElementById("discountAmount");
+                        discountElement.textContent = 'Rs. 0';
+
+                        // Reset the disPrice value
+                        disPrice = 0;
+
+                        const totalElement = document.getElementById("totalAmount");
+                        totalElement.textContent = 'Rs. ' + subtotal;
+                    }
+                },
+                error: function () {
+                    toastr.error('An error occurred while applying the coupon.');
+
+                    // Show zero if an error occurs while applying the coupon
+                    const discountElement = document.getElementById("discountAmount");
+                    discountElement.textContent = 'Rs. 0';
+
+                    // Reset the disPrice value
+                    disPrice = 0;
+
+                    const totalElement = document.getElementById("totalAmount");
+                    totalElement.textContent = 'Rs. ' + subtotal;
+                }
+            });
+        }
+
+    </script>
+
+
 
 
 

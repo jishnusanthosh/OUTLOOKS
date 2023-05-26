@@ -64,6 +64,16 @@ app.use(
     resave: false,
   })
 );
+// Set headers for all responses
+app.use(function (req, res, next) {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
+  next();
+});
+
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use("/node_modules", express.static("node_modules"));
 
@@ -102,17 +112,6 @@ const storage=multer.diskStorage({
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {
   next(createError(404));
-});
-
-
-
-// Set headers for all responses
-app.use(function (req, res, next) {
-  res.header(
-    "Cache-Control",
-    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
-  );
-  next();
 });
 
 

@@ -173,6 +173,14 @@
                 <h4 class="mb-1">Payment</h4>
                 <p class="mb-1">
                   <br> Pay method: <%= order.paymentMethod %><br>
+                  Payment Status:
+                  <% if (order.paymentStatus === 'pending') { %>
+                    <span class="badge bg-danger">Pending</span>
+                   
+                  <% } else if (order.paymentStatus === 'paid') { %>
+                    <span class="badge bg-success">Paid</span>
+                  <% } %>
+                  <br>
                   Order Status:
                   <% if (order.orderStatus === 'placed') { %>
                     <span class="badge bg-success">Placed</span>
@@ -183,6 +191,7 @@
                   <% } else if (order.orderStatus === 'cancelled') { %>
                     <span class="badge bg-danger">Cancelled</span>
                   <% } %>
+                  
                 </p>
               </div>
             </article>

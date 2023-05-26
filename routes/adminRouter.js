@@ -54,8 +54,13 @@ router.get("/getOneOrderDetail/:id",isloggedInadmin,adminController.getOneOrderD
 
 router.post("/updateOrderStatus/:id",isloggedInadmin,adminController.updateOrderStatus);
 
-
 router.get("/getSalesReport",isloggedInadmin,adminController.GetSalesReport)
+
+router.get("/getAddNewCoupon",isloggedInadmin,adminController.getAddNewCoupon)
+
+router.post("/addCouponPost",isloggedInadmin,adminController.addCouponPost)
+
+router.get("/admin-coupon-list",isloggedInadmin,adminController.GetCouponList)
 
 
 

@@ -2,49 +2,65 @@
 
 <body>
     <%- include('../partials/admin-header.ejs') %>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+
+
+
+        <style>
+            #toastr-container>.toast-error {
+                opacity: 0.9;
+                /* Adjust the opacity value as desired */
+                color: rgb(230, 90, 8);
+            }
+
+
+
+            #toastr-container>.toast-success {
+                opacity: 0.9;
+                /* Adjust the opacity value as desired */
+                color: green;
+                /* Set the text color to green */
+
+            }
+        </style>
+        <div id="toastr-container"></div>
+
+
         <section class="content-main">
             <div class="content-header">
                 <div>
                     <h2 class="content-title card-title">Category Management </h2>
                     <p>Add, edit or delete a category</p>
                 </div>
-                <div>
+                <!-- <div>
                     <input type="text" placeholder="Search Categories" class="form-control bg-white">
-                </div>
+                </div> -->
             </div>
             <div class="card">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3">
-                            <form action="/admin/createCategory" method="post">
+                            <form action="/admin/createCategory" id="addCategoryForm" method="post">
                                 <div class="mb-4">
-                                    <label for="product_name" class="form-label"  >Name</label>
-                                    <input type="text" placeholder="Type here" name="CategoryName" class="form-control" id="product_name" />
+                                    <label for="product_name" class="form-label">Name</label>
+                                    <input type="text" placeholder="Type here" name="CategoryName" class="form-control"
+                                        id="product_name" />
                                 </div>
-                                <!-- <div class="mb-4">
-                                    <label for="product_slug" class="form-label">Slug</label>
-                                    <input type="text" placeholder="Type here" class="form-control" id="product_slug" />
-                                </div>
-                                <div class="mb-4">
-                                    <label class="form-label">Parent</label>
-                                    <select class="form-select">
-                                        <option>Clothes</option>
-                                        <option>T-Shirts</option>
-                                    </select>
-                                </div> -->
+
                                 <div class="mb-4">
                                     <label class="form-label">Description</label>
-                                    <!-- <textarea placeholder="Type here"   id="product_name" class="form-control"></textarea> -->
-                                    <input type="text" placeholder="Type here" name="CategoryDescription" class="form-control" id="product_name" />
-                                
+                                    <input type="text" placeholder="Type here" name="CategoryDescription"
+                                        class="form-control" id="product_description" required />
                                 </div>
                                 <div class="d-grid">
-                                  
-                                        <button class="btn btn-primary" type="submit">Create category</button>
-                                   
-                                   
+                                    <button class="btn btn-primary" type="submit">Create category</button>
                                 </div>
                             </form>
+                            <div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3"></div>
+
                         </div>
                         <div class="col-md-9">
                             <div class="table-responsive">
@@ -56,40 +72,46 @@
                                                     <input class="form-check-input" type="checkbox" value="" />
                                                 </div> -->
                                             </th>
-                                           
-        
+
+
                                             <th>Name</th>
                                             <th>Description</th>
-                                            
-                
+
+
                                             <th class="text-end">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                       
+
                                         <% viewCategory.forEach(function(category) { %>
-                                         <tr>
-                                            
-                                            <td class="text-center">
-                                                <!-- <div class="form-check">
+                                            <tr>
+
+                                                <td class="text-center">
+                                                    <!-- <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" value="" />
                                                 </div> -->
-                                            </td>
-                                    
-                                            <td><b><%= category.CategoryName %></b></td>
-                                            <td><b><%= category.CategoryDescription %></b></td>
+                                                </td>
 
-                                            <td class="text-end">
-                                                <a href="/admin/deleteCategory/<%= category._id %>" class="btn btn-danger rounded mt-15" style="margin-right: 10px;">Delete</a>
-                                               
-                                            </td>
-                                            
-                                
-                                           
-                                        </tr>
-                                     
-                                        <%})%>
-                                       
+                                                <td><b>
+                                                        <%= category.CategoryName %>
+                                                    </b></td>
+                                                <td><b>
+                                                        <%= category.CategoryDescription %>
+                                                    </b></td>
+
+                                                <td class="text-end">
+                                                    <a href="/admin/deleteCategory/<%= category._id %>"
+                                                        class="btn btn-danger rounded mt-15"
+                                                        style="margin-right: 10px;">Delete</a>
+
+                                                </td>
+
+
+
+                                            </tr>
+
+                                            <%})%>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -102,7 +124,7 @@
             <div class="row pb-30 pt-15">
                 <div class="col-sm-6">
                     <script>
-                    document.write(new Date().getFullYear())
+                        document.write(new Date().getFullYear())
                     </script> © Outlooks - HTML Ecommerce Template .
                 </div>
                 <div class="col-sm-6">
@@ -112,16 +134,88 @@
                 </div>
             </div>
         </footer>
-    </main>
-    <script src="/admin/js/vendors/jquery-3.6.0.min.js"></script>
-    <script src="/admin/js/vendors/bootstrap.bundle.min.js"></script>
-    <script src="/admin/js/vendors/select2.min.js"></script>
-    <script src="/admin/js/vendors/perfect-scrollbar.js"></script>
-    <script src="/admin/js/vendors/jquery.fullscreen.min.js"></script>
-    <!-- Main Script -->
-    <script src="/admin/js/main.js" type="text/javascript"></script>
+        </main>
+        <script src="/admin/js/vendors/jquery-3.6.0.min.js"></script>
+        <script src="/admin/js/vendors/bootstrap.bundle.min.js"></script>
+        <script src="/admin/js/vendors/select2.min.js"></script>
+        <script src="/admin/js/vendors/perfect-scrollbar.js"></script>
+        <script src="/admin/js/vendors/jquery.fullscreen.min.js"></script>
+        <!-- Main Script -->
+        <script src="/admin/js/main.js" type="text/javascript"></script>
+        <script>
+            $(document).ready(function () {
+                $('#addCategoryForm').submit(function (event) {
+                    event.preventDefault();
+                    var formData = new FormData(this);
+                    var categoryName = $('#product_name').val();
+
+                    // Check if category name contains blank spaces or numbers
+                    if (/\s/.test(categoryName) || /\d/.test(categoryName)) {
+                        toastr.error('Category name should not contain blank spaces or numbers.', '', { "toastClass": "toast-error" });
+                        return;
+                    }
+
+                    $.ajax({
+                        url: '/admin/createCategory',
+                        method: 'post',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            if (response.success) {
+                                toastr.success(response.message, '', { "toastClass": "toast-success" });
+
+                                $('#product_name').val('');
+                                $('#product_description').val('');
+                            } else {
+                                toastr.error(response.message, '', { "toastClass": "toast-error" });
+                                // Additional actions upon error
+                            }
+                        },
+                        error: function () {
+                            toastr.error('Category already exist.', '', { "toastClass": "toast-error" });
+                        }
+                    });
+                });
+            });
+
+        </script>
+
+
+        <script>
+
+
+            $(document).ready(function () {
+                $('.btn-delete').click(function (event) {
+                    event.preventDefault();
+                    var categoryId = $(this).data('category-id');
+
+                    $.ajax({
+                        url: '/admin/deleteCategory/' + categoryId,
+                        method: 'GET',
+                        success: function (response) {
+                            // Handle success response
+                            if (response.success) {
+                                toastr.success(response.message, '', { "toastClass": "toast-success" });
+                            } else {
+                                toastr.error(response.message, '', { "toastClass": "toast-error" });
+                            }
+                        },
+                        error: function () {
+                            // Handle error response
+                            toastr.error('Failed to delete category.', '', { "toastClass": "toast-error" });
+                        }
+                    });
+                });
+            });
+
+
+
+
+        </script>
 </body>
 
 
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
+
 </html>
