@@ -1,4 +1,5 @@
 import twilioFunctions from "../config/twilio";
+import twilioFunctionsForpassword from "../config/twilioFunctionsForpassword";
 import User from "../models/userModels";
 import Product from "../models/productModels";
 import Cart from "../models/cartModels";
@@ -24,11 +25,11 @@ export default {
         });
 
         if (oldUser) {
-           resolve({ emailStatus: true, phoneNumberStatus: false, user: null });
+          resolve({ emailStatus: true, phoneNumberStatus: false, user: null });
         } else if (oldPhoneNumberUser) {
           resolve({ emailStatus: false, phoneNumberStatus: true, user: null });
         } else {
-         const saltRounds = 10;
+          const saltRounds = 10;
           let password = body.password.toString();
           let newpassword = await bcrypt.hash(password, saltRounds);
           const newUser = new User({
@@ -66,14 +67,14 @@ export default {
           return { status: false };
         }
       } else {
-        console.log("User not found");
-        return { status: false };
+        throw new Error("User not found");
       }
     } catch (err) {
       console.error(err);
       throw err;
     }
   },
+
   generateOtp: (body) => {
     console.log(body);
     return new Promise(async (resolve, reject) => {
@@ -92,6 +93,38 @@ export default {
         reject(err);
       }
     });
+  },
+
+  generateOtpForPassword: async (phonenumber) => {
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    try {
+      let customer = await User.findOne({ phonenumber });
+      if (customer) {
+        try {
+          await twilioFunctionsForpassword.generateOtpForPassword(
+            customer.phonenumber
+          );
+          return { status: true, body: phonenumber };
+        } catch (error) {
+          // Check if the error is due to rate limiting (error code 20429)
+          if (error.code === 20429) {
+            console.log("Too many requests. Retrying after a delay...");
+            await delay(3000); // Add a delay of 3 seconds (adjust as needed)
+            return generateOtpForPassword(phonenumber); // Retry the request
+          } else {
+            console.error(error);
+            throw new Error("Failed to generate OTP for password");
+          }
+        }
+      } else {
+        console.log("No User Found!");
+        return { status: false };
+      }
+    } catch (error) {
+      console.error(error);
+      throw new Error("Failed to generate OTP for password");
+    }
   },
   addToCart: async (userId, productId) => {
     try {
@@ -286,7 +319,14 @@ export default {
       console.log(error);
     }
   },
-  placeOrder: async (order, totalAmount, cartItems, userId) => {
+  placeOrder: async (
+    order,
+    totalAmount,
+    cartItems,
+    userId,
+    CouponAmount,
+    RealAmount
+  ) => {
     console.log(order);
     const orderDate = () => {
       return new Date();
@@ -307,22 +347,28 @@ export default {
         status = "pending";
         paymentStatus = "pending";
       }
-
-      let date = orderDate();
+  let currentDate=new Date();
+      let date = {
+        month: currentDate.getMonth() + 1, // Adding 1 since getMonth() returns values from 0 to 11
+        year: currentDate.getFullYear(),
+      }
       let addressId = order.address_id;
       let orderedItems = cartItems.products;
+      let orderDate = new Date(date.year, date.month - 1); 
       console.log(orderedItems + "orderedItems");
 
       // Create a new order document
       let ordered = new Order({
         user: userId,
         address: addressId,
-        orderDate: date,
+        orderDate: orderDate,
         totalAmount: totalAmount,
         paymentMethod: paymentMethod,
         orderStatus: status,
         paymentStatus: paymentStatus,
         orderedItems: orderedItems,
+        couponAmount: CouponAmount,
+        realAmount: RealAmount,
       });
 
       // Save the order to the database
@@ -431,7 +477,6 @@ export default {
         ],
       }).populate("category");
       if (products.length > 0) {
-
         return products;
       }
       return [];

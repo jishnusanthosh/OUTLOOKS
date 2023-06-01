@@ -3,6 +3,34 @@
 
     <%- include('../shop/layout/user-header.ejs') %>
 
+
+    <link rel="stylesheet" href="/AddOnStyles/toastr.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+
+
+    <style>
+        #toastr-container>.toast-error {
+            background-color: #ebdbdb;
+        }
+
+        #toastr-container>.toast-success {
+            opacity: 0.9;
+            /* Adjust the opacity value as desired */
+            color: green;
+            /* Set the text color to green */
+        }
+
+        .form-control-sm::placeholder {
+            font-size: 12px;
+        }
+    </style>
+
+
+
+    <div id="toastr-container"></div>
+
     <style>
         .single-product-item {
             position: relative;
@@ -93,34 +121,24 @@
             border: 2px solid #ff6600;
             border-radius: 3px;
         }
+        .product-cart-wrap {
+        height: 460px;
+        width: 325px;/* Adjust the height as per your requirement */
+    }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 
-
-    <div class="header-info col-lg-12">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="header-item">
-                        <img src="shop/img/icons/delivery.png" alt="">
-                        <p>Free shipping on orders over $30 in USA</p>
-                    </div>
-                </div>
-                <div class="col-md-4 text-left text-lg-center">
-                    <div class="header-item">
-                        <img src="shop/img/icons/voucher.png" alt="">
-                        <p>20% Student Discount</p>
-                    </div>
-                </div>
-                <div class="col-md-4 text-left text-xl-right">
-                    <div class="header-item">
-                    <img src="shop/img/icons/sales.png" alt="">
-                    <p>30% off on dresses. Use code: 30OFF</p>
-                </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <link rel="stylesheet" href="/profile/css/magiczoomplus.css">
+    <link rel="stylesheet" href="/shop/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/shop/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/profile/css/main.css">
+   
     <!-- Header Info End -->
     <!-- Header End -->
     
@@ -264,88 +282,85 @@
 
            
 
-              <div class="row">
-                <% for (var i=0; i < allproducts.length; i++) { %>
+              <div class="row product-grid-3">
+                <% for (var i=0; i < products.length; i++) { %>
 
-                    <% if (allproducts[i].productStatus==true) { %>
-                        <% if (i%2==0) { %>
-                            <div class="col-lg-4 col-md-6 col-sm-12">
-                                <div class="single-product-item">
-                                    <figure>
-                                        <img src="/uploads/<%= allproducts[i].productImage %>.jpg" alt="">
-                                        <div class="favorite-icon">
-                                            <a href="#" class="favorite-button"><i class="far fa-heart"></i></a>
-                                        </div>
-                                        <div class="hover-icon">
-                                            <a href="/uploads/<%= allproducts[i].productImage %>.jpg" class="pop-up"><i
-                                                    class="fas fa-search"></i></a>
-                                        </div>
-                                    </figure>
-                                    <div class="product-text">
-                                        <div class="product-name">
-                                            <a href="/viewProduct/<%= allproducts[i]._id %>">
-                                                <h4>
-                                                    <%= allproducts[i].productName %>
-                                                </h4>
-                                            </a>
-                                            <h6>
-                                                <%= allproducts[i].productDescription %>
-                                            </h6>
-                                        </div>
-                                        <h6>
-                                            <%= "Rs. " + allproducts[i].productPrice %>
-                                        </h6>
-                                        <div class="product-buttons">
-                                            <a href="#" class="buy-button">Buy Now</a>
-                                            <button onclick="AddToCart('<%= allproducts[i]._id %>')" class="add-to-cart-button">Add to Cart</button>
-                                        </div>
+                    <% if (products[i].productStatus==true) { %>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="product-cart-wrap mb-30">
+                                <div class="product-img-action-wrap">
+                                    <div class="product-img product-img-zoom">
+
+                                        <img src="/uploads/<%= products[i].productImage[0] %>" alt=""
+                                            srcset="">
+
                                     </div>
+                                    <div class="product-action-1">
+
+                                        <a aria-label="Add To Wishlist" class="action-btn hover-up"
+                                            href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
+
+                                    </div>
+                                    <div class="product-badges product-badges-position product-badges-mrg">
+                                        <span class="hot">Hot</span>
+                                    </div>
+                                </div>
+                                <div class="product-content-wrap">
+                                    <div class="product-category">
+                                        <a href="shop-grid-right.html">
+                                            <%= products[i].productBrand %>
+                                        </a>
+                                    </div>
+                                    <h2><a href="/viewProduct/<%= products[i]._id %>">
+                                            <%= products[i].productName %>
+                                        </a></h2>
+                                    <div class="rating-result" title="90%">
+                                        <span>
+                                            <span>90%</span>
+                                        </span>
+                                    </div>
+                                    <div class="product-price">
+                                        <span>Rs. <%= products[i].productPrice %></span>
+                                        <span class="old-price">$245.8</span>
+                                    </div>
+                                    <div class="product-action-1 show">
+                                        <% if (products[i].productQuantity> 0) { %>
+                                            <a aria-label="Add To Cart" class="action-btn hover-up"
+                                                href="/addToCart/<%= products[i]._id %>"
+                                                onclick="addToCart(event, '<%= products[i]._id %>')">
+                                                <i class="fi-rs-shopping-bag-add"></i>
+                                            </a>
+                                            <% } else { %>
+                                                <a aria-label="Add To Wishlist" class="action-btn hover-up"
+                                                    href="shop-wishlist.html">
+                                                    <i class="fi-rs-heart"></i>
+                                                </a>
+                                                <% } %>
+                                    </div>
+
+                                    <ul class="product-meta font-xs color-grey">
+                                        <% if (products[i].productQuantity> 0) { %>
+                                            <li>Availability:<span class="in-stock text-success ml-5">
+                                                    <%= products[i].productQuantity %> Items In Stock
+                                                </span></li>
+                                            <% } else { %>
+                                                <li>Availability:<span
+                                                        class="out-of-stock text-danger ml-5">Out of
+                                                        Stock</span></li>
+                                                <% } %>
+                                    </ul>
+
+
+
                                 </div>
                             </div>
-                            <!-- code for if condition is true -->
-                            <% } else { %>
-                                <div class="col-lg-4 col-md-6 col-sm-12">
-                                    <div class="single-product-item">
-                                        <figure>
-                                            <img src="/uploads/<%= allproducts[i].productImage %>.jpg" alt="">
-                                            <div class="favorite-icon">
-                                                <a href="#" class="favorite-button"><i class="far fa-heart"></i></a>
-                                            </div>
-                                            <div class="hover-icon">
-                                                <a href="/uploads/<%= allproducts[i].productImage %>.jpg" class="pop-up"><i
-                                                        class="fas fa-search"></i></a>
-                                            </div>
-                                        </figure>
-                                        <div class="product-text">
-                                            <div class="product-name">
-                                                <a href="/viewProduct/<%= allproducts[i]._id %>">
-                                                    <h4>
-                                                        <%= allproducts[i].productName %>
-                                                    </h4>
-                                                </a>
-                                                <h6>
-                                                    <%= allproducts[i].productDescription %>
-                                                </h6>
-                                            </div>
-                                            <h6>
-                                                <%= "Rs. " + allproducts[i].productPrice %>
-                                            </h6>
-                                            <div class="product-buttons">
-                                                <a href="#" class="buy-button">Buy Now</a>
-                                                
-                                                <button onclick="AddToCart('<%= allproducts[i]._id %>')" class="add-to-cart-button">Add to Cart</button>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- code for if condition is false -->
-                                <% } %>
-
-                                    <% } %>
+                        </div>
 
 
-                                        <% } %>
+                        <% } %>
+
+                            <% } %>
+                
             </div>
 
 
@@ -375,7 +390,7 @@
                 </div>
                 <div class="col-lg-5 offset-lg-1">
                     <div class="lookbok-pic">
-                        <img src="shop/img/lookbok.jpg" alt="">
+                        <img src="/shop/img/lookbok.jpg" alt="">
                         <div class="pic-text">fashion</div>
                     </div>
                 </div>
@@ -388,19 +403,19 @@
     <div class="logo-section spad">
         <div class="logo-items owl-carousel">
             <div class="logo-item">
-                <img src="shop/img/logos/logo-1.png" alt="">
+                <img src="/shop/img/logos/logo-1.png" alt="">
             </div>
             <div class="logo-item">
-                <img src="shop/img/logos/logo-2.png" alt="">
+                <img src="/shop/img/logos/logo-2.png" alt="">
             </div>
             <div class="logo-item">
-                <img src="shop/img/logos/logo-3.png" alt="">
+                <img src="/shop/img/logos/logo-3.png" alt="">
             </div>
             <div class="logo-item">
-                <img src="shop/img/logos/logo-4.png" alt="">
+                <img src="/shop/img/logos/logo-4.png" alt="">
             </div>
             <div class="logo-item">
-                <img src="shop/img/logos/logo-5.png" alt="">
+                <img src="/shop/img/logos/logo-5.png" alt="">
             </div>
         </div>
     </div>
@@ -411,32 +426,59 @@
     <!-- Footer Section End -->
 
     <!-- Js Plugins -->
-    <script src="shop/js/jquery-3.3.1.min.js"></script>
-    <script src="shop/js/bootstrap.min.js"></script>
-    <script src="shop/js/jquery.magnific-popup.min.js"></script>
-    <script src="shop/js/jquery.slicknav.js"></script>
-    <script src="shop/js/owl.carousel.min.js"></script>
-    <script src="shop/js/jquery.nice-select.min.js"></script>
-    <script src="shop/js/mixitup.min.js"></script>
-    <script src="shop/js/main.js"></script>
+    <script src="/shop/js/jquery-3.3.1.min.js"></script>
+    <script src="/shop/js/bootstrap.min.js"></script>
+    <script src="/shop/js/jquery.magnific-popup.min.js"></script>
+    <script src="/shop/js/jquery.slicknav.js"></script>
+    <script src="/shop/js/owl.carousel.min.js"></script>
+    <script src="/shop/js/jquery.nice-select.min.js"></script>
+    <script src="/shop/js/mixitup.min.js"></script>
+    <script src="/shop/js/main.js"></script>
+    <script src="/profile/js/magiczoomplus.js"></script>
+    <script src="/profile/js/magiczoomplus.min.js"></script>
+    <script src="/profile/js/vendor/modernizr-3.6.0.min.js"></script>
+    <script src="/profile/js/vendor/jquery-3.6.0.min.js"></script>
+    <script src="/profile/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+    <script src="/profile/js/vendor/bootstrap.bundle.min.js"></script>
+    <script src="/profile/js/plugins/slick.js"></script>
+    <script src="/profile/js/plugins/jquery.syotimer.min.js"></script>
+    <script src="/profile/js/plugins/wow.js"></script>
+    <script src="/profile/js/plugins/jquery-ui.js"></script>
+    <script src="/profile/js/plugins/perfect-scrollbar.js"></script>
+    <script src="/profile/js/plugins/magnific-popup.js"></script>
+    <script src="/profile/js/plugins/select2.min.js"></script>
+    <script src="/profile/js/plugins/waypoints.js"></script>
+    <script src="/profile/js/plugins/counterup.js"></script>
+    <script src="/profile/js/plugins/jquery.countdown.min.js"></script>
+    <script src="/profile/js/plugins/images-loaded.js"></script>
+    <script src="/profile/js/plugins/isotope.js"></script>
+    <script src="/profile/js/plugins/scrollup.js"></script>
+    <script src="/profile/js/plugins/jquery.vticker-min.js"></script>
+    <script src="/profile/js/plugins/jquery.theia.sticky.js"></script>
+    <script src="/profile/js/magiczoomplus.js"></script>
+    <script src="/profile/js/magiczoomplus.min.js"></script>
     <script>
-        function AddToCart(productId) {
+        function addToCart(event, productId) {
+            event.preventDefault();
             $.ajax({
-                url:'/addToCart/'+productId,
-                method:'get',
-                success:(response)=>{
+                url: '/addToCart/' + productId,
+                method: 'GET',
+                success: function (response) {
                     if (response.status) {
-                        let coubt=$('#cart-count').html()
-                        count=parseInt(count)+1
-                        $("#cart-count").html(count)
+                        toastr.success(response.message, '', { "toastClass": "toast-success" });
+                    } else {
+                        if (response.redirect) {
+                            // Redirect to the login page
+                            window.location.href = response.redirect;
+                        } else {
+                            toastr.error(response.message);
+                        }
                     }
                 },
-                error:function(e){
-                    console.log(e)
+                error: function () {
+                    toastr.error('An error occurred while adding the product to cart.');
                 }
-
-            })
-            
+            });
         }
     </script>
    

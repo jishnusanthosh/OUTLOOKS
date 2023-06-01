@@ -1,8 +1,4 @@
-
-
-
- 
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zxx">
 
 <head>
@@ -13,159 +9,208 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Outlooks</title>
 
-    
-    <!-- Google Font -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-Nk3El0oz9hPpETksg6w3KLVYbAsv8zWdpQuKqCz70ylbwb1ndLqWCEb4VYyFj0mUviRoqrzHXeB4S9d+gh3r+A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-
-    <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900&display=swap"
-        rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
-<!-- Popper JS -->
-
-<!-- Bootstrap CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-
-<!-- Bootstrap JS -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-
-<!-- Sweetalert2 CSS -->
-
-<!-- Sweetalert2 JS -->
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css">
 
 
-    <!-- Css Styles -->
-    <link rel="stylesheet" href="/shop/css/bootstrap.min.css" type="text/css">
-    <link rel="stylesheet" href="/shop/css/font-awesome.min.css" type="text/css">
-    <link rel="stylesheet" href="/shop/css/nice-select.css" type="text/css">
-    <link rel="stylesheet" href="/shop/css/owl.carousel.min.css" type="text/css">
-    <link rel="stylesheet" href="/shop/css/magnific-popup.css" type="text/css">
-    <link rel="stylesheet" href="/shop/css/slicknav.min.css" type="text/css">
-    <link rel="stylesheet" href="/shop/css/style.css" type="text/css">
-    <link rel="stylesheet" href="/shop/css/bootstrap.min.css" >
-    
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+  <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
+  <!-- Popper JS -->
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+  <!-- Bootstrap JS -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+  <!-- Sweetalert2 CSS -->
+
+  <!-- Sweetalert2 JS -->
+
+
+  <!-- Css Styles -->
+  <link rel="stylesheet" href="/shop/css/bootstrap.min.css" type="text/css">
+  <link rel="stylesheet" href="/shop/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/shop/css/nice-select.css" type="text/css">
+  <link rel="stylesheet" href="/shop/css/owl.carousel.min.css" type="text/css">
+  <link rel="stylesheet" href="/shop/css/magnific-popup.css" type="text/css">
+  <link rel="stylesheet" href="/shop/css/slicknav.min.css" type="text/css">
+  <link rel="stylesheet" href="/shop/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/shop/css/bootstrap.min.css" type="text/css">
+  <link rel="stylesheet" href="/AddOnStyles/style.css">
+
 </head>
+<style>
+  .header-item {
+      display: flex;
+      align-items: center;
+  }
+
+  .header-item img {
+      vertical-align: middle;
+      margin-right: 10px;
+  }
+
+  .header-item p, .black-text {
+      color: black;
+  }
+</style>
 
 <body>
-    <!-- Page Preloder -->
-    <div id="preloder">
-        <div class="loader"></div>
+  <!-- Page Preloder -->
+  <div id="preloder">
+    <div class="loader"></div>
+  </div>
+
+  <!-- Search model -->
+  <div class="search-model">
+    <div class="h-100 d-flex align-items-center justify-content-center">
+      <div class="search-close-switch">+</div>
+      <form class="search-model-form">
+        <input type="text" id="search-input" placeholder="Search here.....">
+      </form>
     </div>
-    
-    <!-- Search model -->
-	<div class="search-model">
-		<div class="h-100 d-flex align-items-center justify-content-center">
-			<div class="search-close-switch">+</div>
-			<form class="search-model-form">
-				<input type="text" id="search-input" placeholder="Search here.....">
-			</form>
-		</div>
-	</div>
-	<!-- Search model end -->
+  </div>
+  <!-- Search model end -->
 
-    <!-- Header Section Begin -->
-    <header class="header-section">
-        <div class="container-fluid">
-            <div class="inner-header">
-                <div class="logo">
-                    <a href="/"><img src="/shop/img/logo.png" alt=""></a>
-                </div>
-                <div class="header-right">
-                    <span style="margin-right: 10px;">
-                      <a href="">
-                        <img src="/shop/img/icons/search.png" alt="" class="search-trigger">
-                      </a>
-                    </span>
-                  
-                    <% if (user) {  %>
-                        <span style="margin-right: 10px;">
-                      <a href="/userProfile/<%= user._id %>">
-                        <img src="/shop/img/icons/man.png" alt="">
-                      </a>
-                    </span>
-                    <%  } else if (!user){ %>
-                        <span style="margin-right: 10px;">
-                            <img src="/shop/img/icons/man.png" alt="">
-                            </span>
-                        
-                        <% } %>
-                  
-            
-                      
-                        
-                       
-                        <% if (user && (cartCount || cartCount === 0)) { %>
-                          <a href="/cart">
-                            <img src="/shop/img/icons/bag.png" alt="">
-                            <% if (cartCount > 0) { %>
-                              <span class="badge badge-soft-light" id="cart-count"><%= String(cartCount) %></span>
-                            <% } %>
-                          </a>
-                        <% } %>
-                        
-                        
-                        
-                      
-                          
+  <!-- Header Section Begin -->
+  <header class="header-section">
+    <div class="container-fluid">
+      <div class="inner-header">
+        <div class="logo">
+          <a href="/"><img src="/shop/img/logo.png" alt=""></a>
+        </div>
+        <div class="header-right">
+          <span style="margin-right: 10px;">
+            <a href="">
+              <img src="/shop/img/icons/search.png" alt="" class="search-trigger">
+            </a>
+          </span>
 
-                       
-                       
-            
-                  </div>
-                  
+          <% if (user) { %>
+            <span style="margin-right: 10px;">
+              <a href="/userProfile/<%= user._id %>">
+                <img src="/shop/img/icons/man.png" alt="">
+              </a>
+            </span>
+            <% } else if (!user){ %>
+              <span style="margin-right: 10px;">
+                <img src="/shop/img/icons/man.png" alt="">
+              </span>
 
-                <% if (user) { %>
-                    <div class="user-access">
-                        <a>Welcome, <%= user.username %>!</a>
-                        <a href="/logout" class="in">logout</a>
-                    </div>
-    
-                      <% } else if(!user) { %>
-                        <div class="user-access">
-                            <a href="/signup">Register</a>
-                            <a href="/login" class="in">Sign in</a>
-                        </div>
+              <% } %>
+
+
+
+
+
+                <% if (user && (cartCount || cartCount===0)) { %>
+                  <a href="/cart">
+                    <img src="/shop/img/icons/bag.png" alt="">
+                    <% if (cartCount> 0) { %>
+                      <span class="badge badge-soft-light" id="cart-count">
+                        <%= String(cartCount) %>
+                      </span>
                       <% } %>
-                      <nav class="main-menu mobile-menu">
-                        <ul>
-                          <li><a href="/">Home</a></li>
-                      
-                          <li><a href="/">Shop</a>
+                  </a>
+                  <% } %>
+
+
+
+
+
+
+
+
+
+        </div>
+
+
+        <% if (user) { %>
+          <div class="user-access">
+            <a>Welcome, <%= user.username %>!</a>
+            <a href="/logout" class="in">logout</a>
+          </div>
+
+          <% } else if(!user) { %>
+            <div class="user-access">
+              <a href="/signup">Register</a>
+              <a href="/login" class="in">Sign in</a>
+            </div>
+            <% } %>
+              <nav class="main-menu mobile-menu">
+                <ul>
+                  <li><a href="/">Home</a></li>
+
+                  <li><a href="/">Shop</a>
+                    <ul class="sub-menu">
+                      <% for(let i=0; i < allcategory.length; i++) { %>
+                        <li><a href="/shopView/<%= allcategory[i]._id %>">
+                            <%= allcategory[i].CategoryName %>
+                          </a>
+                          <% if (allcategory[i].SubCategories && allcategory[i].SubCategories.length> 0) { %>
                             <ul class="sub-menu">
-                              <% for(let i = 0; i < allcategory.length; i++) { %>
-                                <li><a href="/shopView/<%= allcategory[i]._id %>"><%= allcategory[i].CategoryName %></a>
-                                  <% if (allcategory[i].SubCategories && allcategory[i].SubCategories.length > 0) { %>
-                                    <ul class="sub-menu">
-                                      <% for(let j = 0; j < allcategory[i].SubCategories.length; j++) { %>
-                                        <li><a href="#"><%= allcategory[i].SubCategories[j] %></a></li>
-                                      <% } %>
-                                    </ul>
-                                  <% } %>
-                                </li>
-                              <% } %>
+                              <% for(let j=0; j < allcategory[i].SubCategories.length; j++) { %>
+                                <li><a href="#">
+                                    <%= allcategory[i].SubCategories[j] %>
+                                  </a></li>
+                                <% } %>
                             </ul>
-                          </li>
-                      
-                          <li><a href="./product-page.html">About</a></li>
-                          <li><a href="./check-out.html">Blog</a></li>
-                          <li><a href="./contact.html">Contact</a></li>
-                        </ul>
-                      </nav>
-                      
-                      
-                
+                            <% } %>
+                        </li>
+                        <% } %>
+                    </ul>
+                  </li>
+
+                  <li><a href="./product-page.html">About</a></li>
+                  <li><a href="./check-out.html">Blog</a></li>
+                  <li><a href="./contact.html">Contact</a></li>
+                </ul>
+              </nav>
+
+
+
+      </div>
+    </div>
+  </header>
+  <div class="header-info col-lg-12">
+    <div class=" container-fluid">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="header-item">
+                    <img src="/shop/img/icons/delivery.png" alt="">
+                    <p style="color: black;">Free shipping in India</p>
+                </div>
+            </div>
+            <div class="col-md-4 text-left text-lg-center">
+                <div class="header-item">
+                    <img src="/shop/img/icons/voucher.png" alt="">
+                    <p style="color: black;">20% Summer Discount</p>
+                </div>
+            </div>
+            <div class="col-md-4 text-left">
+                <div class="header-item">
+                    <img src="/shop/img/icons/sales.png" alt="">
+                    <p class="black-text m-0" style="color: black;">Get up to 100% off Use code: <%= Coupons[2].code %></p>
+                </div>
             </div>
         </div>
-    </header>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"></script>
+    </div>
+</div>
 
-    <!-- Header Info Begin -->
-  
-    <!-- Header Info End -->
-    <!-- Header End -->
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  <link rel="stylesheet" href="/AddOnStyles/toastr.css">
+
+  <!-- Header Info Begin -->
+
+  <!-- Header Info End -->
+  <!-- Header End -->

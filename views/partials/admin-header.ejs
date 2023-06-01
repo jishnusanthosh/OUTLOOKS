@@ -3,6 +3,7 @@
 
 
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:32:35 GMT -->
+
 <head>
     <meta charset="utf-8">
     <title>Outlooks | Admin </title>
@@ -13,10 +14,15 @@
     <meta property="og:type" content="">
     <meta property="og:url" content="">
     <meta property="og:image" content="">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="/admin/imgs/theme/favicon.svg">
     <!-- Template CSS -->
     <link href="/admin/css/main.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="/AddOnStyles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.11/cropper.min.css" />
 </head>
 
 <body>
@@ -27,25 +33,26 @@
                 <img src="/admin/imgs/theme/logo.png" class="logo" alt="Outlooks Dashboard">
             </a>
             <div>
-                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+                </button>
             </div>
         </div>
         <nav>
             <ul class="menu-aside">
                 <li class="menu-item page-dashboard">
                     <a class="menu-link active" href="/admin">
-                
+
                     </a>
                 </li>
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="/admin/admin-productss-list">
-                        
-        
+
+
                         <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Products</span>
                     </a>
                     <div class="submenu">
-                        
+
                         <a href="/admin/admin-productss-list">Product List</a>
                         <a href="/admin/admin-categories">Categories</a>
                     </div>
@@ -75,7 +82,7 @@
                     </a>
                     <div class="submenu">
                         <a href="/admin/admin-coupon-list">Coupon list</a>
-                       
+
                     </div>
                 </li>
                 <li class="menu-item has-submenu">
@@ -127,47 +134,51 @@
             <div class="col-search">
                 <form class="searchform">
                     <div class="input-group">
-                       
-                       
+
+
                     </div>
-                    
+
                 </form>
             </div>
             <div class="col-nav">
-                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
+                        class="material-icons md-apps"></i> </button>
                 <ul class="nav">
-                    
-                   
-                   
-                    
+
+
+
+
                     <li class="dropdown nav-item">
-                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="/admin/imgs/people/avatar2.jpg" alt="User"></a>
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount"
+                            aria-expanded="false"> <img class="img-xs rounded-circle"
+                                src="/admin/imgs/people/avatar2.jpg" alt="User"></a>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                            
-                            <a class="dropdown-item text-danger" href="/admin/logout"><i class="material-icons md-exit_to_app"></i>Logout</a>
+
+                            <a class="dropdown-item text-danger" href="/admin/logout"><i
+                                    class="material-icons md-exit_to_app"></i>Logout</a>
                         </div>
                     </li>
                 </ul>
             </div>
         </header>
 
-     <script>
-        // Get the current page URL
-        var currentURL = window.location.pathname;
+        <script>
+            // Get the current page URL
+            var currentURL = window.location.pathname;
 
-        // Get all the menu links
-        var menuLinks = document.querySelectorAll('.menu-link');
+            // Get all the menu links
+            var menuLinks = document.querySelectorAll('.menu-link');
 
-        // Loop through the menu links
-        for (var i = 0; i < menuLinks.length; i++) {
-            var link = menuLinks[i];
+            // Loop through the menu links
+            for (var i = 0; i < menuLinks.length; i++) {
+                var link = menuLinks[i];
 
-            // Check if the link's href matches the current URL
-            if (link.getAttribute('href') === currentURL) {
-                // Add the "active" class to the parent menu item
-                link.parentNode.classList.add('active');
+                // Check if the link's href matches the current URL
+                if (link.getAttribute('href') === currentURL) {
+                    // Add the "active" class to the parent menu item
+                    link.parentNode.classList.add('active');
+                }
             }
-        }
-    </script>
-        
-    </body>
+        </script>
+
+</body>

@@ -1,39 +1,15 @@
 <%- include('../shop/layout/user-header.ejs') %>
   <!-- Header Section Begin -->
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  <link rel="stylesheet" href="/AddOnStyles/toastr.css">
   <!-- Header Info Begin -->
-  <div class="header-info">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-4">
-          <div class="header-item">
-            <img src="/shop/img/icons/delivery.png" alt="">
-            <p>Free shipping on orders over $30 in USA</p>
-          </div>
-        </div>
-        <div class="col-md-4 text-left text-lg-center">
-          <div class="header-item">
-            <img src="/shop/img/icons/voucher.png" alt="">
-            <p>20% Student Discount</p>
-          </div>
-        </div>
-        <div class="col-md-4 text-left text-xl-right">
-          <div class="header-item">
-            <img src="/shop/img/icons/sales.png" alt="">
-            <p>30% off on dresses. Use code: 30OFF</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+ 
   <!-- Header Info End -->
-<style>
-.order-status.placed {
-    color: green;
-}
-
-
-</style>
+  <style>
+    .order-status.placed {
+      color: green;
+    }
+  </style>
 
 
 
@@ -57,24 +33,23 @@
     <link rel="shortcut icon" type="image/x-icon" href="/profile/imgs/theme/favicon.svg">
     <!-- Template CSS -->
     <link rel="stylesheet" href="/profile/css/main.css">
+        <!-- Toastr JS -->
+
   </head>
   <%= console.log("============================="); %>
     <%= console.log(order); %>
     <%= console.log("============================="); %>
 
-    <%= console.log(orderedItems); %>
-
-    <%= console.log("=============================") %>
-   <%= console.log( address) %>
+   
   
     
-   <main class="main">
+   <main class=" main">
     <section class="mt-50 mb-50">
       <div class="container">
         <div class="row">
-  
+
           <div class="col-lg-6">
-  
+
           </div>
         </div>
         <div class="row">
@@ -83,7 +58,7 @@
           </div>
         </div>
         <div class="row">
-  
+
           <div class="col-md-6">
             <div class="order_review">
               <div class="mb-20">
@@ -99,39 +74,51 @@
                   </thead>
                   <tbody>
                     <% for (let i=0; i < orderedItems.length; i++) { %>
-                    <tr>
-                      <td class="image product-thumbnail">
-                        <img src="/uploads/<%= orderedItems[i].product.image[0] %>.jpg" alt="#">
-                      </td>
-                      <td>
-                        <i class="ti-check-box font-small text-muted mr-10"></i>
-                        <h5>
-                          <a href="/viewProduct/<%= order.orderedItems[i].productId %>">
-                            <%= orderedItems[i].product.name %>
-                          </a>
-                        </h5>
-                        <p>Color: <%= orderedItems[i].product.color %></p>
-                        <p>Size: <%= orderedItems[i].product.size %></p>
-                        <p>Brand: <%= orderedItems[i].product.brand %></p>
-                        <p>Description: <%= orderedItems[i].product.description %></p>
-                        <span class="product-qty">x <%= orderedItems[i].quantity %></span>
-                      </td>
-                      <td>Rs. <%= orderedItems[i].quantity * orderedItems[i].product.price %></td>
-                    </tr>
-                    <% } %>
-  
-                    <tr>
-                      <th>SubTotal</th>
-                      <td class="product-subtotal" colspan="2">Rs. <%= order.totalAmount %></td>
-                    </tr>
-                    <tr>
-                      <th>Shipping</th>
-                      <td colspan="2"><em>Free Shipping</em></td>
-                    </tr>
-                    <tr>
-                      <th>Total</th>
-                      <td colspan="2" class="product-subtotal"><span class="font-xl text-brand fw-900">Rs. <%= order.totalAmount %></span></td>
-                    </tr>
+                      <tr>
+                        <td class="image product-thumbnail">
+                          <img src="/uploads/<%= orderedItems[i].product.image[0] %>" alt="#">
+                        </td>
+                        <td>
+                          <i class="ti-check-box font-small text-muted mr-10"></i>
+                          <h5>
+                            <a href="/viewProduct/<%= order.orderedItems[i].productId %>">
+                              <%= orderedItems[i].product.name %>
+                            </a>
+                          </h5>
+                          <p>Color: <%= orderedItems[i].product.color %>
+                          </p>
+                          <p>Size: <%= orderedItems[i].product.size %>
+                          </p>
+                          <p>Brand: <%= orderedItems[i].product.brand %>
+                          </p>
+                          <p>Description: <%= orderedItems[i].product.description %>
+                          </p>
+                          <span class="product-qty">x <%= orderedItems[i].quantity %></span>
+                        </td>
+                        <td>Rs. <%= orderedItems[i].quantity * orderedItems[i].product.price %>
+                        </td>
+                      </tr>
+                      <% } %>
+
+                        <tr>
+                          <th>SubTotal</th>
+                          <td class="product-subtotal" colspan="2">Rs. <%= order.realAmount %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th>Discount</th>
+                          <td class="product-subtotal" colspan="2">Rs. <%= order.couponAmount %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th>Shipping</th>
+                          <td colspan="2"><em>Free Shipping</em></td>
+                        </tr>
+                        <tr>
+                          <th>Grand Total</th>
+                          <td colspan="2" class="product-subtotal"><span class="font-xl text-brand fw-900">Rs. <%=
+                                order.totalAmount %></span></td>
+                        </tr>
                   </tbody>
                 </table>
               </div>
@@ -139,7 +126,7 @@
               <div class="payment_method"></div>
             </div>
           </div>
-  
+
           <div class="col-md-6">
             <div class="mb-25">
               <h4>Shipping to</h4>
@@ -151,19 +138,20 @@
                 </span>
                 <div class="text">
                   <p class="mb-1">
-                    <br> Full Name: <%= address.firstname %> <%= address.lastname %><br>
-                    City: <%= address.city %><br>
-                    Street Name: <%= address.streetname %><br>
-                    House: <%= address.apartmentnumber %><br>
-                    Zipcode: <%= address.zipcode %><br>
-                    State: <%= address.state %>
+                    <br> Full Name: <%= address.firstname %>
+                      <%= address.lastname %><br>
+                        City: <%= address.city %><br>
+                          Street Name: <%= address.streetname %><br>
+                            House: <%= address.apartmentnumber %><br>
+                              Zipcode: <%= address.zipcode %><br>
+                                State: <%= address.state %>
                   </p>
                 </div>
               </article>
-  
+
               <br>
               <br>
-  
+
             </div> <!-- col// -->
             <article class="icontext align-items-start">
               <span class="icon icon-sm rounded-circle bg-primary-light">
@@ -172,78 +160,144 @@
               <div class="text">
                 <h4 class="mb-1">Payment</h4>
                 <p class="mb-1">
-                  <br> Pay method: <%= order.paymentMethod %><br>
-                  Payment Status:
-                  <% if (order.paymentStatus === 'pending') { %>
-                    <span class="badge bg-danger">Pending</span>
-                   
-                  <% } else if (order.paymentStatus === 'paid') { %>
-                    <span class="badge bg-success">Paid</span>
-                  <% } %>
-                  <br>
-                  Order Status:
-                  <% if (order.orderStatus === 'placed') { %>
-                    <span class="badge bg-success">Placed</span>
-                    <br>
-                    <div class="text-end">
-                      <a href="#" class="btn btn-primary">Print Invoice</a>
-                    </div>
-                  <% } else if (order.orderStatus === 'cancelled') { %>
-                    <span class="badge bg-danger">Cancelled</span>
-                  <% } %>
-                  
+               Pay method: <%= order.paymentMethod %><br>
+                    Payment Status:
+                    <% if (order.paymentStatus==='pending' ) { %>
+                      <span class="badge bg-danger">Pending</span>
+
+                      <% } else if (order.paymentStatus==='paid' ) { %>
+                        <span class="badge bg-success">Paid</span>
+                        <% } %>
+                          <br>
+                        </div>
+                        <br>
+                        <div class="text">
+                          <h4 class="mb-1">Order</h4>
+                          <p class="mb-1">
+                            Order Status:
+                       
+                          <% if (order.orderStatus==='placed' ) { %>
+                            <span class="badge bg-success">Placed</span>
+                            <br>
+                            <div class="text-end">
+                              <a href="#" class="btn btn-primary">Print Invoice</a>
+                            </div>
+                            <% } else if (order.orderStatus==='cancelled' ) { %>
+                              <span class="badge bg-danger">Cancelled</span>
+                              <% } else if (order.orderStatus==='delivered' ) { %>
+                                <span class="badge bg-info">Delivered</span>
+                                <!-- Add your desired HTML code for this case -->
+                                <% } else if (order.orderStatus==='returned' ) { %>
+                                  <span class="badge bg-warning text-dark">return</span>
+                                  <!-- Add your desired HTML code for this case -->
+                                  <% } %>
+                                  
+                                 
+                
+                          </p>
+                        </div>
+                        <% if (order.orderStatus === 'returned') { %>
+                          <p>Return Status:</p>
+                          <% if (order.returnStatus === 'pending') { %>
+                            <span class="badge bg-info">Pending</span>
+                          <% } else if (order.returnStatus === 'return accepted') { %>
+                            <span class="badge bg-success">Return Accepted</span>
+                          <% } else if (order.returnStatus === 'rejected') { %>
+                            <span class="badge bg-danger">Rejected</span>
+                            <!-- Add your desired HTML code for this case -->
+                          <% } %>
+                        <% } %>
+                        
                 </p>
-              </div>
             </article>
-            
-  
-  
+
+
+
             <br>
             <form method="post">
-              <% if (order.orderStatus !== 'cancelled') { %>
-              <div class="form-group">
-                <div class="checkbox">
-                  <label class="form-check-label label_info" data-bs-toggle="collapse" href="#collapsePassword" data-target="#collapsePassword" aria-controls="collapsePassword">
-                    <a style="color: rgb(232, 60, 60); font-size: 18px;">Cancel this Order?</a>
-                  </label>
+              <% if (order.orderStatus === 'placed') { %>
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label class="form-check-label label_info" data-bs-toggle="collapse" href="#collapsePassword"
+                      data-target="#collapsePassword" aria-controls="collapsePassword">
+                      <a style="color: rgb(232, 60, 60); font-size: 18px;">Cancel this Order?</a>
+                    </label>
+                  </div>
                 </div>
-              </div>
-              <% } %>
-  
-              <% if (order.orderStatus !== 'cancelled') { %>
+                
                 <div id="collapsePassword" class="form-group create-account collapse in">
                   <span>Reason to Cancel this order</span>
-                  <textarea id="cancelReason" rows="5" placeholder="Cancel notes"></textarea>
-                  <% if (order.orderStatus === 'delivered') { %>
-                  <a href="/returnOrder/<%= order._id %>" class="btn btn-fill btn-block mt-30" style="background-color: rgb(220, 67, 67); color: white;">Return</a>
-                  <% } else { %>
-                  <a href="/cancelOrder/<%= order._id %>" class="btn btn-fill btn-block mt-30" style="background-color: rgb(220, 67, 67); color: white;" onclick="validateCancelReason(event)">Cancel Order</a>
-                  <% } %>
-                </div>
-                <% if (order.orderStatus !== 'delivered') { %>
-                <script>
-                  function validateCancelReason(event) {
-                    const cancelReason = document.getElementById('cancelReason').value;
-                    if (cancelReason.trim() === '') {
-                      event.preventDefault();
-                      toastr.error('Please enter a reason to cancel the order.');
+                  <textarea id="cancelReason" rows="5" placeholder="Cancel notes" <% if (order.orderStatus !== 'delivered')  %>></textarea>
+                  
+                  <button type="button" class="btn btn-fill btn-block mt-30"
+                    style="background-color: rgb(220, 67, 67); color: white;" onclick="validateCancelReason()">Cancel Order</button>
+                  
+                  <script>
+                    function validateCancelReason() {
+                      const cancelReason = document.getElementById('cancelReason').value;
+                      if (cancelReason.trim() === '') {
+                        toastr.error('Please enter a reason to cancel the order.');
+                      } else {
+                        window.location.href = "/cancelOrder/<%= order._id %>";
+                      }
                     }
-                  }
-                </script>
-              <% } %>
+                  </script>
+                </div>
+              <% } else if (order.orderStatus === 'delivered') { %>
+                <div class="form-group create-account">
+                  <textarea id="returnReason" rows="5" placeholder="Return reason" <% if (!order.returnRequested)  %>></textarea>
+                  
+                  <button type="button" class="btn btn-fill btn-block mt-30"
+                    style="background-color: rgb(220, 67, 67); color: white;" onclick="validateReturnReason()">Return Order</button>
+                  
+                    <script>
+                      function validateReturnReason() {
+                        const returnReason = document.getElementById('returnReason').value;
+                        
+                        if (returnReason.trim() === '') {
+                          toastr.error('Please enter a reason to return the order.');
+                        } else {
+                          const orderId = '<%= order._id %>';
+                          
+                          fetch(`/returnOrder/${orderId}`, {
+                            method: 'post',
+                            headers: {
+                              'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ reason: returnReason }),
+                          })
+                            .then(response => {
+                              if (response.success) {
+                                // Handle success case
+                                toastr.success('Order returned successfully.');
+                              } else {
+                                // Handle error case
+                                toastr.error('Failed to return the order.');
+                              }
+                            })
+                            .catch(error => {
+                              // Handle error case
+                              toastr.error('Failed to return the order.');
+                            });
+                        }
+                      }
+                    </script>
+                    
+                    
+                </div>
               <% } %>
             </form>
+            
+            
+            
+            
           </div>
         </div>
       </div>
     </section>
-  </main>
-  
-  <!-- Toastr JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-  <!-- Toastr CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-  <!-- Toastr Configuration -->
+    </main>
+
+
 
 
 

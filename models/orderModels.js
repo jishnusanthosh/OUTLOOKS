@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const orderSchema = mongoose.Schema(
   {
@@ -11,25 +11,31 @@ const orderSchema = mongoose.Schema(
       {
         productId: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'Products',
+          ref: "Products",
         },
         quantity: {
           type: Number,
         },
         address: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'Address',
+          ref: "Address",
         },
       },
     ],
     address: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Address',
+      ref: "Address",
     },
     orderDate: {
       type: Date,
     },
     totalAmount: {
+      type: Number,
+    },
+    realAmount: {
+      type: Number,
+    },
+    couponAmount: {
       type: Number,
     },
     paymentMethod: {
@@ -38,10 +44,22 @@ const orderSchema = mongoose.Schema(
     },
     paymentStatus: {
       type: String,
-      enum: ["paid", "pending", "cancelled"],
+      enum: ["paid", "pending", "cancelled","refund"],
       default: "pending",
     },
+    refund: {
+      type: Number,
+    },
     orderStatus: {
+      type: String,
+    },
+    returnStatus: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending",
+    },
+
+    returnReason: {
       type: String,
     },
   },

@@ -2,8 +2,10 @@ import express from 'express';
 const router = express.Router();
 import { isloggedInUser, isLoggedIn } from '../middlewares/sessionHandling';
 import userController from '../controllers/userController';
+import {isUserActive} from "../middlewares/customMiddleware"
 
-router.get('/', userController.homePage);
+
+router.get('/',userController.homePage);
 
 router.get("/login",isLoggedIn,userController.loginPage);
 
@@ -17,49 +19,62 @@ router.get("/otp-login",isLoggedIn, userController.GetOtpLogin);
 
 router.get("/otp-send", userController.GetOtpSend);
 
-router.get("/cart", isloggedInUser, userController.GetCart);
+router.get("/cart", isloggedInUser,isUserActive,userController.GetCart);
 
 router.get("/shopView/:id",userController.getShopView);
 
 router.get("/viewProduct/:id", userController.getProductView);
 
-router.get("/userProfile/:id", isloggedInUser, userController.getUserProfile);
+router.get("/userProfile/:id", isloggedInUser,isUserActive, userController.getUserProfile);
 
-router.post("/deleteCartProduct",isloggedInUser,userController.deleteCartProduct);
+router.post("/deleteCartProduct",isloggedInUser,isUserActive,userController.deleteCartProduct);
 
 router.get("/addToCart/:id",userController.addToCart);
 
-router.get("/GetcheckOut", isloggedInUser, userController.getCheckOut);
+router.get("/GetcheckOut", isloggedInUser,isUserActive, userController.getCheckOut);
 
 router.post("/signup", userController.signUpPost);
 
 router.post('/generate-otp', userController.generateOtp);
 
-router.post('/verify-otp', userController.verifyOtp);
+ router.post('/verify-otp', userController.verifyOtp);
 
 router.post("/login",isLoggedIn, userController.loginPost);
 
 router.post('/resendOtp',isLoggedIn, userController.resendOtp);
 
-router.post('/update-product-quantity', isloggedInUser, userController.updateProductQuantity);
 
-router.post("/addAddress", isloggedInUser, userController.addAddress);
+router.post("/generate-otp-password",isLoggedIn,userController.generateOtpForPassword)
 
-router.post("/deleteAddress", isloggedInUser, userController.deleteAddress);
+router.post("/verify-otp-password",isLoggedIn,userController.verifyOtpForPassword)
+
+router.post("/resetPassword",isLoggedIn,userController.resetPassword)
 
 
-router.post("/placeOrder", isloggedInUser, userController.placeOrderPost);
+router.get("/productFiltering", isLoggedIn, userController.productFiltering);
 
-router.get("/orderPlaced/:id", isloggedInUser, userController.getOrderPlaced);
 
-router.post('/verifyPayment', isloggedInUser, userController.verifyPaymentPost);
+router.post('/update-product-quantity', isloggedInUser,isUserActive, userController.updateProductQuantity);
 
-router.get("/viewOrderDetails/:id", isloggedInUser, userController.viewOrderDetails);
+router.post("/addAddress", isloggedInUser,isUserActive, userController.addAddress);
 
-router.get("/cancelOrder/:id", isloggedInUser, userController.cancelOrderPost);
+router.post("/deleteAddress", isloggedInUser,isUserActive, userController.deleteAddress);
 
-router.post('/applyCoupon', isloggedInUser, userController.applyCoupon);
+
+router.post("/placeOrder", isloggedInUser,isUserActive, userController.placeOrderPost);
+
+router.get("/orderPlaced/:id", isloggedInUser,isUserActive, userController.getOrderPlaced);
+
+router.post('/verifyPayment', isloggedInUser,isUserActive, userController.verifyPaymentPost);
+
+router.get("/viewOrderDetails/:id", isloggedInUser,isUserActive, userController.viewOrderDetails);
+
+router.get("/cancelOrder/:id", isloggedInUser,isUserActive, userController.cancelOrderPost);
+
+router.post('/applyCoupon', isloggedInUser,isUserActive, userController.applyCoupon);
 
 router.get("/product-search", userController.search);
+
+router.post("/returnOrder/:id",isloggedInUser,isUserActive,userController.returnOrder)
 
 export default router;

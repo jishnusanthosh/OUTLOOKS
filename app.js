@@ -10,6 +10,10 @@ import mongoose from 'mongoose';
 import  session  from "express-session";
 import  multer  from "multer";
 import  swal from "sweetalert";
+import multerSharpS3 from 'multer-sharp-s3'
+import XLSX from 'xlsx';
+import html2pdf from 'html2pdf.js';
+;
 const flash = require('connect-flash');
 
 
@@ -41,13 +45,6 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 
-app.use(multer({
-  dest: 'uploads',
-  storage: storage,
-  limits: { fileSize: 1024 * 1024 } // 1MB
-}).array('productImage',3));
-
-
 // Set up middleware
 
 
@@ -72,18 +69,6 @@ app.use(function (req, res, next) {
   );
   next();
 });
-
-
-app.use(express.static(path.join(__dirname, 'public')));
-app.use("/node_modules", express.static("node_modules"));
-
-app.use('/uploads',express.static(path.join(__dirname, 'uploads')));
-// Set up routers
-app.use('/', userRouter);
-app.use('/admin', adminRouter);
-
-
-
 const storage=multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads')
@@ -106,6 +91,26 @@ const storage=multer.diskStorage({
     }
     
 });
+
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 1024 * 1024 }, // 1MB
+});
+app.use(upload.array('productImage', 3));
+
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use("/node_modules", express.static("node_modules"));
+
+app.use('/uploads',express.static(path.join(__dirname, 'uploads')));
+// Set up routers
+app.use('/', userRouter);
+app.use('/admin', adminRouter);
+
+
+
+
 
 
 
@@ -139,7 +144,7 @@ app.set('port', PORT);
 // Listen on provided port, on all network interfaces
 mongoose.connection.once('open', () => {
   server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}👶`);
+    console.log(`Server running on port ${PORT}`);
   });
 });
 

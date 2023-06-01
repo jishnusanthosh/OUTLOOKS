@@ -1,168 +1,340 @@
 <html>
+  <%- include('../partials/admin-header.ejs') %>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 
-<body>
-    <%- include('../partials/admin-header.ejs') %>
+  <style>
+    .image-preview {
+      max-width: 300px;
+      height: 300px;
+      /* Adjust the height as needed */
+      border: 1px solid #ccc;
+      overflow: hidden;
+      margin-top: 10px;
+      display: inline-block;
+    }
 
-        <section class="content-main">
-            <form action="/admin/add-product" method="post" enctype="multipart/form-data">
-                <div class="row">
-                    <div class="col-9">
-                        <div class="content-header">
-                            <h2 class="content-title">Add New Product</h2>
-                            <div>
-                                <button class="btn btn-md rounded font-sm hover-up">Add Product</button>
+    .cropper-container {
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+    }
+    label.form-label {
+    color: white;
+  }
+  </style>
 
-
-
-                                <!-- <button class="btn btn-md rounded font-sm hover-up">Publich</button> -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <div class="mb-4">
-                                    <label for="product_title" class="form-label">Product title</label>
-                                    <input type="text" placeholder="Type here" class="form-control" name="productName"
-                                        id="productName" required>
-                                </div>
-                                <div class="row gx-3">
-                                    <div class="col-md-4  mb-3">
-                                        <label for="productQuantity" class="form-label">Quantity</label>
-                                        <input type="number" placeholder="Type here" class="form-control"
-                                            name="productQuantity" id="productQuantity" min="0" required>
-                                    </div>
-
-                                    <div class="col-md-4  mb-3">
-                                        <label for="product_color" class="form-label">Color</label>
-                                        <input type="text" placeholder="Type here" class="form-control"
-                                            name="productColor" required>
-                                    </div>
-                                    <div class="col-md-4  mb-3">
-                                        <label for="product_size" class="form-label">Size</label>
-                                        <input type="text" placeholder="Type here" class="form-control"
-                                            name="productSize" id="product_size" required>
-                                    </div>
-                                </div>
-                                <div class="mb-4">
-                                    <label for="product_brand" class="form-label">Brand</label>
-                                    <input type="text" placeholder="Type here" class="form-control" id="product_brand"
-                                        name="productBrand" required>
-                                </div>
-                            </div>
-                        </div> <!-- card end// -->
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <div>
-                                    <label class="form-label">Description</label>
-                                    <textarea placeholder="Type here" class="form-control" rows="4"
-                                        name="productDescription" name="productDescription" required></textarea>
-                                </div>
-                            </div>
-                        </div> <!-- card end// -->
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <div>
-                                    <label class="form-label">Images</label>
-                                    <input class="form-control" type="file" name="productImage" id="productImage"
-                                        multiple>
-                                    <div id="imagePreview" class="mt-3"></div>
-                                </div>
-                            </div>
-                        </div> <!-- card end// -->
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <div class="mb-4">
-                                    <label class="form-label">Price</label>
-                                    <input type="text" placeholder="Type here" class="form-control" name="productPrice"
-                                        required>
-                                </div>
-
-
-                                <hr>
-                                <h5 class="mb-3">Categories</h5>
-                                <% viewCategory.forEach(function(category) { %>
-                                    <div class="form-check">
-                                        <input onclick="categoryCheck('<%= category._id %>')" class="form-check-input"
-                                            type="checkbox" value="<%= category._id %>"
-                                            id="product-cat-<%= category._id %>" />
-                                        <label class="form-check-label" for="product-cat-<%= category._id %>">
-                                            <%= category.CategoryName %>
-                                        </label>
-                                    </div>
-                                <% }) %>
-                                
-
-                                        <input type="text" name="viewCategoryId" value="" id="viewCategoryId" hidden>
-
-                            </div>
-                        </div> <!-- card end// -->
-                    </div>
+  <body>
+    <section class="content-main">
+      <form id="addProductForm" enctype="multipart/form-data">
+        <div class="row">
+          <div class="col-9">
+            <div class="content-header">
+              <h2 class="content-title">Add New Product</h2>
+              <div>
+                <button type="submit" class="btn btn-primary">Add Product</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="card mb-4">
+              <div class="card-body">
+                <div class="mb-4">
+                  <label for="productName" class="form-label">Product title</label>
+                  <input type="text" placeholder="Type here" class="form-control" name="productName" id="productName" >
+                  <span class="text-danger" id="nameError"></span>
                 </div>
-            </form>
-        </section>
-        <%- include('../partials/admin-footer.ejs') %>
+                <div class="row gx-3">
+                  <div class="col-md-4  mb-3">
+                    <label for="productQuantity" class="form-label">Quantity</label>
+                    <input type="number" placeholder="Type here" class="form-control" name="productQuantity" id="productQuantity" min="0" >
+                    <span class="text-danger" id="quantityError"></span>
+                  </div>
+                  <div class="col-md-4  mb-3">
+                    <label for="productColor" class="form-label">Color</label>
+                    <input type="text" placeholder="Type here" class="form-control" name="productColor" >
+                    <span class="text-danger" id="colorError"></span>
+                  </div>
+                  <div class="col-md-4  mb-3">
+                    <label for="productSize" class="form-label">Size</label>
+                    <input type="text" placeholder="Type here" class="form-control" name="productSize" id="product_size" >
 
+                  </div>
+                </div>
+                <div class="mb-4">
+                  <label for="productBrand" class="form-label">Brand</label>
+                  <input type="text" placeholder="Type here" class="form-control" id="product_brand" name="productBrand" >
+                </div>
+              </div>
+            </div> <!-- card end// -->
+            <div class="card mb-4">
+              <div class="card-body">
+                <div>
+                  <label class="form-label">Description</label>
+                  <textarea placeholder="Type here" class="form-control" rows="4" name="productDescription" ></textarea>
+                  <span class="text-danger" id="descError"></span>
+                </div>
+              </div>
+            </div> <!-- card end// -->
+            <div class="card mb-4">
+              <div class="card-body">
+                <div>
+                  <label class="form-label">Images</label>
+                  <input class="form-control" type="file" name="productImage" id="productImage" multiple>
+                  <div id="imagePreview" class="mt-3" style="max-width: 300px;"></div>
+                  <span class="text-danger" id="imageError"></span>
+                </div>
+                <button id="cropButton" class="btn btn-primary mt-3">Crop</button>
+              </div>
+            </div> <!-- card end// -->
+          </div>
+          <div class="col-lg-3">
+            <div class="card mb-4">
+              <div class="card-body">
+                <div class="mb-4">
+                  <label class="form-label">Price</label>
+                  <input type="text" placeholder="Type here" class="form-control" name="productPrice" >
+                  <span class="text-danger" id="priceError"></span>
+                </div>
+                <hr>
+                <h5 class="mb-3">Categories</h5>
+                <% viewCategory.forEach(function(category) { %>
+                <div class="form-check">
+                  <input onclick="categoryCheck('<%= category._id %>')" class="form-check-input" type="checkbox" value="<%= category._id %>" id="product-cat-<%= category._id %>" />
+                  <label class="form-check-label form-label" for="product-cat-<%= category._id %>">
+                    <%= category.CategoryName %>
+                  </label>
+                </div>
+                <% }) %>
+                <input type="text" name="viewCategoryId" value="" id="viewCategoryId" hidden>
+              </div>
+            </div> <!-- card end// -->
+          </div>
+        </div>
+      </form>
+    </section>
+    <%- include('../partials/admin-footer.ejs') %>
 
+    <script>
+      const category = document.getElementById('viewCategoryId')
 
-            <script>
-                const category = document.getElementById('viewCategoryId')
+      function categoryCheck(id) {
+        category.value = id;
+      }
 
-                function categoryCheck(id) {
-                    category.value = id;
+      const checkboxes = document.querySelectorAll('input[name="product-cat"]');
 
-                }
+      checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener('click', () => {
+          if (checkbox.checked) {
+            checkboxes.forEach((otherCheckbox) => {
+              if (otherCheckbox !== checkbox) {
+                otherCheckbox.disabled = true;
+              }
+            });
+          } else {
+            checkboxes.forEach((otherCheckbox) => {
+              if (otherCheckbox !== checkbox) {
+                otherCheckbox.disabled = false;
+              }
+            });
+          }
+        });
+      });
+    </script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 
+    <script>
+      const productImageInput = document.getElementById('productImage');
+      const imagePreviewContainer = document.getElementById('imagePreview');
+      let cropper;
+    
+      productImageInput.addEventListener('change', function() {
+        imagePreviewContainer.innerHTML = ''; // Clear the existing preview
+    
+        // Loop through the selected files and create image previews
+        for (let i = 0; i < this.files.length; i++) {
+          const file = this.files[i];
+          const reader = new FileReader();
+    
+          reader.onload = function(e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.classList.add('img-thumbnail', 'mr-2');
+            imagePreviewContainer.appendChild(img);
+            const previewContainer = document.createElement('div');
+            previewContainer.classList.add('image-preview');
+            previewContainer.appendChild(img);
+    
+            imagePreviewContainer.appendChild(previewContainer);
+    
+            // Initialize Cropper.js for each image preview
+            cropper = new Cropper(img, {
+              aspectRatio: 1,
+              viewMode: 1,
+              autoCropArea: 1,
+              crop: function(event) {
+                // Get the cropped image data
+                const croppedImageData = cropper.getCroppedCanvas().toDataURL('image/jpeg');
+                // Attach the cropped image data to the corresponding hidden input field
+                const croppedImageInput = document.createElement('input');
+                croppedImageInput.type = 'hidden';
+                croppedImageInput.name = 'croppedImages[]';
+                croppedImageInput.value = croppedImageData;
+                previewContainer.appendChild(croppedImageInput);
+              }
+            });
+          };
+    
+          reader.readAsDataURL(file);
+        }
+      });
+    
+      const cropButton = document.getElementById('cropButton');
+      cropButton.addEventListener('click', function() {
+        // Trigger the crop event for the active image preview
+        cropper.crop();
+      });
+    </script>
 
-                const checkboxes = document.querySelectorAll('input[name="product-cat"]');
+    <script>
+      $(document).ready(function() {
+        $('#addProductForm').submit(function(e) {
+          e.preventDefault(); // Prevent form submission
 
-                checkboxes.forEach((checkbox) => {
-                    checkbox.addEventListener('click', () => {
-                        if (checkbox.checked) {
-                            checkboxes.forEach((otherCheckbox) => {
-                                if (otherCheckbox !== checkbox) {
-                                    otherCheckbox.disabled = true;
-                                }
-                            });
-                        } else {
-                            checkboxes.forEach((otherCheckbox) => {
-                                if (otherCheckbox !== checkbox) {
-                                    otherCheckbox.disabled = false;
-                                }
-                            });
-                        }
-                    });
-                });
-            </script>
-            <script>
-                const productImageInput = document.getElementById('productImage');
-                const imagePreviewContainer = document.getElementById('imagePreview');
+          // Display loading spinner
+          $('#addProductForm .btn-primary').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding Product...').prop('disabled', true);
 
-                productImageInput.addEventListener('change', function () {
-                    imagePreviewContainer.innerHTML = ''; // Clear the existing preview
+          // Submit the form data using AJAX
+          $.ajax({
+            url: '/admin/add-product',
+            type: 'POST',
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            success: function(response) {
+              // Reset form fields
+              $('#addProductForm')[0].reset();
 
-                    // Loop through the selected files and create image previews
-                    for (let i = 0; i < this.files.length; i++) {
-                        const file = this.files[i];
-                        const reader = new FileReader();
+              // Clear image preview
+              imagePreviewContainer.innerHTML = '';
 
-                        reader.onload = function (e) {
-                            const img = document.createElement('img');
-                            img.src = e.target.result;
-                            img.classList.add('img-thumbnail', 'mr-2');
-                            imagePreviewContainer.appendChild(img);
-                        };
+              // Reset cropper
+              cropper.destroy();
 
-                        reader.readAsDataURL(file);
-                    }
-                });</script>
+              // Display success toast message
+              toastr.success('Product added successfully!', 'Success');
 
-</body>
+              // Reset button state
+              $('#addProductForm .btn-primary').html('Add Product').prop('disabled', false);
+            },
+            error: function(error) {
+              // Display error toast message
+              toastr.error('Failed to add product. Please try again.', 'Error');
 
+              // Reset button state
+              $('#addProductForm .btn-primary').html('Add Product').prop('disabled', false);
+            }
+          });
+        });
+      });
+    </script>
 
-<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-3.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:32 GMT -->
+    <!-- product form validation -->
 
+    <script>
+      $(document).ready(function() {
+        const form = document.getElementById("addProductForm");
+
+        const nameInput = document.getElementById("productName");
+        const descInput = document.querySelector('textarea[name="productDescription"]');
+        const priceInput = document.querySelector('input[name="productPrice"]');
+        const qtyInput = document.querySelector('input[name="productQuantity"]');
+        const imageInput = document.getElementById("productImage");
+
+        const nameError = document.getElementById("nameError");
+        const descError = document.getElementById("descError");
+        const priceError = document.getElementById("priceError");
+        const qtyError = document.getElementById("quantityError");
+        const imageError = document.getElementById("imageError");
+
+        const nameRegex = /^[A-Za-z\s]+$/;
+        const descRegex = /^[A-Za-z\s]+$/;
+        const priceRegex = /^\d+(\.\d{1,2})?$/;
+        const qtyRegex = /^\d+$/;
+
+        form.addEventListener("submit", function(e) {
+          e.preventDefault();
+
+          let isValid = true;
+
+          // Clear previous error messages
+          nameError.innerHTML = "";
+          descError.innerHTML = "";
+          priceError.innerHTML = "";
+          qtyError.innerHTML = "";
+          imageError.innerHTML = "";
+
+          if (nameInput.value.trim() === "") {
+            nameError.innerHTML = "Please enter the product title";
+            isValid = false;
+          } else if (!nameRegex.test(nameInput.value.trim())) {
+            nameError.innerHTML =
+              "Please enter a valid product title (only alphanumeric characters and spaces are allowed)";
+            isValid = false;
+          } else if (
+            nameInput.value.trim().length < 5 ||
+            nameInput.value.trim().length > 50
+          ) {
+            nameError.innerHTML = "Product title must be between 5 and 50 characters";
+            isValid = false;
+          }
+
+          if (descInput.value.trim() === "") {
+            descError.innerHTML = "Please enter the product description";
+            isValid = false;
+          } else if (!descRegex.test(descInput.value.trim())) {
+            descError.innerHTML =
+              "Please enter a valid product description (only alphanumeric characters and spaces are allowed)";
+            isValid = false;
+          }
+
+          if (priceInput.value.trim() === "") {
+            priceError.innerHTML = "Please enter the product price";
+            isValid = false;
+          } else if (!priceRegex.test(priceInput.value.trim())) {
+            priceError.innerHTML =
+              "Please enter a valid product price (e.g., 10 or 10.99)";
+            isValid = false;
+          }
+
+          if (qtyInput.value.trim() === "") {
+            qtyError.innerHTML = "Please enter the product quantity";
+            isValid = false;
+          } else if (!qtyRegex.test(qtyInput.value.trim())) {
+            qtyError.innerHTML = "Please enter a valid product quantity (only numeric characters are allowed)";
+            isValid = false;
+          }
+
+          if (imageInput.files.length === 0) {
+            imageError.innerHTML = "Please select a product image";
+            isValid = false;
+          }
+
+          if (isValid) {
+            // Perform AJAX request or submit the form
+            // ...
+          } else {
+            toastr.error("Please fix the errors and try again.");
+          }
+        });
+      });
+    </script>
+  </body>
 </html>

@@ -1,6 +1,9 @@
 <%- include('../shop/layout/user-header.ejs') %>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+
+    <link rel="stylesheet" href="/AddOnStyles/toastr.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 
@@ -16,9 +19,10 @@
             color: green;
             /* Set the text color to green */
         }
+
         .form-control-sm::placeholder {
-    font-size: 12px;
-  }
+            font-size: 12px;
+        }
     </style>
 
 
@@ -42,30 +46,7 @@
 
 
     <!-- Header Info Begin -->
-    <div class="header-info">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="header-item">
-                        <img src="/shop/img/icons/delivery.png" alt="">
-                        <p>Free shipping on orders over $30 in USA</p>
-                    </div>
-                </div>
-                <div class="col-md-4 text-left text-lg-center">
-                    <div class="header-item">
-                        <img src="/shop/img/icons/voucher.png" alt="">
-                        <p>20% Student Discount</p>
-                    </div>
-                </div>
-                <div class="col-md-4 text-left text-xl-right">
-                    <div class="header-item">
-                        <img src="/shop/img/icons/sales.png" alt="">
-                        <p>30% off on dresses. Use code: 30OFF</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <!-- Header Info End -->
     <div class="page-add">
         <div class="container">
@@ -127,23 +108,25 @@
             <div class="container">
                 <div class="row flex-row-reverse">
                     <div class="col-lg-9">
-                        <form class="mobile-search" action="/product-search/?search" method="get" onsubmit="return validateForm()">
+                        <form class="mobile-search" action="/product-search/?search" method="get"
+                            onsubmit="return validateForm()">
                             <div class="input-group">
-                              <label for="mobile-search" class="sr-only">Search</label>
-                              <input type="search" class="form-control form-control-sm" name="search" id="mobile-search" placeholder="Search in..." required>
-                              <div class="input-group-append">
-                                <button class="btn btn-primary btn-sm" type="submit">
-                                  <i class="fas fa-search"></i>
-                                </button>
-                              </div>
+                                <label for="mobile-search" class="sr-only">Search</label>
+                                <input type="search" class="form-control form-control-sm" name="search"
+                                    id="mobile-search" placeholder="Search in..." required>
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary btn-sm" type="submit">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
                             </div>
                         </form>
-                          
-                          
 
 
 
-                    
+
+
+
                         <div class="shop-product-fillter">
                             <div class="totall-product">
                                 <p> New Collections for you!</p>
@@ -191,7 +174,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row product-grid-3">
+                        <div class="row product-grid-3" id="filteredResults">
 
                             <% for (var i=0; i < products.length; i++) { %>
 
@@ -201,7 +184,7 @@
                                             <div class="product-img-action-wrap">
                                                 <div class="product-img product-img-zoom">
 
-                                                    <img src="/uploads/<%= products[i].productImage[0] %>.jpg" alt=""
+                                                    <img src="/uploads/<%= products[i].productImage[0] %>" alt=""
                                                         srcset="">
 
                                                 </div>
@@ -282,16 +265,13 @@
                                     <li class="page-item active"><a class="page-link" href="#">01</a></li>
                                     <li class="page-item"><a class="page-link" href="#">02</a></li>
                                     <li class="page-item"><a class="page-link" href="#">03</a></li>
-                                    <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">16</a></li>
-                                    <li class="page-item"><a class="page-link" href="#"><i
-                                                class="fi-rs-angle-double-small-right"></i></a></li>
+                                    <i class="fi-rs-angle-double-small-right"></i></a></li>
                                 </ul>
                             </nav>
                         </div>
                     </div>
                     <div class="col-lg-3 primary-sidebar sticky-sidebar">
-                        <div class="widget-category mb-30">
+                        <!-- <div class="widget-category mb-30">
                             <h5 class="section-title style-1 mb-30 wow fadeIn animated">Category</h5>
                             <ul class="categories">
                                 <li><a href="shop-grid-right.html">Formal</a></li>
@@ -299,65 +279,100 @@
                                 <li><a href="shop-grid-right.html">Wedding Dresses</a></li>
 
                             </ul>
-                        </div>
+                        </div> -->
                         <!-- Fillter By Price -->
                         <div class="sidebar-widget price_range range mb-30">
+                            <!-- Sidebar content -->
                             <div class="widget-header position-relative mb-20 pb-10">
-                                <h5 class="widget-title mb-10">Fill by price</h5>
+                                <h5 class="widget-title mb-10">Filter</h5>
                                 <div class="bt-1 border-color-1"></div>
                             </div>
-                            <div class="price-filter">
-                                <div class="price-filter-inner">
-                                    <div id="slider-range"></div>
-                                    <div class="price_slider_amount">
-                                        <div class="label-input">
-                                            <span>Range:</span><input type="text" id="amount" name="price"
-                                                placeholder="Add Your Price" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
+
                             <div class="list-group">
                                 <div class="list-group-item mb-10 mt-10">
+                                    <label class="fw-900">Price Range:</label>
+                                    <div class="custome-checkbox">
+                                        <input class="form-check-input price-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox10" value="0-1000">
+                                        <label class="form-check-label"
+                                            for="exampleCheckbox10"><span>0-1000</span></label>
+                                        <br>
+                                        <input class="form-check-input price-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox12" value="1000-2500">
+                                        <label class="form-check-label"
+                                            for="exampleCheckbox12"><span>1000-2500</span></label>
+                                        <br>
+                                        <input class="form-check-input price-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox13" value="3000-5000">
+                                        <label class="form-check-label"
+                                            for="exampleCheckbox13"><span>2500-5000</span></label>
+                                        <br>
+                                        <input class="form-check-input price-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox14" value="5000-100000">
+                                        <label class="form-check-label"
+                                            for="exampleCheckbox14"><span>5000-100000</span></label>
+                                    </div>
+
                                     <label class="fw-900">Color</label>
                                     <div class="custome-checkbox">
-                                        <input class="form-check-input" type="checkbox" name="checkbox"
-                                            id="exampleCheckbox1" value="">
-                                        <label class="form-check-label" for="exampleCheckbox1"><span>Red
-                                                (56)</span></label>
+                                        <input class="form-check-input color-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox1" value="NAVY">
+                                        <label class="form-check-label" for="exampleCheckbox1"><span>NAVY</span></label>
                                         <br>
-                                        <input class="form-check-input" type="checkbox" name="checkbox"
-                                            id="exampleCheckbox2" value="">
-                                        <label class="form-check-label" for="exampleCheckbox2"><span>Green
-                                                (78)</span></label>
+                                        <input class="form-check-input color-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox2" value="LIGHT BLUE">
+                                        <label class="form-check-label" for="exampleCheckbox2"><span>LIGHT
+                                                BLUE</span></label>
                                         <br>
-                                        <input class="form-check-input" type="checkbox" name="checkbox"
-                                            id="exampleCheckbox3" value="">
-                                        <label class="form-check-label" for="exampleCheckbox3"><span>Blue
-                                                (54)</span></label>
+                                        <input class="form-check-input color-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox3" value="BEIGE">
+                                        <label class="form-check-label"
+                                            for="exampleCheckbox3"><span>BEIGE</span></label>
+                                        <br>
+                                        <input class="form-check-input color-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox4" value="MAROONED">
+                                        <label class="form-check-label" for="exampleCheckbox4"><span>MAROONED
+                                            </span></label>
+                                        <br>
+                                        <input class="form-check-input color-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox5" value="PINK">
+                                        <label class="form-check-label" for="exampleCheckbox5"><span>PINK</span></label>
+                                        <br>
+                                        <input class="form-check-input color-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox6" value="GREY">
+                                        <label class="form-check-label" for="exampleCheckbox6"><span>GREY</span></label>
                                     </div>
-                                    <label class="fw-900 mt-15">Item Condition</label>
+
+                                    <label class="fw-900 mt-15">Item Size</label>
                                     <div class="custome-checkbox">
-                                        <input class="form-check-input" type="checkbox" name="checkbox"
-                                            id="exampleCheckbox11" value="">
-                                        <label class="form-check-label" for="exampleCheckbox11"><span>New
-                                                (1506)</span></label>
+                                        <input class="form-check-input size-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox11" value="S">
+                                        <label class="form-check-label" for="exampleCheckbox11"><span>S</span></label>
                                         <br>
-                                        <input class="form-check-input" type="checkbox" name="checkbox"
-                                            id="exampleCheckbox21" value="">
-                                        <label class="form-check-label" for="exampleCheckbox21"><span>Refurbished
-                                                (27)</span></label>
+                                        <input class="form-check-input size-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox21" value="M">
+                                        <label class="form-check-label" for="exampleCheckbox21"><span>M</span></label>
                                         <br>
-                                        <input class="form-check-input" type="checkbox" name="checkbox"
-                                            id="exampleCheckbox31" value="">
-                                        <label class="form-check-label" for="exampleCheckbox31"><span>Used
-                                                (45)</span></label>
+                                        <input class="form-check-input size-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox31" value="L">
+                                        <label class="form-check-label" for="exampleCheckbox31"><span>L</span></label>
+                                        <br>
+                                        <input class="form-check-input size-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox41" value="XL">
+                                        <label class="form-check-label" for="exampleCheckbox41"><span>XL</span></label>
                                     </div>
+
                                 </div>
                             </div>
-                            <a href="shop-grid-right.html" class="btn btn-sm btn-default"><i
-                                    class="fi-rs-filter mr-5"></i> Fillter</a>
+                            <a href="#" class="btn btn-sm btn-default" id="filterButton"><i
+                                    class="fi-rs-filter mr-5"></i> Filter</a>
                         </div>
+
+                        <div id="filteredResults">
+                            <!-- Display the filtered results here -->
+                        </div>
+
                         <!-- Product sidebar Widget -->
 
                     </div>
@@ -421,6 +436,146 @@
             });
         }
     </script>
+
+
+    <script>
+        const priceCheckboxes = document.querySelectorAll('.price-checkbox');
+
+        priceCheckboxes.forEach((checkbox) => {
+            checkbox.addEventListener('change', () => {
+                if (checkbox.checked) {
+                    // Disable other price checkboxes
+                    priceCheckboxes.forEach((otherCheckbox) => {
+                        if (otherCheckbox !== checkbox) {
+                            otherCheckbox.disabled = true;
+                        }
+                    });
+                } else {
+                    // Enable all price checkboxes
+                    priceCheckboxes.forEach((otherCheckbox) => {
+                        otherCheckbox.disabled = false;
+                    });
+                }
+            });
+        });
+
+
+
+
+
+
+        $(document).ready(function () {
+            $('#filterButton').click(applyFilters);
+        });
+
+        function applyFilters(event) {
+            event.preventDefault();
+
+            const selectedColors = $('.color-checkbox:checked').map(function () {
+                return $(this).val();
+            }).get();
+
+            const selectedSizes = $('.size-checkbox:checked').map(function () {
+                return $(this).val();
+            }).get();
+
+            const selectedPrices = $('.price-checkbox:checked').map(function () {
+                return $(this).val();
+            }).get();
+
+            $.ajax({
+                url: '/productFiltering',
+                type: 'GET',
+                data: {
+                    colors: selectedColors.length > 0 ? JSON.stringify(selectedColors) : '[]',
+                    sizes: selectedSizes.length > 0 ? JSON.stringify(selectedSizes) : '[]',
+                    prices: JSON.stringify(selectedPrices)
+                },
+                success: function (filteredProducts) {
+                    displayFilteredResults(filteredProducts);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error filtering products:', error);
+                }
+            });
+        }
+
+
+
+        function displayFilteredResults(products) {
+            const filteredResults = $('#filteredResults');
+            filteredResults.empty();
+
+            if (products.length > 0) {
+                for (let i = 0; i < products.length; i++) {
+                    const product = products[i];
+
+                    // Create the HTML elements for each product
+                    const productContainer = $('<div>').addClass('col-lg-4 col-md-4 col-12 col-sm-6');
+                    const productCartWrap = $('<div>').addClass('product-cart-wrap mb-30');
+                    const productImgActionWrap = $('<div>').addClass('product-img-action-wrap');
+                    const productImg = $('<div>').addClass('product-img product-img-zoom');
+                    const img = $('<img>').attr('src', '/uploads/' + product.productImage[0]).attr('alt', '');
+                    const productAction1 = $('<div>').addClass('product-action-1');
+                    const actionBtn = $('<a>').addClass('action-btn hover-up').attr('aria-label', 'Add To Wishlist').attr('href', 'shop-wishlist.html');
+                    const iconHeart = $('<i>').addClass('fi-rs-heart');
+                    const productBadges = $('<div>').addClass('product-badges product-badges-position product-badges-mrg');
+                    const hotBadge = $('<span>').addClass('hot').text('Hot');
+                    const productContentWrap = $('<div>').addClass('product-content-wrap');
+                    const productCategory = $('<div>').addClass('product-category');
+                    const categoryLink = $('<a>').attr('href', 'shop-grid-right.html').text(product.productBrand);
+                    const productName = $('<h2>').append($('<a>').attr('href', '/viewProduct/' + product._id).text(product.productName));
+                    const ratingResult = $('<div>').addClass('rating-result').attr('title', '90%');
+                    const ratingSpan = $('<span>').append($('<span>').text('90%'));
+                    const productPrice = $('<div>').addClass('product-price');
+                    const priceSpan = $('<span>').text('Rs. ' + product.productPrice);
+                    const oldPriceSpan = $('<span>').addClass('old-price').text('$245.8');
+                    const productAction1Show = $('<div>').addClass('product-action-1 show');
+                    const availabilityLink = $('<a>').addClass('action-btn hover-up').attr('aria-label', 'Add To Cart').attr('href', '/addToCart/' + product._id).attr('onclick', 'addToCart(event, \'' + product._id + '\')');
+                    const cartIcon = $('<i>').addClass('fi-rs-shopping-bag-add');
+                    const outOfStockLink = $('<a>').addClass('action-btn hover-up').attr('aria-label', 'Add To Wishlist').attr('href', 'shop-wishlist.html');
+                    const heartIcon = $('<i>').addClass('fi-rs-heart');
+                    const productMeta = $('<ul>').addClass('product-meta font-xs color-grey');
+                    const availabilityItem = $('<li>');
+
+                    // Check product availability
+                    if (product.productQuantity > 0) {
+                        availabilityItem.append($('<span>').addClass('in-stock text-success ml-5').text(product.productQuantity + ' Items In Stock'));
+                        productAction1Show.append(availabilityLink.append(cartIcon));
+                    } else {
+                        availabilityItem.append($('<span>').addClass('out-of-stock text-danger ml-5').text('Out of Stock'));
+                        productAction1Show.append(outOfStockLink.append(heartIcon));
+                    }
+
+                    // Build the product HTML structure
+                    productContainer.append(productCartWrap);
+                    productCartWrap.append(productImgActionWrap);
+                    productImgActionWrap.append(productImg.append(img));
+                    productImgActionWrap.append(productAction1.append(actionBtn.append(iconHeart)));
+                    productImgActionWrap.append(productBadges.append(hotBadge));
+                    productCartWrap.append(productContentWrap);
+                    productContentWrap.append(productCategory.append(categoryLink));
+                    productContentWrap.append(productName);
+                    productContentWrap.append(ratingResult.append(ratingSpan));
+                    productContentWrap.append(productPrice.append(priceSpan).append(oldPriceSpan));
+                    productContentWrap.append(productAction1Show);
+                    productContentWrap.append(productMeta.append(availabilityItem));
+
+                    // Append the product to the filtered results container
+                    filteredResults.append(productContainer);
+                }
+            } else {
+                const noResultsMessage = $('<p>').text('No products found.');
+                filteredResults.append(noResultsMessage);
+            }
+        }
+
+
+    </script>
+
+
+
+
 
 
 

@@ -62,6 +62,12 @@ router.post("/addCouponPost",isloggedInadmin,adminController.addCouponPost)
 
 router.get("/admin-coupon-list",isloggedInadmin,adminController.GetCouponList)
 
+router.get("/sales-report-page",isloggedInadmin,adminController.salesReportPage)
+
+router.post("/sales-report",isloggedInadmin,adminController.salesReport)
+
+router.post("/sales-report-excel",isloggedInadmin,adminController.salesReportExcel)
+
 
 
 

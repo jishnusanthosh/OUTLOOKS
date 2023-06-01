@@ -52,11 +52,11 @@
                   <form action="/generate-otp" method="post" id="login-form">
                     <div class="form-group">
                       <label for="phonenumber">Enter your number </label>
-                      <input type="number" class="form-control" id="phonenumber" name="phonenumber" required >
+                      <input type="number" class="form-control" id="phonenumber" name="phonenumber" required>
                     </div>
-                   <br>
-                        <button type="submit" class="btn btn-block btn-login">Send OTP</button>
-                     <br>
+                    <br>
+                    <button type="submit" class="btn btn-block btn-login">Send OTP</button>
+                    <br>
                   </form>
                   </form>
                 </div>
@@ -86,27 +86,27 @@
       </div>
     </div>
 
-    
+
     <script>
-       var otpValues = []; 
+      var otpValues = [];
 
-function setMobileNumber() {
-  const mobileNumber = document.getElementById("phonenumber").value;
+      function setMobileNumber() {
+        const mobileNumber = document.getElementById("phonenumber").value;
 
-  document.getElementById("phonenumber-input").value = mobileNumber;
-  
-  const otp = document.getElementById('otp1').value +
-            document.getElementById('otp2').value +
-            document.getElementById('otp3').value +
-            document.getElementById('otp4').value +
-            document.getElementById('otp5').value +
-            document.getElementById('otp6').value;
-            console.log(otp);
-document.getElementById('otpId').value = otp;
-}
+        document.getElementById("phonenumber-input").value = mobileNumber;
+
+        const otp = document.getElementById('otp1').value +
+          document.getElementById('otp2').value +
+          document.getElementById('otp3').value +
+          document.getElementById('otp4').value +
+          document.getElementById('otp5').value +
+          document.getElementById('otp6').value;
+        console.log(otp);
+        document.getElementById('otpId').value = otp;
+      }
 
       $(document).ready(function () {
-       // initialize empty array to store OTP values
+        // initialize empty array to store OTP values
         $('input[type="text"]').on('input keydown', function (e) {
           var $this = $(this);
           if (e.keyCode == 8 && !$this.val()) {
@@ -120,8 +120,8 @@ document.getElementById('otpId').value = otp;
       });
       function abc() {
         otpValues = otpValues.join('')
-       document.getElementById('otpId').value = otpValues
-        
+        document.getElementById('otpId').value = otpValues
+
       }
     </script>
 

@@ -1,0 +1,282 @@
+<%- include('../partials/admin-header') %>
+    <section class="content-main">
+        <form action="/admin/addProducts" id="validateForm" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-9">
+                    <div class="content-header">
+                        <h2 class="content-title">Add New Product</h2>
+                        <div>
+                            <button class="btn btn-md rounded font-sm hover-up" type="submit">
+                                Add Product
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Basic</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <label for="product_name" class="form-label">Product name</label>
+                                <input type="text" placeholder="Type here" class="form-control" name="productName"
+                                    id="product_name" />
+                                <span class="text-danger" id="nameError"></span>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="product_color" class="form-label">Color</label>
+                                <input type="text" placeholder="Type here" class="form-control" name="productColor"
+                                    id="product_color" />
+                                <span class="text-danger" id="colorError"></span>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Full description</label>
+                                <textarea placeholder="Type here" class="form-control" rows="4"
+                                    name="productDescription" id="product_description"></textarea>
+                                <span class="text-danger" id="descError"></span>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="mb-4">
+                                        <label class="form-label">Price</label>
+                                        <div class="row gx-2">
+                                            <input placeholder="Rs." type="text" class="form-control"
+                                                name="productPrice" id="prodPrice" />
+                                            <span class="text-danger" id="priceError"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-4">
+                                        <label class="form-label">Product quantity</label>
+                                        <input placeholder="quantity" type="text" class="form-control"
+                                            name="productQuantity" id="product_quantity" />
+                                        <span class="text-danger" id="quantityError"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Status</label>
+                                <select class="form-select" name="productStatus">
+                                    <option>listed</option>
+                                    <option>Unlisted</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- card end// -->
+                </div>
+                <div class="col-lg-3">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Media</h4>
+                        </div>
+                        <div class="card-body">
+                            <div>
+                                <label class="form-label">Images</label>
+                                <input class="form-control" type="file" name="productImage" id="image" multiple />
+                                <span class="text-danger" id="imageError"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- card end// -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Category</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row gx-2">
+                                <div class="col-sm-6 mb-3">
+                                    <% viewCategory.forEach(function(category) { %>
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input onclick="categoryCheck('<%= category._id %>')"
+                                                    class="form-check-input" type="checkbox" value="<%= category._id %>"
+                                                    id="product-cat<%= category._id %>" />
+                                                <%= category.CategoryName %>
+                                            </label>
+                                        </div>
+                                        <% }) %>
+                                            <input type="text" name="viewCategoryId" value="" id="viewCategoryId"
+                                                hidden />
+                                </div>
+                            </div>
+                            <!-- row.// -->
+                        </div>
+                    </div>
+                    <!-- card end// -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Brand</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row gx-2">
+                                <div class="col-sm-6 mb-3">
+                                    <% viewBrand.forEach(function(brand) { %>
+
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input onclick="brandCheck('<%= brand._id %>')" class="form-check-input"
+                                                    type="checkbox" value="<%= brand._id %>"
+                                                    id="product-bnd<%= brand._id %>" />
+                                                <%= brand.brandName %>
+                                            </label>
+                                        </div>
+                                        <% }) %>
+                                            <input type="text" name="viewBrandId" value="" id="viewBrandId" hidden />
+                                </div>
+                            </div>
+                            <!-- row.// -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </section>
+    <!-- content-main end// -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const category = document.getElementById("viewCategoryId");
+        function categoryCheck(id) {
+            category.value = id;
+        }
+        const checkboxes = document.querySelectorAll('input[name="product-cat"]');
+        checkboxes.forEach((checkbox) => {
+            checkbox.addEventListener("click", () => {
+                if (checkbox.checked) {
+                    checkboxes.forEach((otherCheckbox) => {
+                        if (otherCheckbox !== checkbox) {
+                            otherCheckbox.disabled = true;
+                        }
+                    });
+                } else {
+                    checkboxes.forEach((otherCheckbox) => {
+                        if (otherCheckbox !== checkbox) {
+                            otherCheckbox.disabled = false;
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+    <script>
+        const brand = document.getElementById("viewBrandId");
+        function brandCheck(id) {
+            brand.value = id;
+        }
+        const checkbrand = document.querySelectorAll('input[name="product-bnd"]');
+        checkbrand.forEach((checkbox) => {
+            checkbox.addEventListener("click", () => {
+                if (checkbox.checked) {
+                    checkbrand.forEach((otherCheckbox) => {
+                        if (otherCheckbox !== checkbox) {
+                            otherCheckbox.disabled = true;
+                        }
+                    });
+                } else {
+                    checkbrand.forEach((otherCheckbox) => {
+                        if (otherCheckbox !== checkbox) {
+                            otherCheckbox.disabled = false;
+                        }
+                    });
+                }
+            });
+        });
+
+        const form = document.querySelector("#validateForm");
+
+        const nameInput = document.getElementById("product_name");
+        const descInput = document.getElementById("product_description");
+        // const colorInput = document.getElementById("product_color");
+
+        const priceInput = document.getElementById("prodPrice");
+        const qtyInput = document.getElementById("product_quantity");
+        const imageInput = document.getElementById("image");
+
+        const nameError = document.getElementById("nameError");
+        const descError = document.getElementById("descError");
+        // const colorError = document.getElementById("colorError");
+        const imageError = document.getElementById("imageError");
+
+        const priceError = document.getElementById("priceError");
+        const qtyError = document.getElementById("quantityError");
+
+        // Regular expressions for validation
+        const nameRegex = /^[A-Za-z\s]+$/;
+        const descRegex = /^[A-Za-z\s]+$/;
+        const priceRegex = /^\d+(\.\d{1,2})?$/;
+        const qtyRegex = /^\d+$/;
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            let isValid = true;
+
+            if (nameInput.value.trim() === "") {
+                nameError.innerHTML = "Please enter the product title";
+                isValid = false;
+            } else if (!nameRegex.test(nameInput.value.trim())) {
+                nameError.innerHTML =
+                    "Please enter a valid product title (only alphanumeric characters and spaces are allowed)";
+                isValid = false;
+            } else if (
+                nameInput.value.trim().length < 5 ||
+                nameInput.value.trim().length > 50
+            ) {
+                nameError.innerHTML = "Product title must be between 5 and 50 characters";
+                isValid = false;
+            } else {
+                nameError.innerHTML = "";
+            }
+
+            if (descInput.value.trim() === "") {
+                descError.innerHTML = "Please enter the product description";
+                isValid = false;
+            } else if (!descRegex.test(descInput.value.trim())) {
+                descError.innerHTML =
+                    "Please enter a valid product description (only alphanumeric characters and spaces are allowed)";
+                isValid = false;
+            } else {
+                descError.innerHTML = "";
+            }
+            // if (colorInput.value.trim() === "") {
+            //   colorError.textContent = "Color is required.";
+            //   colorError.style.display = "block";
+            //   isValid = false;
+            // }
+
+            if (priceInput.value.trim() === "") {
+                priceError.innerHTML = "Please enter the product price";
+                isValid = false;
+            } else if (!priceRegex.test(priceInput.value.trim())) {
+                priceError.innerHTML =
+                    "Please enter a valid product price (e.g., 10 or 10.99)";
+                isValid = false;
+            } else {
+                priceError.innerHTML = "";
+            }
+            if (imageInput.files.length === 0) {
+                imageError.innerHTML = "Please select an image";
+                isValid = false;
+            } else {
+                imageError.innerHTML = "";
+            }
+            if (qtyInput.value.trim() === "") {
+                qtyError.innerHTML = "Please enter the product quantity";
+                isValid = false;
+            } else if (!qtyRegex.test(qtyInput.value.trim())) {
+                qtyError.innerHTML =
+                    "Please enter a valid product quantity (only positive whole numbers are allowed)";
+                isValid = false;
+            } else {
+                qtyError.innerHTML = "";
+            }
+
+            if (isValid) {
+                form.submit();
+            }
+        });
+    </script>
+    <%- include('../partials/admin-footer') %>

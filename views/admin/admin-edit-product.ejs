@@ -15,8 +15,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="/admin/imgs/theme/favicon.svg">
     <!-- Template CSS -->
     <link href="/admin/css/main.css" rel="stylesheet" type="text/css" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
-</head>
+    <link rel="stylesheet" href="/AddOnStyles/toastr.css">>
 
 <body>
     <div class="screen-overlay"></div>
@@ -278,7 +277,7 @@
                                         <div>
                                             <label class="form-label">Images</label>
                                             <input class="form-control" type="file" name="productImage">
-                                            <img src="/uploads/<%= product.productImage%>.jpg"
+                                            <img src="/uploads/<%= product.productImage%>"
                                                 class="img-thumbnail square-image " id="imgView">
                                         </div>
                                         <input type="text" name="productImage" value="<%= product.productImage  %>"

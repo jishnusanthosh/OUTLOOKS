@@ -1,167 +1,182 @@
 <%- include('../partials/admin-header.ejs') %>
 
 
-<%= console.log("=========================="); %>
+    <%= console.log("=========================="); %>
 
 <%= console.log(Order); %>
 <%= console.log("=========================="); %>
 <%= console.log(Order.orderedItems.productId[0]); %>
-        <section class="content-main">
-            <div class="content-header">
-                <div>
-                    <h2 class="content-title card-title">Order detail</h2>
-                    <p>Details for Order ID: <%= Order._id %></p>
-                </div>
+        <section class=" content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Order detail</h2>
+                <p>Details for Order ID: <%= Order._id %>
+                </p>
             </div>
-            
-            <div class="card">
-                <header class="card-header">
-                    <div class="row align-items-center">
-                        <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
-                          <span>
-                            <i class="material-icons md-calendar_today"></i> <b><%= Order.orderDate %></b>
-                          </span> <br>
-                          <small class="text-muted">Order ID: <%= Order._id %></small>
-                        </div>
-                        <div class="col-lg-6 col-md-6 ms-auto text-md-end">
-                          <form action="/admin/updateOrderStatus/<%= Order._id %>" method="POST">
+        </div>
+
+        <div class="card">
+            <header class="card-header">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
+                        <span>
+                            <i class="material-icons md-calendar_today"></i> <b>
+                                <%= Order.orderDate %>
+                            </b>
+                        </span> <br>
+                        <small class="text-muted">Order ID: <%= Order._id %></small>
+                    </div>
+                    <div class="col-lg-6 col-md-6 ms-auto text-md-end">
+                        <form action="/admin/updateOrderStatus/<%= Order._id %>" method="POST">
                             <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200" name="orderStatus">
-                              <option value="Placed">Placed</option>
-                              <option value="Confirmed">Confirmed</option>
-                              <option value="Shipped">Shipped</option>
-                              <option value="Delivered">Delivered</option>
+                                <option value="placed" <% if (Order.orderStatus === "placed") { %>selected<% } %>>Placed</option>
+                                <option value="confirmed" <% if (Order.orderStatus === "confirmed") { %>selected<% } %>>Confirmed</option>
+                                <option value="shipped" <% if (Order.orderStatus === "shipped") { %>selected<% } %>>Shipped</option>
+                                <option value="delivered" <% if (Order.orderStatus === "delivered") { %>selected<% } %>>Delivered</option>
+                                <option value="returned" <% if (Order.orderStatus === "returned") { %>selected<% } %>>Return Accepted</option>
                             </select>
                             <button type="submit" class="btn btn-primary">Save</button>
-                          </form>
-                        </div>
-                      </div>
-                      
-                      
-                </header> <!-- card-header end// -->
-                <div class="card-body">
-                    <div class="row mb-50 mt-20 order-info-wrap">
-                        <div class="col-md-4">
-                            <article class="icontext align-items-start">
-                                <span class="icon icon-sm rounded-circle bg-primary-light">
-                                    <i class="text-primary material-icons md-person"></i>
-                                </span>
-                                <div class="text">
-                                    <h6 class="mb-1">Customer</h6>
-                                    <p class="mb-1">
-                                        <%= Order.user.username %> <br> <template class="__cf_email__" data-cfemail="e2838e879aa2879a838f928e87cc818d8f">[email&#160;protected]</template> <br> +91 <%= Order.user.phonenumber %>
-                                    </p>
-                                    <a href="#">View profile</a>
-                                </div>
-                            </article>
-                        </div> <!-- col// -->
-                        <div class="col-md-4">
-                            <article class="icontext align-items-start">
-                                <span class="icon icon-sm rounded-circle bg-primary-light">
-                                    <i class="text-primary material-icons md-local_shipping"></i>
-                                </span>
-                                <div class="text">
-                                    <h6 class="mb-1">Order info</h6>
-                                    <p class="mb-1">
-                                        Shipping: Fargo express <br> Pay method: <%= Order.paymentMethod %> <br> Status: <%= Order.orderStatus %>
-                                    </p>
-                                    <a href="#">Download info</a>
-                                </div>
-                            </article>
-                        </div> <!-- col// -->
-                        <div class="col-md-4">
-                            <article class="icontext align-items-start">
-                                <span class="icon icon-sm rounded-circle bg-primary-light">
-                                    <i class="text-primary material-icons md-place"></i>
-                                </span>
-                                <div class="text">
-                                    <h6 class="mb-1">Deliver to</h6>
-                                    <p class="mb-1">
-                                        <%= Order.address[0].firstname %>  <%= Order.address[0].lastname %> <br> City: <%= Order.address[0].city %>, Street Name: <%= Order.address[0].streetname %> <br>Block A, House : <%= Order.address[0].apartmentnumber %> <br> zipcode: <%= Order.address[0].zipcode %> <br> state: <%= Order.address[0].state %>
-                                    </p>
-                                    <a href="#">View profile</a>
-                                </div>
-                            </article>
-                        </div> <!-- col// -->
-                    </div> <!-- row // -->
-                    <div class="row">
-                        <div class="col-lg-7">
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th width="40%">Product</th>
-                                            <th width="20%">Unit Price</th>
-                                            <th width="20%">Quantity</th>
-                                            <th width="20%" class="text-end">Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                       
-                                       <% for( let i = 0; i < Order.orderedItems.productId.length; i++ ) { %>
+                        </form>
+                    </div>
+                    
+                </div>
+
+
+
+            </header> <!-- card-header end// -->
+            <div class="card-body">
+                <div class="row mb-50 mt-20 order-info-wrap">
+                    <div class="col-md-4">
+                        <article class="icontext align-items-start">
+                            <span class="icon icon-sm rounded-circle bg-primary-light">
+                                <i class="text-primary material-icons md-person"></i>
+                            </span>
+                            <div class="text">
+                                <h6 class="mb-1">Customer</h6>
+                                <p class="mb-1">
+                                    <%= Order.user.username %> <br> <template class="__cf_email__"
+                                            data-cfemail="e2838e879aa2879a838f928e87cc818d8f">[email&#160;protected]</template>
+                                        <br> +91 <%= Order.user.phonenumber %>
+                                </p>
+                                <a href="#">View profile</a>
+                            </div>
+                        </article>
+                    </div> <!-- col// -->
+                    <div class="col-md-4">
+                        <article class="icontext align-items-start">
+                            <span class="icon icon-sm rounded-circle bg-primary-light">
+                                <i class="text-primary material-icons md-local_shipping"></i>
+                            </span>
+                            <div class="text">
+                                <h6 class="mb-1">Order info</h6>
+                                <p class="mb-1">
+                                    Shipping: Fargo express <br> Pay method: <%= Order.paymentMethod %> <br> Status: <%=
+                                            Order.orderStatus %>
+                                </p>
+                                <a href="#">Download info</a>
+                            </div>
+                        </article>
+                    </div> <!-- col// -->
+                    <div class="col-md-4">
+                        <article class="icontext align-items-start">
+                            <span class="icon icon-sm rounded-circle bg-primary-light">
+                                <i class="text-primary material-icons md-place"></i>
+                            </span>
+                            <div class="text">
+                                <h6 class="mb-1">Deliver to</h6>
+                                <p class="mb-1">
+                                    <%= Order.address[0].firstname %>
+                                        <%= Order.address[0].lastname %> <br> City: <%= Order.address[0].city %>, Street
+                                                Name: <%= Order.address[0].streetname %> <br>Block A, House : <%=
+                                                        Order.address[0].apartmentnumber %> <br> zipcode: <%=
+                                                            Order.address[0].zipcode %> <br> state: <%=
+                                                                Order.address[0].state %>
+                                </p>
+                                <a href="#">View profile</a>
+                            </div>
+                        </article>
+                    </div> <!-- col// -->
+                </div> <!-- row // -->
+                <div class="row">
+                    <div class="col-lg-7">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th width="40%">Product</th>
+                                        <th width="20%">Unit Price</th>
+                                        <th width="20%">Quantity</th>
+                                        <th width="20%" class="text-end">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <% for( let i=0; i < Order.orderedItems.productId.length; i++ ) { %>
                                         <tr>
                                             <td>
                                                 <a class="itemside" href="#">
                                                     <div class="left">
-                                                        <img src="/uploads/<%= Order.orderedItems.productId[i].productImage %>.jpg" width="40" height="40" class="img-xs" alt="Item">
+                                                        <img src="/uploads/<%= Order.orderedItems.productId[i].productImage %>"
+                                                            width="40" height="40" class="img-xs" alt="Item">
                                                     </div>
-                                                    <div class="info"> <%= Order.orderedItems.productId[i].productName %> </div>
+                                                    <div class="info">
+                                                        <%= Order.orderedItems.productId[i].productName %>
+                                                    </div>
                                                 </a>
                                             </td>
-                                            <td>Rs.<%= Order.orderedItems.productId[i].productPrice %></td>
-                                            <td><%= Order.orderedItems.productId[i].productQuantity %></td>
+                                            <td>Rs.<%= Order.orderedItems.productId[i].productPrice %>
+                                            </td>
+                                            <td>
+                                                <%= Order.orderedItems.productId[i].productQuantity %>
+                                            </td>
                                             <td class="text-end">
-                                                 <%= Order.orderedItems.productId[i].productPrice * Order.orderedItems.productId[i].productQuantity %>
-                                              </td>
-                                              </tr>
-                                       
-                                       <% } %>
-                                        <tr>
-                                            <td colspan="4">
-                                                <article class="float-end">
-                                                    <dl class="dlist">
-                                                        <dt>Subtotal:</dt>
-                                                        <dd>Rs.<%= Order.totalAmount %></dd>
-                                                    </dl>
-                                                    <dl class="dlist">
-                                                        <dt>Shipping cost:</dt>
-                                                        <dd>Free</dd>
-                                                    </dl>
-                                                    <dl class="dlist">
-                                                        <dt>Grand total:</dt>
-                                                        <dd> <b class="h5">Rs.<%= Order.totalAmount %></b> </dd>
-                                                    </dl>
-                                                    <dl class="dlist">
-                                                        <dt class="text-muted">Status:</dt>
-                                                        <dd>
-                                                            <span class="badge rounded-pill alert-success text-success">Payment done</span>
-                                                        </dd>
-                                                    </dl>
-                                                </article>
+                                                <%= Order.orderedItems.productId[i].productPrice *
+                                                    Order.orderedItems.productId[i].productQuantity %>
                                             </td>
                                         </tr>
-                                    </tbody>
-                                </table>
-                            </div> <!-- table-responsive// -->
-                        </div> <!-- col// -->
-                        <div class="col-lg-1"></div>
-                        <div class="col-lg-4">
-                            <div class="box shadow-sm bg-light">
-                                <h6 class="mb-15">Payment info</h6>
-                                <p>
-                                    <img src="admin/imgs/card-brands/2.png" class="border" height="20"> Master Card **** **** 4768 <br>
-                                    Business name: Grand Market LLC <br>
-                                    Phone: +1 (800) 555-154-52
-                                </p>
-                            </div>
-                            
-                        </div> <!-- col// -->
-                    </div>
-                </div> <!-- card-body end// -->
-            </div> <!-- card end// -->
+
+                                        <% } %>
+                                            <tr>
+                                                <td colspan="4">
+                                                    <article class="float-end">
+                                                        <dl class="dlist">
+                                                            <dt>Subtotal:</dt>
+                                                            <dd>Rs.<%= Order.totalAmount %>
+                                                            </dd>
+                                                        </dl>
+                                                        <dl class="dlist">
+                                                            <dt>Shipping cost:</dt>
+                                                            <dd>Free</dd>
+                                                        </dl>
+                                                        <dl class="dlist">
+                                                            <dt>Grand total:</dt>
+                                                            <dd> <b class="h5">Rs.<%= Order.totalAmount %></b> </dd>
+                                                        </dl>
+                                                        <dl class="dlist">
+                                                            <dt class="text-muted">Status:</dt>
+                                                            <dd>
+                                                                <span
+                                                                    class="badge rounded-pill alert-success text-success">Payment
+                                                                    done</span>
+                                                            </dd>
+                                                        </dl>
+                                                    </article>
+                                                </td>
+                                            </tr>
+                                </tbody>
+                            </table>
+                        </div> <!-- table-responsive// -->
+                    </div> <!-- col// -->
+                    <div class="col-lg-1"></div>
+
+                </div>
+            </div> <!-- card-body end// -->
+        </div> <!-- card end// -->
         </section> <!-- content-main end// -->
         <%- include('../partials/admin-footer.ejs') %>
-</body>
+            </body>
 
 
-<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-orders-detail.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:22 GMT -->
-</html>
+            <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-orders-detail.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:22 GMT -->
+
+            </html>

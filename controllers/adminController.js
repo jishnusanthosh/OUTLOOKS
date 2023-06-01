@@ -1,29 +1,46 @@
 import dotenv from "dotenv";
 import adminHelper from "../helpers/adminHelpers";
-const mongoose = require('mongoose');
-import {generateSalesReport} from "../config/pdfKit"
+const mongoose = require("mongoose");
+import { generateSalesReport } from "../config/pdfKit";
 const ObjectId = mongoose.Types.ObjectId;
-
-
-
 
 import User from "../models/userModels";
 import Product from "../models/productModels";
 import Order from "../models/orderModels";
-import Address from "../models/addressModels";
-import Coupon from "../models/couponModel"
-
+// import Address from "../models/addressModels";
+// import Coupon from "../models/couponModel";
 
 dotenv.config();
 
-
-
 export default {
   AdminHomePage: async (req, res) => {
-    
     try {
       if (req.session.admin) {
-        res.render("admin/admin-home");
+        const allorder = await Order.find();
+        const allproducts = await Product.find();
+        const allusers = await User.find();
+        const productCount = allproducts.length;
+        const userCount = allusers.length;
+        const orderCount = allorder.length;
+        const chartData = await adminHelper.getChartDetails();
+        const orderStatus = await adminHelper.getAllOrderStatusesCount();
+
+        let revenue = 0;
+        for (const order of allorder) {
+          if (order.orderStatus === "delivered") {
+            revenue += order.totalAmount;
+          }
+        }
+        res.render("admin/admin-home", {
+          chartData,
+          productCount,
+          userCount,
+          revenue,
+          orderCount,
+          allusers,
+          allorder,
+          orderStatus,
+        });
       } else {
         res.redirect("/admin/login");
       }
@@ -81,14 +98,13 @@ export default {
 
   blockProduct: async (req, res) => {
     let proId = req.params.id;
- 
- 
+
     let product = await Product.findById(proId);
 
     try {
       if (req.session.admin) {
         await adminHelper.blockProduct(product);
-        res.status(200).json("done")
+        res.status(200).json("done");
         // res.redirect("/admin/admin-productss-list");
       } else {
         res.redirect("/admin/login");
@@ -105,7 +121,7 @@ export default {
     try {
       if (req.session.admin) {
         await adminHelper.unblockProduct(product);
-        res.status(200).json("done")
+        res.status(200).json("done");
         // res.redirect("/admin/admin-productss-list");
       } else {
         res.redirect("/admin/login");
@@ -158,9 +174,9 @@ export default {
       let userId = req.params.id;
       try {
         await adminHelper.blockUser(userId);
-      
-        res.status(200).json("done")
-       // res.redirect("/admin/admin-users-list");
+
+        res.status(200).json("done");
+        // res.redirect("/admin/admin-users-list");
       } catch (error) {
         console.error(error);
       }
@@ -172,8 +188,8 @@ export default {
       let userId = req.params.id;
       try {
         await adminHelper.unblockUser(userId);
-        res.status(200).json("done")
-       // res.redirect("/admin/admin-users-list");
+        res.status(200).json("done");
+        // res.redirect("/admin/admin-users-list");
       } catch (err) {
         console.error(err);
       }
@@ -190,46 +206,53 @@ export default {
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ success: false, message: "Failed to add category." });
+      res
+        .status(500)
+        .json({ success: false, message: "Failed to add category." });
     }
-  }
-  ,
+  },
   deleteCategory: async (req, res) => {
     let categoryId = req.params.id;
     try {
       const response = await adminHelper.deleteCategory(categoryId);
       if (response.success) {
-        return res.status(200).json({ success: true, message: 'Category deleted successfully.' });
+        return res
+          .status(200)
+          .json({ success: true, message: "Category deleted successfully." });
       } else {
-        return res.status(500).json({ success: false, message: 'Failed to delete category.' });
+        return res
+          .status(500)
+          .json({ success: false, message: "Failed to delete category." });
       }
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ success: false, message: 'Failed to delete category.' });
+      return res
+        .status(500)
+        .json({ success: false, message: "Failed to delete category." });
     }
-  }
-  ,
+  },
   addProductPost: async (req, res) => {
     let productDetails = req.body;
-    let image = req.files;
-   
+    let images = req.files;
+    console.log(req.body);
 
     try {
-      await adminHelper.addProductPost(productDetails, image);
-      res.redirect("/admin/admin-add-product");
+      await adminHelper.addProductPost(productDetails, images);
+      res.json({ success: true }); // Send a JSON response indicating success
     } catch (error) {
       console.error(error);
+      res.status(500).json({ success: false }); // Send a JSON response indicating failure
     }
   },
   getEditProduct: async (req, res) => {
     let productId = req.params.id;
-   
+
     try {
       if (req.session.admin) {
         let viewCategory = await adminHelper.getAllCategory();
-        let product = await Product.findById(productId)
-        res.locals.notificationMessage = 'Product updated successfully';
-        res.render("admin/admin-edit-product",{viewCategory,product});
+        let product = await Product.findById(productId);
+        res.locals.notificationMessage = "Product updated successfully";
+        res.render("admin/admin-edit-product", { viewCategory, product });
       } else {
         res.redirect("/admin/login");
       }
@@ -244,14 +267,14 @@ export default {
       const productId = req.params.id;
       const productDetails = req.body;
       const image = req.files;
-  
+
       // call the editProductPost function to update the product details
       const updatedProduct = await adminHelper.postEditProduct(
         productDetails,
         image,
         productId
       );
-      
+
       // redirect to the updated product page
       res.redirect(`/admin/admin-edit-product/${productId}`);
     } catch (error) {
@@ -265,12 +288,10 @@ export default {
       const product = await Product.findById(productId);
 
       res.render("admin/admin-product-details", { product });
-     
     } catch (error) {
       console.error(error);
     }
   },
-  
 
   AdminViewUser: async (req, res) => {
     let userId = req.params.id;
@@ -288,15 +309,14 @@ export default {
       const Orders = await Order.aggregate([
         {
           $lookup: {
-            from: "users", 
+            from: "users",
             localField: "user",
             foreignField: "_id",
             as: "user",
           },
-        }
-    
+        },
       ]);
-  
+
       if (req.session.admin) {
         res.render("admin/admin-orders", { Orders: Orders });
       } else {
@@ -308,44 +328,42 @@ export default {
   },
 
   getOneOrderDetails: async (req, res) => {
-    
     let orderId = req.params.id;
-   
+
     try {
       const order = await Order.aggregate([
         { $match: { _id: new ObjectId(orderId) } },
         {
           $lookup: {
-            from: 'users',
-            localField: 'user',
-            foreignField: '_id',
-            as: 'user'
-          }
+            from: "users",
+            localField: "user",
+            foreignField: "_id",
+            as: "user",
+          },
         },
-        { $unwind: '$user' },
+        { $unwind: "$user" },
         {
           $lookup: {
-            from: 'products',
-            localField: 'orderedItems.productId',
-            foreignField: '_id',
-            as: 'orderedItems.productId'
-          }
+            from: "products",
+            localField: "orderedItems.productId",
+            foreignField: "_id",
+            as: "orderedItems.productId",
+          },
         },
         {
           $lookup: {
-            from: 'addresses',
-            localField: 'address',
-            foreignField: '_id',
-            as: 'address'
-          }
+            from: "addresses",
+            localField: "address",
+            foreignField: "_id",
+            as: "address",
+          },
         },
-       
       ]);
-     
+
       res.render("admin/admin-orders-detail", { Order: order[0] });
     } catch (err) {
       console.log(err);
-      res.status(500).json({ error: 'An error occurred' });
+      res.status(500).json({ error: "An error occurred" });
     }
   },
   updateOrderStatus: async (req, res) => {
@@ -354,28 +372,39 @@ export default {
       const { orderStatus } = req.body;
       console.log(orderStatus);
       console.log(orderId);
-  
+
       const order = await Order.findByIdAndUpdate(
         orderId,
         { orderStatus },
         { new: true }
       );
-  
-      if (!order) {
-        return res.status(404).json({ error: 'Order not found' });
+
+      if (order.paymentStatus === "pending" && order.paymentMethod === "COD") {
+        order.paymentStatus = "paid";
+        await order.save();
       }
-  
-      res.redirect(`/admin/getOneOrderDetail/${orderId}`)
+      if (order.paymentStatus === "paid" && order.returnStatus === "pending") {
+        const existingOrder = await Order.findById(orderId);
+        const refund = existingOrder.totalAmount;
+        const user = await User.findById(existingOrder.user);
+        user.wallet = refund;
+        await user.save();
+      }
+
+      if (!order) {
+        return res.status(404).json({ error: "Order not found" });
+      }
+
+      res.redirect(`/admin/getOneOrderDetail/${orderId}`);
     } catch (err) {
       console.log(err);
-      res.status(500).json({ error: 'An error occurred' });
+      res.status(500).json({ error: "An error occurred" });
     }
   },
 
   getAddNewCoupon: async (req, res) => {
     try {
-        res.render("admin/admin-add-coupon")
-   
+      res.render("admin/admin-add-coupon");
     } catch (err) {
       console.log(err);
     }
@@ -387,45 +416,37 @@ export default {
       res.json(response);
     } catch (err) {
       console.log(err);
-      res.json({ status: false, message: 'An error occurred' });
+      res.json({ status: false, message: "An error occurred" });
     }
   },
-
 
   GetCouponList: async (req, res) => {
     try {
       const coupons = await adminHelper.getCoupons();
-      
+
       console.log(coupons);
-      
+
       res.render("admin/admin-coupon-list", { coupons });
-     
     } catch (err) {
       console.log(err);
     }
   },
-  
-
-
-
 
   GetSalesReport: async (req, res) => {
     try {
-      
-      const orders = await Order.find({ orderStatus: 'placed' })
+      const orders = await Order.find({ orderStatus: "placed" })
         .populate({
-          path: 'orderedItems.productId',
+          path: "orderedItems.productId",
           model: Product,
         })
-        .populate('address')
-        
+        .populate("address");
 
       const reportData = [];
       for (const order of orders) {
         for (const item of order.orderedItems) {
           const { productId, quantity } = item;
           console.log(item);
-          const product = productId; 
+          const product = productId;
 
           const entry = {
             date: order.orderDate,
@@ -441,11 +462,115 @@ export default {
       generateSalesReport(reportData, res);
     } catch (error) {
       console.log(error);
-      res.status(500).json({ error: 'Oops! Something went wrong while fetching order data' });
+      res
+        .status(500)
+        .json({
+          error: "Oops! Something went wrong while fetching order data",
+        });
     }
   },
 
+  salesReportPage: async (req, res) => {
+    const sales = await adminHelper.getAllDeliveredOrders();
+    console.log("sales", sales);
 
+    sales.forEach((order) => {
+      // Format the orderDate using built-in JavaScript methods or a date formatting library like Moment.js
+      const formattedDate = new Date(order.orderDate).toLocaleDateString(
+        "en-US",
+        {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }
+      );
+
+      order.orderDate = formattedDate;
+    });
+
+    res.render("admin/admin-sales-report", { sales });
+  },
+
+  salesReport: async (req, res) => {
+    try {
+      console.log(req.body);
+      let { startDate, endDate } = req.body;
+  
+      startDate = new Date(startDate);
+      endDate = new Date(endDate);
+  
+      const salesReport = await adminHelper.getAllDeliveredOrdersByDate(
+        startDate,
+        endDate
+      );
+      for (let i = 0; i < salesReport.length; i++) {
+        salesReport[i].orderDate = salesReport[i].orderDate.toLocaleDateString(); // Format the orderDate using toLocaleDateString
+        salesReport[i].totalAmount = salesReport[i].totalAmount.toLocaleString('en-IN', { style: 'currency', currency: 'INR' }); // Format totalAmount as currency (INR)
+      }
+      res.status(200).json({ sales: salesReport });
+    } catch (error) {
+      console.log(error);
+    }
+  },
   
   
+  salesReportExcel: async (req, res) => {
+    try {
+      console.log(
+        "salesReportExcelsalesReportExcel",
+        req.body,
+        "salesReportExcelsalesReportExcel"
+      );
+      let salesData = [];
+      let { startDate, endDate } = req.body;
+
+      startDate = new Date(startDate);
+      endDate = new Date(endDate);
+
+      const salesReport = await adminHelper.getAllDeliveredOrdersByDate(
+        startDate,
+        endDate
+      );
+
+      for (let i = 0; i < salesReport.length; i++) {
+        salesReport[i].orderDate = dateFormat(salesReport[i].orderDate);
+        salesReport[i].totalAmount = currencyFormat(salesReport[i].totalAmount);
+      }
+
+      console.log(salesReport);
+      sales.forEach((sale) => {
+        const { _id, orderDate, totalAmount, paymentMethod, orderStatus } =
+          sale;
+        const userName = sale.userDetails[0].name;
+        salesData.push({
+          _id,
+          userName,
+          orderDate,
+          totalAmount,
+          paymentMethod,
+          orderStatus,
+        });
+      });
+
+      const csvFields = [
+        "No",
+        "Order Id",
+        "Customer Id",
+        "Order Date",
+        "Payment Method",
+        "Order Status",
+        "Total Amount",
+      ];
+      const csvData = await csvParser.json2csv(salesData, { csvFields });
+
+      res.setHeader("Content-Type", "text/csv");
+      res.setHeader(
+        "Content-Disposition",
+        "attachment: filename = Sales-Report.csv"
+      );
+      res.status(200).end(csvData);
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };

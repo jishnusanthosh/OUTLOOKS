@@ -1,8 +1,7 @@
 <%- include('../shop/layout/user-header.ejs') %>
 
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<link rel="stylesheet" href="/AddOnStyles/toastr.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <div id="toastr-container"></div>
 
@@ -19,8 +18,12 @@
             color: green;
             /* Set the text color to green */
         }
+        .right-div {
+    background-color: #b4b4b4;
+    border-radius: 15px;
+    padding: 10px;
+  }
     </style>
-
     <head>
         <meta charset="utf-8">
         <title>Outlooks</title>
@@ -39,34 +42,8 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
         <link rel="stylesheet" href="profile/css/main.css">
     </head>
-
-
-
     <!-- Header Info Begin -->
-    <div class="header-info">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="header-item">
-                        <img src="shop/img/icons/delivery.png" alt="">
-                        <p>Free shipping on orders over $30 in USA</p>
-                    </div>
-                </div>
-                <div class="col-md-4 text-left text-lg-center">
-                    <div class="header-item">
-                        <img src="shop/img/icons/voucher.png" alt="">
-                        <p>20% Student Discount</p>
-                    </div>
-                </div>
-                <div class="col-md-4 text-left text-xl-right">
-                    <div class="header-item">
-                        <img src="shop/img/icons/sales.png" alt="">
-                        <p>30% off on dresses. Use code: 30OFF</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    
     <!-- Header Info End -->
     <!-- Header End -->
 
@@ -162,7 +139,7 @@
                                     <% for (let i=0; i < products.length; i++) { %>
                                         <tr>
                                             <td class="image product-thumbnail"><img
-                                                    src="/uploads/<%= products[i].productId.productImage %>.jpg"
+                                                    src="/uploads/<%= products[i].productId.productImage %>"
                                                     alt="#"></td>
                                             <td>
                                                 <h5><a href="shop-product-full.html">
@@ -200,19 +177,53 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-lg-6">
-                            <div class="coupon-input">
+                        <div class="row">
+                            <div class="col-lg-6">
+                              <!-- Main Div -->
+                              <div class="coupon-input">
                                 <input id="coupon-input" type="text" placeholder="Enter Coupon Code">
                                 <div id="apply-coupon-btn" class="btn btn-fill-out btn-block mt-30">Apply Coupon</div>
+                              </div>
                             </div>
-                        </div>
-
+                            <div class="col-lg-6">
+                                <!-- Div on the right side -->
+                                <div class="right-div">
+                                  <div class="card pl-10 pt-10">
+                                    <div class="flip-card">
+                                      <div class="flip-card-inner">
+                                        <div class="flip-card-front">
+                                          <p class="heading_8264">Wallet</p>
+                                          <svg viewBox="0 0 48 48" height="36" width="36" y="0px" x="0px" xmlns="http://www.w3.org/2000/svg" class="logo">
+                                            <path d="M32 10A14 14 0 1 0 32 38A14 14 0 1 0 32 10Z" fill="#ff9800"></path>
+                                            <path d="M16 10A14 14 0 1 0 16 38A14 14 0 1 0 16 10Z" fill="#d50000"></path>
+                                            <path d="M18,24c0,4.755,2.376,8.95,6,11.48c3.624-2.53,6-6.725,6-11.48s-2.376-8.95-6-11.48 C20.376,15.05,18,19.245,18,24z" fill="#ff3d00"></path>
+                                          </svg>
+                                          <br>
+                                          <br>
+                                          <p class="valid_thru">Balance Rs. <%= userDetails.wallet %></p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                          </div>
+                          
+                        <br>
+                        
                         <div class="bt-1 border-color-1 mt-40 mb-30"></div>
                         <div class="payment_method">
                             <div class="mb-25">
-                                <h5>Payment</h5>
+                                <h4>Payment Methods</h4>
                             </div>
                             <div class="payment_option">
+                                <div class="custome-radio">
+                                    <input class="form-check-input" required="" type="radio" name="payment_option"
+                                        id="exampleRadios1" checked="" value="wallet">
+                                    <label class="form-check-label" for="exampleRadios1" data-bs-toggle="collapse"
+                                        data-target="#bankTranfer" aria-controls="bankTranfer">Wallet</label>
+
+                                </div>
                                 <div class="custome-radio">
                                     <input class="form-check-input" required="" type="radio" name="payment_option"
                                         id="exampleRadios3" checked="">
@@ -530,45 +541,55 @@
 
     <script>
         var disPrice = 0;
+        var discountElement = document.getElementById("discountAmount");
+        var totalElement = document.getElementById("totalAmount");
+
 
         $(document).ready(function () {
-            var checkedRadio = document.querySelector('.billing-address:checked');
-            dataValue = checkedRadio.getAttribute('data-value');
+    var checkedRadio = document.querySelector('.billing-address:checked');
+    var dataValue = null;
 
-            $('#placeOrder-btn').on('click', function (e) {
-                e.preventDefault();
-                console.log(dataValue);
-                var payment_method = $('input[name="payment_option"]:checked').val();
-                var amount;
-                if (disPrice !== null && disPrice > 0) {
-                    amount = disPrice;
+    if (checkedRadio !== null) {
+        dataValue = checkedRadio.getAttribute('data-value');
+    }
+
+    $('#placeOrder-btn').on('click', function (e) {
+        e.preventDefault();
+        console.log(dataValue);
+        var payment_method = $('input[name="payment_option"]:checked').val();
+        var amount;
+        if (disPrice !== null && disPrice > 0) {
+            amount = disPrice;
+        } else {
+            amount = '<%= subtotal %>';
+        }
+
+        var requestData = {
+            address_id: dataValue,
+            payment_method: payment_method,
+            amount: amount,
+            disPrice: disPrice,
+            discountAmount: discountElement.textContent,
+            totalAmount: totalElement.textContent,
+            subtotal: '<%= subtotal %>'
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/placeOrder',
+            data: requestData,
+            success: function (response) {
+                if (response.cod_success) {
+                    // Redirect to the order placed page
+                    window.location.href = `/orderPlaced/${response.orderId}`;
                 } else {
-                    amount = '<%= subtotal %>';
+                    console.log(response);
+                    razorpayPayment(response);
                 }
-
-                var requestData = {
-                    address_id: dataValue,
-                    payment_method: payment_method,
-                    amount: amount,
-                    disPrice: disPrice
-                };
-
-                $.ajax({
-                    type: 'POST',
-                    url: '/placeOrder',
-                    data: requestData,
-                    success: function (response) {
-                        if (response.cod_success) {
-                            // Redirect to the order placed page
-                            window.location.href = `/orderPlaced/${response.orderId}`;
-                        } else {
-                            console.log(response);
-                            razorpayPayment(response);
-                        }
-                    }
-                });
-            });
+            }
         });
+    });
+});
 
         function razorpayPayment(order) {
             var options = {
@@ -630,9 +651,11 @@
     <script>
         $(document).ready(function () {
             var subtotal = '<%= subtotal %>';
+            var applyCouponBtn = $('#apply-coupon-btn');
             $('#apply-coupon-btn').click(function () {
                 var couponCode = $('#coupon-input').val();
                 applyCoupon(couponCode, subtotal);
+
             });
         });
 
@@ -656,6 +679,9 @@
 
                         const totalElement = document.getElementById("totalAmount");
                         totalElement.textContent = (disPrice !== null && disPrice > 0) ? ('Rs. ' + disPrice) : ('Rs. ' + subtotal);
+                        isCouponApplied = true;
+                        applyCouponBtn.prop('disabled', true)
+
                     } else {
                         toastr.error(response.message, '', { "toastClass": "toast-success" });
 
@@ -664,7 +690,7 @@
                         discountElement.textContent = 'Rs. 0';
 
                         // Reset the disPrice value
-                        disPrice = 0;
+                        //disPrice = 0;
 
                         const totalElement = document.getElementById("totalAmount");
                         totalElement.textContent = 'Rs. ' + subtotal;
@@ -684,7 +710,13 @@
                     totalElement.textContent = 'Rs. ' + subtotal;
                 }
             });
+            applyCouponBtn.on('mouseup', function() {
+    if (!isCouponApplied) {
+      applyCouponBtn.prop('disabled', false);
+    }
+  });
         }
+        
 
     </script>
 

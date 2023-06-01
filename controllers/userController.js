@@ -10,9 +10,9 @@ import mongoose from "mongoose";
 import Cart from "../models/cartModels";
 import Category from "../models/categoryModels";
 import Orders from "../models/orderModels";
+import Coupon from "../models/couponModel";
 const { generateRazorpay } = require("../config/razorpay");
 
-const toastr = require("toastr");
 const ObjectId = mongoose.Types.ObjectId;
 
 dotenv.config();
@@ -24,10 +24,13 @@ const client = require("twilio")(accountSid, authToken);
 export default {
   homePage: async (req, res, next) => {
     let user = req.session.user;
-    const allproducts = await Products.find();
-    const allcategory = await Category.find();
 
     try {
+      const allproducts = await Products.find();
+      const allcategory = await Category.find();
+      const products = await Products.find();
+      const Coupons= await Coupon.find()
+
       if (req.session.user) {
         let cartCount = await userHelpers.getCartCount(req.session.user._id);
 
@@ -37,6 +40,8 @@ export default {
           allproducts,
           cartCount,
           allcategory,
+          products,
+          Coupons
         });
       } else {
         let cartCount = null;
@@ -45,6 +50,8 @@ export default {
           allproducts,
           cartCount,
           allcategory,
+          products,
+          Coupons
         });
       }
     } catch (error) {
@@ -71,58 +78,11 @@ export default {
   signUpPage: (req, res) => {
     res.render("shop/userlogin/signup.ejs");
   },
-  getForgotPassword:(req,res)=>{
+  getForgotPassword: (req, res) => {
     res.render("shop/userlogin/forgotPassword.ejs");
   },
-
-
-
-  signUpPost: (req, res) => {
-    userHelper
-      .doSignUp(req.body)
-      .then((userData) => {
-        if (userData.emailStatus) {
-          const msg = "Email already exists";
-          res.render("shop/userlogin/signup", { msg });
-        } else if (userData.phoneStatus) {
-          const msg2 = "Phone number already exists";
-          res.render("shop/userlogin/signup", { msg2 });
-        } else if (userData.user) {
-          req.session.login = true;
-          req.session.user = userData.user;
-          res.redirect("/");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        res.render("error");
-      });
-  },
-
-  loginPost: async (req, res) => {
-    try {
-      const response = await userHelpers.doLogin(req.body);
-      if (response.status && response.user.isActive) {
-        req.session.user = true;
-        req.session.user = response.user;
-
-        res.redirect("/");
-      } else {
-        if (response.status == false) {
-          const blockmsg = "Incorrect Password or Email...!!";
-          res.render("shop/userlogin/login.ejs", { blockmsg });
-        } else {
-          const blockmsg = "Account is blocked...Unable to login";
-          res.render("shop/userlogin/login.ejs", { blockmsg });
-        }
-      }
-    } catch (err) {
-      console.error(err);
-      res.status(500).send("Internal Server Error");
-    }
-  },
-
   generateOtp: (req, res) => {
+    console.log(req.body);
     userHelpers.generateOtp(req.body.phonenumber).then((user) => {
       let response = user;
       if (response.status) {
@@ -137,6 +97,69 @@ export default {
     });
   },
 
+  generateOtpForPassword: async (req, res) => {
+    userHelpers
+      .generateOtpForPassword(req.body.phonenumber)
+      .then((response) => {
+        res.json(response);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).json({ status: false });
+        console.error(err);
+        res.render("catchError", {
+          message: err.message,
+        });
+      });
+  },
+
+  verifyOtpForPassword: async (req, res) => {
+    console.log(req.body);
+    try {
+      const phonenumber = req.body.phonenumber;
+      const otp = req.body.otp;
+      console.log(phonenumber);
+      console.log(otp);
+
+      client.verify.v2
+        .services("VA90f6a161ac014c889176b5d2e630bcde")
+        .verificationChecks.create({ to: `+91${phonenumber}`, code: otp })
+        .then(async (verificationChecks) => {
+          if (verificationChecks.status === "approved") {
+            res.json({ status: "success" }); // Send success response as JSON object
+          } else {
+            res.json({ status: "error" }); // Send error response as JSON object
+          }
+        });
+    } catch (err) {
+      console.error(err);
+      res.render("catchError", {
+        message: err.message,
+      });
+    }
+  },
+  resetPassword: async (req, res) => {
+    const phonenumber = req.body.phonenumber;
+    const newpassword = req.body.password;
+    console.log(phonenumber, newpassword + "inside reset password");
+
+    try {
+      let user = await User.findOneAndUpdate(
+        { phonenumber: phonenumber },
+        { password: newpassword }
+      );
+
+      if (user) {
+        console.log(user + "inside reset password");
+        return res.redirect("/login");
+      } else {
+        res.json({ status: "error", message: "User not found" });
+      }
+    } catch (error) {
+      console.log(error);
+      res.json({ status: "error", message: "Error resetting password" });
+    }
+  },
   verifyOtp: async (req, res) => {
     try {
       const phonenumber = req.body.phone;
@@ -180,6 +203,50 @@ export default {
     }
   },
 
+  signUpPost: (req, res) => {
+    userHelper
+      .doSignUp(req.body)
+      .then((userData) => {
+        if (userData.emailStatus) {
+          const msg = "Email already exists";
+          res.render("shop/userlogin/signup", { msg });
+        } else if (userData.phoneStatus) {
+          const msg2 = "Phone number already exists";
+          res.render("shop/userlogin/signup", { msg2 });
+        } else if (userData.user) {
+          req.session.login = true;
+          req.session.user = userData.user;
+          res.redirect("/");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.render("error");
+      });
+  },
+
+  loginPost: async (req, res) => {
+    try {
+      const response = await userHelpers.doLogin(req.body);
+      if (response.status && response.user.isActive) {
+        req.session.user = true;
+        req.session.user = response.user;
+        res.redirect("/");
+      } else {
+        if (response.status == false) {
+          const blockmsg = "Incorrect Password or Email...!!";
+          res.render("shop/userlogin/login.ejs", { blockmsg });
+        } else {
+          const blockmsg = "Account is blocked...Unable to login";
+          res.render("shop/userlogin/login.ejs", { blockmsg });
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      res.redirect("/signup"); // Redirect to the login page
+    }
+  },
+
   resendOtp: (req, res) => {
     let phone = req.query.phone;
     console.log(phone);
@@ -198,6 +265,7 @@ export default {
       let cartCount = await userHelpers.getCartCount(req.session.user._id);
       let total = await userHelpers.getCartTotal(req.session.user);
       let allcategory = await Category.find();
+      const Coupons= await Coupon.find()
 
       const cart = await Cart.findOne({ user: user._id }).populate(
         "products.productId"
@@ -216,6 +284,7 @@ export default {
         cartCount: cartCount ? cartCount : 0,
         total,
         allcategory,
+        Coupons
       });
     } catch (error) {
       console.error(error);
@@ -259,8 +328,9 @@ export default {
   getProductView: async (req, res) => {
     let productId = req.params.id;
     let user = req.session.user || null;
-    let userId= req.session.user || null;
+    let userId = req.session.user || null;
     let allcategory = await Category.find();
+    const Coupons= await Coupon.find()
     try {
       let cartCount = await userHelpers.getCartCount(userId);
 
@@ -271,6 +341,7 @@ export default {
           user,
           cartCount,
           allcategory,
+          Coupons
         });
       } else {
         res.redirect("/shop");
@@ -323,17 +394,19 @@ export default {
     let user = req.session.user;
 
     try {
+      let userDetails = await User.findById(req.session.user._id);
       let cartCount = await userHelpers.getCartCount(req.session.user._id);
       const subtotal = await userHelpers.getCartTotal(req.session.user);
       let allcategory = await Category.find();
       let Addresses = await Address.find({ user: req.session.user._id });
+      const Coupons= await Coupon.find()
 
       const cart = await Cart.findOne({ user: req.session.user._id }).populate(
         "products.productId"
       );
 
       if (!cart) {
-        res.render("shop/emptyCart", { user: req.session.user, allcategory });
+        res.render("shop/emptyCart", { user: req.session.user, allcategory,Coupons });
         return;
       }
 
@@ -348,6 +421,8 @@ export default {
           cartCount,
           allcategory,
           Addresses,
+          userDetails,
+          Coupons
         });
       } else {
         res.redirect("/shop/login");
@@ -363,6 +438,7 @@ export default {
     let userId = null;
     let cartCount = null;
     let allcategory = await Category.find();
+    const Coupons= await Coupon.find()
 
     if (req.session.user) {
       userId = req.session.user._id;
@@ -376,7 +452,7 @@ export default {
         "category"
       );
       console.log(products);
-      res.render("shop/shop.ejs", { products, user, allcategory, cartCount });
+      res.render("shop/shop.ejs", { products, user, allcategory, cartCount,Coupons });
     } catch (error) {
       console.error(error);
     }
@@ -397,7 +473,7 @@ export default {
   },
   deleteAddress: async (req, res) => {
     const addressId = req.body.addressId;
-    console.log(addressId);
+
     try {
       await Address.findByIdAndUpdate(addressId, { addStatus: true });
 
@@ -408,10 +484,15 @@ export default {
   },
 
   placeOrderPost: async (req, res) => {
+    console.log(req.body + "placeOrderPost");
     try {
       let userId = req.session.user._id;
       const cartItems = await Cart.findOne({ user: req.session.user._id });
       const totalAmount = req.body.amount;
+      const CouponAmount = parseInt(
+        req.body.discountAmount.replace("Rs. ", "")
+      );
+      const RealAmount = req.body.subtotal;
 
       if (req.body.payment_method === "COD") {
         // Update product quantities
@@ -421,7 +502,9 @@ export default {
           req.body,
           totalAmount,
           cartItems,
-          userId
+          userId,
+          CouponAmount,
+          RealAmount
         );
 
         // Clear the user's cart
@@ -493,8 +576,10 @@ export default {
     let orderId = req.params.id;
     const user = req.session.user;
     let allcategory = await Category.find();
+    const Coupons= await Coupon.find()
+
     let cartCount = await userHelpers.getCartCount(req.session.user._id);
-    res.render("shop/orderPlaced", { user, cartCount, allcategory, orderId });
+    res.render("shop/orderPlaced", { user, cartCount, allcategory, orderId,Coupons });
   },
 
   getUserProfile: async (req, res) => {
@@ -508,6 +593,7 @@ export default {
       const address = await Address.find({ user: userId });
 
       const orders = await Orders.find({ user: userId });
+      const Coupons= await Coupon.find()
 
       const response = await userHelpers.getUserDetails(userid);
 
@@ -518,6 +604,7 @@ export default {
           allcategory,
           address,
           orders,
+          Coupons
         });
       } else {
         res.redirect("/shop/login");
@@ -534,6 +621,7 @@ export default {
   viewOrderDetails: async (req, res) => {
     const orderId = req.params.id;
     console.log(orderId + " order id in view order details");
+    const Coupons= await Coupon.find()
 
     const user = req.session.user;
     const order = await Orders.findOne({
@@ -585,6 +673,7 @@ export default {
       order,
       orderedItems,
       address,
+      Coupons
     });
   },
 
@@ -626,15 +715,28 @@ export default {
         return res.status(400).json({ error: "Order cancellation failed" });
       }
 
+      // Check if paymentStatus is "paid"
+      if (order.paymentStatus === "paid") {
+        // Store the order total amount in the user's wallet
+        const user = await User.findOne({ _id: order.userId });
+        user.wallet += order.totalAmount;
+        await user.save();
+
+        // Set the order paymentStatus to "refund"
+        order.paymentStatus = "refund";
+        await order.save();
+      }
+
       res.redirect(`/viewOrderDetails/${req.params.id}`);
     } catch (error) {
       console.log(error);
       res.render("catchError", {
-        message: err.message,
+        message: error.message,
         user: req.session.user,
       });
     }
   },
+
   applyCoupon: async (req, res) => {
     const subtotal = req.body.subtotal;
     const couponCode = req.body.couponCode;
@@ -666,6 +768,7 @@ export default {
     let userId = null;
     let cartCount = null;
     let allcategory = await Category.find();
+    const Coupons= await Coupon.find()
 
     if (req.session.user) {
       userId = req.session.user._id;
@@ -673,16 +776,97 @@ export default {
     }
     try {
       const search = req.query.search;
-      const products = await userHelper.searchQuery(
-        search
-      
-      );
-      res.render("shop/searchedProducts",{products,user,catId,allcategory})
+      const products = await userHelper.searchQuery(search);
+      res.render("shop/searchedProducts", {
+        products,
+        user,
+        catId,
+        allcategory,
+        cartCount,
+        Coupons
+      });
       console.log(products);
-  
     } catch (err) {
       console.log(err);
-      
+    }
+  },
+
+  productFiltering: async (req, res) => {
+    console.log(req.query);
+    try {
+      // Retrieve the filter parameters from the request query
+      const { colors, sizes, prices } = req.query;
+
+      // Convert colors and sizes to arrays
+      const colorArray = Array.isArray(colors) ? colors : JSON.parse(colors);
+      const sizeArray = Array.isArray(sizes) ? sizes : JSON.parse(sizes);
+      const priceRangeArray = Array.isArray(prices)
+        ? prices
+        : JSON.parse(prices);
+
+      // Build the filter query
+      const filterQuery = {};
+
+      if (priceRangeArray.length > 0) {
+        const [minPrice, maxPrice] = priceRangeArray[0].split("-");
+        filterQuery.productPrice = {
+          $gte: parseInt(minPrice, 10),
+          $lte: parseInt(maxPrice, 10),
+        };
+      }
+
+      if (colorArray.length > 0) {
+        filterQuery.productColor = { $in: colorArray };
+      }
+
+      if (sizeArray.length > 0) {
+        filterQuery.productSize = { $in: sizeArray };
+      }
+
+      console.log(filterQuery);
+
+      // Perform the filtering based on the received parameters
+      const filteredProducts = await Products.find(filterQuery);
+
+      console.log(filteredProducts);
+
+      // Send the filtered products as a JSON response
+      res.json(filteredProducts);
+    } catch (error) {
+      console.error("Error filtering products:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  },
+  returnOrder: async (req, res) => {
+    try {
+      const orderId = req.params.id;
+      const returnReason = req.body.reason;
+
+      const order = await Orders.findOne({ _id: orderId });
+      const returnItems = order.orderedItems;
+
+      for (const item of returnItems) {
+        const product = await Products.findOne({ _id: item.productId });
+        product.productQuantity += item.quantity;
+        await product.save();
+      }
+
+      await Orders.findOneAndUpdate(
+        { _id: orderId },
+
+        {
+          $set: {
+            orderStatus: "return",
+            returnStatus: "pending",
+            returnReason: returnReason,
+          },
+        }
+      );
+
+      res.json({ success: true });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ success: false });
     }
   },
 };

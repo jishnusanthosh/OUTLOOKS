@@ -11,124 +11,57 @@
                 
             </div>
             <div class="card mb-4">
-                <div class="card-header bg-light" style="height:150px">
-                </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-xl col-lg flex-grow-0" style="flex-basis:230px">
-
-                            
-                            <img src="/uploads/<%= product.productImage[0] %>.jpg" alt="product picture">
-                              <i class="fas fa-user-circle fa-5x text-secondary"></i> <!-- Use Font Awesome's "fa-user-circle" and add "text-secondary" class for grey color -->
-                            </div>
-                          </div>
-                          
-                           <!--  col.// -->
-                        <div class="col-xl col-lg">
-                            <h3><%= product.productName %></h3>
-                            <p>Product_ID:<%= product._id %></p>
-                        </div> <!--  col.// -->
-                        <div class="col-xl-4 text-md-end">
-                            <select class="form-select w-auto d-inline-block">
-                                <option>Actions</option>
-                                <option>Disable shop</option>
-                                <option>Analyze</option>
-                                <option>Something</option>
-                            </select>
-
-                        </div> <!--  col.// -->
-                    </div> <!-- card-body.// -->
-                    <hr class="my-4">
-                    <div class="row g-4">
-                        <div class="col-md-12 col-lg-4 col-xl-2">
-                            <article class="box">
-                                <p class="mb-0 text-muted">Total sales:</p>
-                                <h5 class="text-success">238</h5>
-                                <p class="mb-0 text-muted">Revenue:</p>
-                                <h5 class="text-success mb-0">$2380</h5>
-                            </article>
-                        </div> <!--  col.// -->
-                        <div class="col-sm-6 col-lg-4 col-xl-3">
-                            <h6>Contact</h6>
-                            <p>Color:
-                                <%= product.productColor %> <br>
-                                <template class="__cf_email__" data-cfemail="31585f575e715449505c415d541f525e5c">[email&#160;protected]</template> <br>
-                                Mobile Number :<%= product.productBrand %>
-                            </p>
-                        </div> <!-- col.// -->
-                        
-                        <div class="col-sm-6 col-lg-4 col-xl-3">
-                            <h6>Status</h6>
-                            <% if (locals.product.productStatus) { %>
-                                <span class="text-success">Listed</span>
-
-                            <% } else { %>
-                                <span class="text-danger" >Unlisted</span>
-                            <% } %>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="row">
+                        <div class="col-lg flex-grow-0" style="flex-basis:230px">
+                          <img src="/uploads/<%= product.productImage[0] %>" alt="product picture">
+                          <i class="fas fa-user-circle fa-5x text-secondary"></i>
                         </div>
-                        
-                        <div class="col-sm-6 col-lg-4 col-xl-3">
-                            <h6>Address</h6>
-                            <p>
-                                Country: California <br>
-                                Address: Ranchview Dr. Richardson <br>
-                                Postal code: 62639
-                            </p>
-                        </div> <!--  col.// -->
-                        
-                    </div> <!--  row.// -->
-                </div> <!--  card-body.// -->
-            </div> <!--  card.// -->
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h5 class="card-title">Orders </h5>
-                    <div class="row">
-                        <div class="col-xl-2 col-lg-3 col-md-6">
-                            <div class="card card-product-grid">
-                                <a href="#" class="img-wrap"> <img src="/admin/imgs/items/1.jpg" alt="Product"> </a>
-                                <div class="info-wrap">
-                                    <a href="#" class="title">Product name</a>
-                                    <div class="price mt-1">$179.00</div> <!-- price-wrap.// -->
-                                </div>
-                            </div> <!-- card-product  end// -->
-                        </div> <!-- col.// -->
-                        <div class="col-xl-2 col-lg-3 col-md-6">
-                            <div class="card card-product-grid">
-                                <a href="#" class="img-wrap"> <img src="/admin/imgs/items/2.jpg" alt="Product"> </a>
-                                <div class="info-wrap">
-                                    <a href="#" class="title">Product name</a>
-                                    <div class="price mt-1">$179.00</div> <!-- price-wrap.// -->
-                                </div>
-                            </div> <!-- card-product  end// -->
-                        </div> <!-- col.// -->
-                        <div class="col-xl-2 col-lg-3 col-md-6">
-                            <div class="card card-product-grid">
-                                <a href="#" class="img-wrap"> <img src="/admin/imgs/items/3.jpg" alt="Product"> </a>
-                                <div class="info-wrap">
-                                    <a href="#" class="title">Jeans short new model</a>
-                                    <div class="price mt-1">$179.00</div> <!-- price-wrap.// -->
-                                </div>
-                            </div> <!-- card-product  end// -->
-                        </div> <!-- col.// -->
-        
-               
-                  
-                     
-                    </div> <!-- row.// -->
-                </div> <!--  card-body.// -->
-            </div> <!--  card.// -->
-            <div class="pagination-area mt-30 mb-50">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-start">
-                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                        <li class="page-item"><a class="page-link" href="#">02</a></li>
-                        <li class="page-item"><a class="page-link" href="#">03</a></li>
-                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                        <li class="page-item"><a class="page-link" href="#">16</a></li>
-                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
-                    </ul>
-                </nav>
-            </div>
+                        <div class="col-lg">
+                          <h3><%= product.productName %></h3>
+                          <p>Product_ID: <%= product._id %></p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="row">
+                        <div class="col-md-12 col-lg-6">
+                          <article class="box">
+                            <p class="mb-0 text-muted">Price</p>
+                            <h5 class="text-success">Rs.<%= product.productPrice %></h5>
+                            <p class="mb-0 text-muted">Stock Available</p>
+                            <h5 class="text-success"><%= product.productQuantity %></h5>
+                          </article>
+                        </div>
+                        <div class="col-md-12 col-lg-6">
+                          <article class="box">
+                            <p class="mb-0 text-muted">Available Size</p>
+                            <h5 class="text-success"><%= product.productSize %></h5>
+                            <p class="mb-0 text-muted">Available Color</p>
+                            <h5 class="text-success"><%= product.productColor %></h5>
+                            <p class="mb-0 text-muted">Brand</p>
+                            <h5 class="text-success"><%= product.productBrand %></h5>
+                          </article>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4 col-xl-3">
+                      <h6>Status</h6>
+                      <% if (locals.product.productStatus) { %>
+                        <span class="text-success">Listed</span>
+                      <% } else { %>
+                        <span class="text-danger">Unlisted</span>
+                      <% } %>
+                    </div>
+                  </div>
+                  <br>
+                  <br>
+                </div>
+              </div>
+              
+           
         </section> <!-- content-main end// -->
         <%- include('../partials/admin-footer.ejs') %>
 </body>
