@@ -55,7 +55,7 @@ const orderSchema = mongoose.Schema(
     },
     returnStatus: {
       type: String,
-      enum: ["pending", "approved", "rejected"],
+      enum: ["pending", "return accepted", "rejected"],
       default: "pending",
     },
 

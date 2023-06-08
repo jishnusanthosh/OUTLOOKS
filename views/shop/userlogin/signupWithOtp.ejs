@@ -1,0 +1,259 @@
+<head>
+  <!DOCTYPE html>
+  <html>
+
+  <head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/login/font/icomoon/style.css">
+    <link rel="stylesheet" href="/login/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="/login/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/login/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="/AddOnStyles/toastr.css">
+    <!-- Toastr JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <title>Otp Verification</title>
+
+  <body>
+    <div id="toastMessage"></div>
+  </body>
+
+  </html>
+  <style>
+    .btn-login {
+      background-color: #6c757d;
+    }
+
+    .btn-login:hover {
+      background-color: rgb(245, 245, 245);
+    }
+
+    .content {
+      background-image: url('../../../login/image/h1_hero.jpg.webp');
+      background-repeat: no-repeat;
+      background-size: cover;
+      height: 100vh;
+    }
+
+    .grey-link {
+      color: rgb(255, 247, 247);
+      text-decoration: none;
+    }
+
+    .grey-link:hover {
+      color: #f8f3f3;
+    }
+
+    .icon-round {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: #fbfbfb;
+      text-align: center;
+      line-height: 30px;
+    }
+
+    .icon-mobile {
+      font-size: 2em;
+      color: #606060;
+    }
+
+    html,
+    body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .hover-span:hover {
+      transform: scale(1.2);
+    }
+
+    .btn-send-otp {
+      float: right;
+      /* Align button to the right */
+    }
+
+    .btn-verify-otp {
+      float: right;
+      /* Align button to the right */
+      margin-right: 10px;
+      /* Add some margin between the buttons */
+    }
+  </style>
+  <title>OTP Verification</title>
+</head>
+
+<body>
+  <div id="toastMessage"></div>
+  <div class="content">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 contents">
+          <div class="row justify-content-center">
+            <a href="/" style="text-decoration: none; color: white;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path d="M8 4l-4 4 4 4V9H21V7H8V4z" fill="white" />
+              </svg>
+              Back to Home
+            </a>
+            <div class="col-md-8">
+              <h1 style="font-family: 'Roboto', sans-serif; color: #faf2f2; text-align: center;">
+                Outlooks<span style="color: #fff;">.</span>
+              </h1>
+              <br>
+              <h3 class="text-align: center;">OTP Verification</h3>
+              <br>
+              <form action="/verifyOtpForSignup" id="forgotPasswordForm" method="post">
+                <div class="form-group first">
+                  <label for="phonenumber">Enter your Number</label>
+                  <input type="number" name="phone" class="form-control" id="phone">
+                </div>
+                <small id="phoneWarning" class="text-danger d-none">Phone number is not valid.</small>
+                <br>
+                <div>
+                  <button id="sendOtp" class="btn btn-primary btn-send-otp">Send OTP</button>
+                  <button id="resendOtp" class="btn btn-primary btn-send-otp d-none">Resend OTP</button>
+                  <span id="countdownTimer" style="color: white" ></span>
+                </div>
+                <br>
+                <br>
+                <br>
+                <div class="form-group last mb-4">
+                  <label for="otp">Enter OTP</label>
+                  <input type="text" name="otp" class="form-control" id="otp">
+                </div>
+                <small id="otpWarning" class="text-danger d-none">OTP should be 6 digits.</small>
+                <div>
+
+                  <button id="verifyOtp" class="btn btn-success btn-verify-otp">Verify OTP</button>
+                </div>
+            </div>
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+   const passwordRegex = /^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]{6,}$/;
+let isOtpVerified = false;
+
+$(document).ready(function () {
+  let phoneNumber;
+  let isOtpSent = false;
+
+  $('#sendOtp').click(function (e) {
+    e.preventDefault();
+    phoneNumber = $('#phone').val();
+    sendOtp(phoneNumber);
+  });
+
+  $('#verifyOtp').click(function (e) {
+    e.preventDefault();
+    const otp = $('#otp').val();
+    verifyOtp(otp, phoneNumber);
+  });
+
+  function sendOtp(phone) {
+    if (phone.length !== 10) {
+      $('#phoneWarning').removeClass('d-none');
+    } else {
+      if (!isOtpSent) {
+        $.ajax({
+          url: '/generateOtpForSignup',
+          type: 'POST',
+          data: { phonenumber: phone },
+          success: function (response) {
+            if (response.status) {
+              toastr.clear();
+              toastr.success("OTP sent successfully");
+              disableSendOtpButton();
+              startResendTimer();
+            } else {
+              toastr.clear();
+              toastr.error(response.message); // Show the error message from the server
+            }
+          },
+          error: function (error) {
+            console.log(error);
+          }
+        });
+      }
+    }
+  }
+
+  function disableSendOtpButton() {
+    isOtpSent = true;
+    $('#sendOtp').prop('disabled', true);
+  }
+
+  function enableSendOtpButton() {
+    isOtpSent = false;
+    $('#sendOtp').prop('disabled', false);
+  }
+
+  function startResendTimer() {
+  let remainingTime = 60;
+  const sendOtpButton = $('#sendOtp'); // Reference to the "Send OTP" button
+  const countdownTimer = $('#countdownTimer');
+  countdownTimer.removeClass('d-none'); // Show the countdown timer
+
+  const countdownInterval = setInterval(() => {
+    remainingTime--;
+    if (remainingTime > 0) {
+      countdownTimer.text(`Resend OTP (${remainingTime}s)`);
+    } else {
+      clearInterval(countdownInterval);
+      countdownTimer.addClass('d-none'); // Hide the countdown timer
+      sendOtpButton.prop('disabled', false); // Enable the "Send OTP" button
+    }
+  }, 1000);
+}
+
+
+      function verifyOtp(otp, phone) {
+        if (otp.length !== 6) {
+          $('#otpWarning').removeClass('d-none');
+        } else {
+          $.ajax({
+            url: '/verifyOtpForSignup',
+            type: 'POST',
+            data: { otp: otp, phonenumber: phone },
+            success: function (response) {
+              console.log(response);
+              if (response.status === 'success') {
+                toastr.success('OTP verified successfully');
+                window.location.href = '/signup?phone=' + phone;
+              } else {
+                toastr.error('OTP verification failed');
+              }
+            },
+            error: function (error) {
+              console.log(error);
+              toastr.error('OTP verification failed. Please try again.');
+            }
+          });
+        }
+      }
+
+    });
+
+  </script>
+
+  <script src="/login/js/jquery-3.3.1.min.js"></script>
+  <script src="/login/js/popper.min.js"></script>
+  <script src="/login/js/bootstrap.min.js"></script>
+  <script src="/login/js/main.js"></script>
+</body>
+
+
+
+</html>

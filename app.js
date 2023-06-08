@@ -9,26 +9,14 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import  session  from "express-session";
 import  multer  from "multer";
-import  swal from "sweetalert";
-import multerSharpS3 from 'multer-sharp-s3'
-import XLSX from 'xlsx';
-import html2pdf from 'html2pdf.js';
-;
+
 const flash = require('connect-flash');
-
-
-
-
 
 import connectDB from './config/database.js';
 
 // Import routers
 import adminRouter from './routes/adminRouter.js';
 import userRouter from './routes/userRouter.js';
-
-
-//upload images
-
 
 
 // Load environment variables from .env file
@@ -46,9 +34,6 @@ app.set('view engine', 'ejs');
 
 
 // Set up middleware
-
-
-app.use(flash());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -109,17 +94,10 @@ app.use('/', userRouter);
 app.use('/admin', adminRouter);
 
 
-
-
-
-
-
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {
   next(createError(404));
 });
-
-
 
 
 // Error handler
@@ -133,10 +111,8 @@ app.use((err, req, res, next) => {
   res.render('error');
   
 });
-
 // Create HTTP server
 const server = http.createServer(app);
-
 // Set port
 const PORT = normalizePort(process.env.PORT || '4000');
 app.set('port', PORT);
@@ -169,8 +145,6 @@ const onError = (error) => {
       throw error;
   }
 };
-
-
 
 console.log('Listening to the server on http://localhost:4000');
 

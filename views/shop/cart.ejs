@@ -20,7 +20,7 @@
         }
     </style>
     <div id="toastr-container"></div>
-   
+
     <!-- Header Info End -->
     <!-- Header End -->
 
@@ -51,90 +51,94 @@
                 <% if (products.length==0) { %>
                     <div class="col-lg-5 offset-lg-5">
                         <h1>Empty cart</h1>
-                      </div>
-                      
-                  <% } else { %>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th class="product-h">Product</th>
-                                <th>Price</th>
-                                <th class="quan">Quantity</th>
-                                <th>Total</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        
-    
+                    </div>
+
+                    <% } else { %>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="product-h">Product</th>
+                                    <th>Price</th>
+                                    <th class="quan">Quantity</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+
                                 <% products.forEach(product=> { %>
                                     <input id="<%= product.productId._id %>" type="text" hidden
                                         value="<%= product.productId._id %>">
                                     <tr>
                                         <td class="product-col">
                                             <div class="product-images">
-                                               
-                                                    <img src="/uploads/<%= product.productId.productImage[0] %>" alt=""
-                                                        width="130" height="150">
-                                                   
+
+                                                <img src="/uploads/<%= product.productId.productImage[0] %>" alt=""
+                                                    width="130" height="150">
+
                                             </div>
-                                         
-                                                <div class="p-title">
-                                                    <h5>
-                                                        <%= product.productId.productName %>
-                                                    </h5>
-                                                </div>
+
+                                            <div class="p-title">
+                                                <h5>
+                                                    <%= product.productId.productName %>
+                                                </h5>
+                                            </div>
                                         </td>
-                                        <td class="price-col"><span id="rate-<%= product.productId._id %>">
+                                        <td class="price-col">Rs.<span id="rate-<%= product.productId._id %>">
                                                 <%= product.productId.productPrice %>
                                             </span>
-    
-    
+
+
                                         </td>
                                         <td class="quantity-col">
-    
+
                                             <div class="pro-qty" data-product-id="<%= product.productId._id %>">
                                                 <input type="text" value=<%=product.quantity %>>
-    
+
                                             </div>
                                         </td>
-    
+
                                         <input id="total-<%= product.productId._id %>" type="text" hidden>
-    
+
                                         <input id="total-<%= product.productId.productPrice * product.quantity %>"
                                             type="text" hidden>
-    
-    
-    
-    
-                                        <td class="total"><span id="qty-<%= product.productId._id %>">
+
+
+
+
+                                        <td class="total">Rs.<span id="qty-<%= product.productId._id %>"><input
+                                                    id="total-<%= product.productId.productPrice * product.quantity %>"
+                                                    type="text" hidden>
+
+
                                                 <%= product.productId.productPrice * product.quantity %>
                                             </span></td>
                                         <a>
-    
+
                                             <td onclick="productRemove('<%= product.productId._id %>')"
                                                 class="product-close">x
                                             </td>
                                         </a>
-    
+
                                     </tr>
                                     <% }) %>
-                        </tbody>
-    
-                    </table>
-                  <% } %>
-                  
-                
+                            </tbody>
+
+                        </table>
+                        <% } %>
+
+
             </div>
             <div class="cart-btn">
                 <div class="row">
-                   
 
-                    <div class="col-lg-5 offset-lg-5 " >
-                     <a href="/">
-                        <div class="site-btn ">Continue Shopping</div>
-                     </a>
-                       
+
+                    <div class="col-lg-5 offset-lg-5 ">
+                        <a href="/">
+                            <div class="site-btn ">Continue Shopping</div>
+                        </a>
+
                     </div>
                 </div>
             </div>
@@ -174,7 +178,7 @@
                                         <thead>
                                             <tr>
                                                 <th>Total</th>
-    
+
                                                 <th>Shipping</th>
                                                 <th class="total-cart">Total Cart</th>
                                             </tr>
@@ -182,19 +186,19 @@
                                         <tbody>
                                             <tr>
                                                 <td> Rs.<span id="total-value1">
-    
+
                                                         <%= total %>
                                                     </span></td>
-    
-    
-    
+
+
+
                                                 <td class="shipping">Free</td>
-    
+
                                                 <td class="total-cart-p"> Rs.<span id="total-value2">
-    
+
                                                         <%= total %>
                                                     </span></td>
-    
+
                                             </tr>
                                         </tbody>
                                     </table>
@@ -209,9 +213,9 @@
                     </div>
                 </div>
             </div>
-          <% }  %>
-            
-         
+            <% } %>
+
+
     </div>
     <!-- Cart Page Section End -->
 

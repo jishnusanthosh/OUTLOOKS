@@ -104,9 +104,9 @@
                   <br>
 
                   <div class="form-group last mb-2">
-                    <label for="phonenumber">Phone Number<span class="text-color-danger">*</span></label>
-                    <input type="number" class="form-control" id="phonenumber" name="phonenumber" value="">
-
+                    <label for="phonenumber"><span class="text-color-danger"></span></label>
+                    <input type="number" class="form-control" id="phonenumber" name="phonenumber" value="<%= phone %>" placeholder="<%= phone %>" readonly>
+                    <input type="hidden" name="hiddenPhoneNumber" value="<%= phone %>">
                   </div>
                   <% var msg2=msg2|| '' ; %>
                   <% if (msg2) { %>

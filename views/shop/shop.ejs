@@ -90,8 +90,7 @@
     <!-- Page Add Section End -->
 
 
-
-
+<%= console.log(allcategory); %>
     <main class="main">
         <div class="page-header breadcrumb-wrap">
             <div class="container">
@@ -212,10 +211,26 @@
                                                         <span>90%</span>
                                                     </span>
                                                 </div>
-                                                <div class="product-price">
-                                                    <span>Rs. <%= products[i].productPrice %></span>
-                                                    <span class="old-price">$245.8</span>
-                                                </div>
+                                                <% if (products[i].category.offerApplied) { %>
+                                                    <div>
+                                                      <span>
+                                                        <span style="color: rgb(242, 117, 8); font-weight: bold;">Offer Applied!!</span>
+
+                                                      </span>
+                                                    </div>
+                                                  <% } %>
+                                                  
+                                                  <% if (products[i].category.offerApplied) { %>
+                                                    <div class="product-price">
+                                                      <span>Rs. <%= products[i].productPrice %></span>
+                                                      <span class="old-price">Rs. <%= products[i].originalPrice %></span>
+                                                    </div>
+                                                  <% } else { %>
+                                                    <div class="product-price">
+                                                      <span>Rs. <%= products[i].productPrice %></span>
+                                                    </div>
+                                                  <% } %>
+                                                  
                                                 <div class="product-action-1 show">
                                                     <% if (products[i].productQuantity> 0) { %>
                                                         <a aria-label="Add To Cart" class="action-btn hover-up"

@@ -161,13 +161,16 @@
                 <h4 class="mb-1">Payment</h4>
                 <p class="mb-1">
                Pay method: <%= order.paymentMethod %><br>
-                    Payment Status:
-                    <% if (order.paymentStatus==='pending' ) { %>
-                      <span class="badge bg-danger">Pending</span>
-
-                      <% } else if (order.paymentStatus==='paid' ) { %>
-                        <span class="badge bg-success">Paid</span>
-                        <% } %>
+               Payment Status:
+               <% if (order.orderStatus === 'returned'||order.orderStatus === 'cancelled') { %>
+                <span class="badge bg-warning text-dark">Refund</span>
+              <% } else if (order.paymentStatus === 'pending') { %>
+                <span class="badge bg-danger">Pending</span>
+              <% } else if (order.paymentStatus === 'paid') { %>
+                <span class="badge bg-success">Paid</span>
+              <% } %>
+              
+               
                           <br>
                         </div>
                         <br>
@@ -176,21 +179,25 @@
                           <p class="mb-1">
                             Order Status:
                        
-                          <% if (order.orderStatus==='placed' ) { %>
-                            <span class="badge bg-success">Placed</span>
-                            <br>
-                            <div class="text-end">
-                              <a href="#" class="btn btn-primary">Print Invoice</a>
-                            </div>
-                            <% } else if (order.orderStatus==='cancelled' ) { %>
+                            <% if (order.orderStatus === 'placed') { %>
+                              <span class="badge bg-success">Placed</span>
+                              <br>
+                              <div class="text-end">
+                              <!-- <a href="#" class="btn btn-primary">Print Invoice</a> -->
+                              </div>
+                            <% } else if (order.orderStatus === 'cancelled') { %>
                               <span class="badge bg-danger">Cancelled</span>
-                              <% } else if (order.orderStatus==='delivered' ) { %>
-                                <span class="badge bg-info">Delivered</span>
-                                <!-- Add your desired HTML code for this case -->
-                                <% } else if (order.orderStatus==='returned' ) { %>
-                                  <span class="badge bg-warning text-dark">return</span>
-                                  <!-- Add your desired HTML code for this case -->
-                                  <% } %>
+                            <% } else if (order.orderStatus === 'delivered') { %>
+                              <span class="badge bg-info">Delivered</span>
+                              <!-- Add your desired HTML code for this case -->
+                            <% } else if (order.orderStatus === 'returned') { %>
+                              <span class="badge bg-warning text-dark">Return</span>
+                              <!-- Add your desired HTML code for this case -->
+                            <% } else if (order.orderStatus === 'return') { %>
+                              <span class="badge bg-warning">Return</span>
+                              <!-- Add your desired HTML code for this case -->
+                            <% } %>
+                            
                                   
                                  
                 
@@ -269,6 +276,7 @@
                             .then(response => {
                               if (response.success) {
                                 // Handle success case
+                                location.reload();
                                 toastr.success('Order returned successfully.');
                               } else {
                                 // Handle error case

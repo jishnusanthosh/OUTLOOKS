@@ -13,6 +13,9 @@ router.get("/forgotPassword",isLoggedIn,userController.getForgotPassword)
 
 router.get("/logout", userController.logoutGet);
 
+router.get("/signupWithOtp",isLoggedIn,userController.signupWithOtp);
+
+
 router.get("/signup",isLoggedIn,userController.signUpPage);
 
 router.get("/otp-login",isLoggedIn, userController.GetOtpLogin);
@@ -37,7 +40,12 @@ router.post("/signup", userController.signUpPost);
 
 router.post('/generate-otp', userController.generateOtp);
 
+router.post('/generateOtpForSignup', userController.generateOtpForSignup);
+
+router.post('/verifyOtpForSignup', userController.verifyOtpForSignup);
+
  router.post('/verify-otp', userController.verifyOtp);
+
 
 router.post("/login",isLoggedIn, userController.loginPost);
 
@@ -51,7 +59,7 @@ router.post("/verify-otp-password",isLoggedIn,userController.verifyOtpForPasswor
 router.post("/resetPassword",isLoggedIn,userController.resetPassword)
 
 
-router.get("/productFiltering", isLoggedIn, userController.productFiltering);
+router.get("/productFiltering", userController.productFiltering);
 
 
 router.post('/update-product-quantity', isloggedInUser,isUserActive, userController.updateProductQuantity);

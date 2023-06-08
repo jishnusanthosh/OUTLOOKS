@@ -3,12 +3,13 @@ import adminHelper from "../helpers/adminHelpers";
 const mongoose = require("mongoose");
 import { generateSalesReport } from "../config/pdfKit";
 const ObjectId = mongoose.Types.ObjectId;
-
+import Offer from "../models/offerModels";
 import User from "../models/userModels";
 import Product from "../models/productModels";
 import Order from "../models/orderModels";
 // import Address from "../models/addressModels";
 // import Coupon from "../models/couponModel";
+import Category from "../models/categoryModels";
 
 dotenv.config();
 
@@ -378,16 +379,23 @@ export default {
         { orderStatus },
         { new: true }
       );
+      if (order.orderStatus === "returned") {
+        order.returnStatus = "return accepted";
+        await order.save();
+      }
 
       if (order.paymentStatus === "pending" && order.paymentMethod === "COD") {
         order.paymentStatus = "paid";
         await order.save();
       }
-      if (order.paymentStatus === "paid" && order.returnStatus === "pending") {
+      if (
+        order.paymentStatus === "paid" &&
+        order.returnStatus === "return accepted"
+      ) {
         const existingOrder = await Order.findById(orderId);
         const refund = existingOrder.totalAmount;
         const user = await User.findById(existingOrder.user);
-        user.wallet = refund;
+        user.wallet += refund;
         await user.save();
       }
 
@@ -431,7 +439,104 @@ export default {
       console.log(err);
     }
   },
+  GetOfferList: async (req, res) => {
+    try {
+      const categories = await Category.find();
+      const offers = await Offer.aggregate([
+        {
+          $lookup: {
+            from: "categories",
+            localField: "category",
+            foreignField: "_id",
+            as: "categoryData",
+          },
+        },
+        {
+          $unwind: "$categoryData",
+        },
+        {
+          $project: {
+            offerTitle: 1,
+            discount: 1,
+            category: "$categoryData.CategoryName",
+            endDate: {
+              $dateToString: { format: "%d-%m-%Y", date: "$endDate" },
+            },
+            offerApplied: 1,
+          },
+        },
+      ]);
 
+      console.log(offers);
+      console.log(categories);
+
+      res.render("admin/admin-offers-list", { categories, offers });
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  deleteOffer: async (req, res) => {
+    try {
+      const offerId = req.params.id;
+      const response = await adminHelper.postDeleteOffer(offerId);
+  
+      if (response.success) {
+        res.json({message: "Offer deleted successfully."});
+      } else {
+        res.json({message:"Please remove the offer before deleting it."});
+      }
+    } catch (error) {
+      console.error("Error deleting offer:", error);
+      res.json({ status: false, message: "Failed to delete offer." });
+    }
+  },
+
+  addOfferPost: async (req, res) => {
+    console.log(req.body);
+    try {
+      const response = await adminHelper.generateOffer(req.body);
+      res.json(response);
+    } catch (err) {
+      console.log(err);
+      res.json({ status: false, message: "An error occurred" });
+    }
+  },
+
+  applyOffer: async (req, res) => {
+    let offerId = req.params.id;
+    try {
+      const response = await adminHelper.applyOffer(offerId);
+      if (response.success) {
+        res.json({ status: true, message: "Offer applied successfully." });
+      } else {
+        res.json({ status: false, message: "Failed to apply offer." });
+      }
+    } catch (error) {
+      console.log(error);
+      res.json({
+        status: false,
+        message: "An error occurred while applying the offer.",
+      });
+    }
+  },
+  removeOffer: async (req, res) => {
+    let offerId = req.params.id;
+    try {
+      const response = await adminHelper.removeOffer(offerId);
+      if (response.success) {
+        res.json({ status: true, message: "Offer removed successfully." });
+      } else {
+        res.json({ status: false, message: "Failed to remove offer." });
+      }
+    } catch (error) {
+      console.log(error);
+      res.json({
+        status: false,
+        message: "An error occurred while removing the offer.",
+      });
+    }
+  },
   GetSalesReport: async (req, res) => {
     try {
       const orders = await Order.find({ orderStatus: "placed" })
@@ -462,11 +567,9 @@ export default {
       generateSalesReport(reportData, res);
     } catch (error) {
       console.log(error);
-      res
-        .status(500)
-        .json({
-          error: "Oops! Something went wrong while fetching order data",
-        });
+      res.status(500).json({
+        error: "Oops! Something went wrong while fetching order data",
+      });
     }
   },
 
@@ -495,25 +598,30 @@ export default {
     try {
       console.log(req.body);
       let { startDate, endDate } = req.body;
-  
+
       startDate = new Date(startDate);
       endDate = new Date(endDate);
-  
+
       const salesReport = await adminHelper.getAllDeliveredOrdersByDate(
         startDate,
         endDate
       );
       for (let i = 0; i < salesReport.length; i++) {
-        salesReport[i].orderDate = salesReport[i].orderDate.toLocaleDateString(); // Format the orderDate using toLocaleDateString
-        salesReport[i].totalAmount = salesReport[i].totalAmount.toLocaleString('en-IN', { style: 'currency', currency: 'INR' }); // Format totalAmount as currency (INR)
+        salesReport[i].orderDate =
+          salesReport[i].orderDate.toLocaleDateString(); // Format the orderDate using toLocaleDateString
+        salesReport[i].totalAmount = salesReport[i].totalAmount.toLocaleString(
+          "en-IN",
+          { style: "currency", currency: "INR" }
+        ); // Format totalAmount as currency (INR)
       }
-      res.status(200).json({ sales: salesReport });
+      res
+        .status(200)
+        .json({ sales: salesReport, startDate: startDate, endDate: endDate });
     } catch (error) {
       console.log(error);
     }
   },
-  
-  
+
   salesReportExcel: async (req, res) => {
     try {
       console.log(
@@ -533,12 +641,15 @@ export default {
       );
 
       for (let i = 0; i < salesReport.length; i++) {
-        salesReport[i].orderDate = dateFormat(salesReport[i].orderDate);
+        // Convert the orderDate to a valid date format
+        salesReport[i].orderDate = dateFormat(
+          new Date(salesReport[i].orderDate)
+        );
         salesReport[i].totalAmount = currencyFormat(salesReport[i].totalAmount);
       }
 
       console.log(salesReport);
-      sales.forEach((sale) => {
+      salesReport.forEach((sale) => {
         const { _id, orderDate, totalAmount, paymentMethod, orderStatus } =
           sale;
         const userName = sale.userDetails[0].name;
@@ -561,12 +672,14 @@ export default {
         "Order Status",
         "Total Amount",
       ];
-      const csvData = await csvParser.json2csv(salesData, { csvFields });
+      const csvData = await csvParser.json2csv(salesData, {
+        fields: csvFields,
+      });
 
       res.setHeader("Content-Type", "text/csv");
       res.setHeader(
         "Content-Disposition",
-        "attachment: filename = Sales-Report.csv"
+        "attachment: filename=Sales-Report.csv"
       );
       res.status(200).end(csvData);
     } catch (error) {

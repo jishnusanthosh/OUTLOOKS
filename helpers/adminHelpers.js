@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 import User from "../models/userModels";
 import Category from "../models/categoryModels";
 import product from "../models/productModels";
+import Offer from "../models/offerModels";
 import Order from "../models/orderModels";
 import Coupon from "../models/couponModel";
 import moment from "moment/moment.js";
@@ -64,6 +65,7 @@ export default {
       return { success: false };
     }
   },
+
   getAllCategory: async () => {
     try {
       let viewCategory = await Category.find({});
@@ -195,6 +197,140 @@ export default {
       console.error(err);
     }
   },
+  generateOffer: async (offer) => {
+    console.log(offer);
+    try {
+      const { offerTitle, discount, category, expires } = offer;
+
+      // Extract the date portion from the expires field
+      const endDate = new Date(expires);
+      endDate.setUTCHours(0, 0, 0, 0); // Set the time to midnight in UTC
+
+      // Remove the time field from the endDate object
+      const dateOnly = new Date(endDate.toISOString().split("T")[0]);
+
+      const newOffer = new Offer({
+        offerTitle: offerTitle,
+        discount: discount,
+        category: category,
+        endDate: dateOnly,
+      });
+      await newOffer.save();
+
+      return { status: true, message: "Offer added successfully" };
+    } catch (err) {
+      console.error(err);
+      return {
+        status: false,
+        message: "An error occurred while adding the offer",
+      };
+    }
+  },
+
+  applyOffer: async (offerId) => {
+    try {
+      const offer = await Offer.findById(offerId);
+      console.log(offer);
+      if (offer) {
+        // Check if offer is already applied
+        if (offer.offerApplied) {
+          return { success: false, message: "Another offer is already applied." };
+        }
+  
+        const products = await product.find({ category: offer.category });
+  
+        for (const product of products) {
+          // Decrease the offer discount from the product price
+          const discountedPrice = product.productPrice - offer.discount;
+  
+          // Check if the product price is greater than the discounted price
+          if (product.productPrice > discountedPrice) {
+            // Update the product with the discounted price
+            product.productPrice = discountedPrice;
+            product.originalPrice = product.productPrice + offer.discount;
+            await product.save();
+          }
+        }
+  
+        // Update offerApplied field in offerSchema
+        offer.offerApplied = true;
+        await offer.save();
+  
+        // Update offerApplied field in categorySchema
+        const category = await Category.findById(offer.category);
+        if (category) {
+          category.offerApplied = true;
+          await category.save();
+        }
+  
+        return { success: true };
+      } else {
+        return { success: false, message: "Offer not found." };
+      }
+    } catch (error) {
+      console.log(error);
+      return { success: false, message: "An error occurred while applying the offer." };
+    }
+  }
+  ,
+  postDeleteOffer: async (offerId) => {
+    try {
+      const offer = await Offer.findById(offerId);
+
+      if (offer.offerApplied) {
+        return { success: false };
+      }
+
+      await Offer.findByIdAndDelete(offerId);
+      return { success: true };
+    } catch (error) {
+      console.error("Error deleting offer:", error);
+      return { success: false, message: "Failed to delete offer." };
+    }
+  },
+
+  removeOffer: async (offerId) => {
+    try {
+      const offer = await Offer.findById(offerId);
+      console.log(offer);
+      if (offer) {
+        const products = await product.find({ category: offer.category });
+
+        for (const product of products) {
+          // Decrease the offer discount from the product price
+          const discountedPrice = product.productPrice + offer.discount;
+
+          // Update the product with the discounted price
+          product.productPrice = discountedPrice;
+          product.originalPrice = product.productPrice - offer.discount;
+
+          await product.save();
+        }
+
+        // Update offerApplied field in offerSchema
+        offer.offerApplied = false;
+        await offer.save();
+
+        // Update offerApplied field in categorySchema
+        const category = await Category.findById(offer.category);
+        if (category) {
+          category.offerApplied = false;
+          await category.save();
+        }
+
+        return { success: true };
+      } else {
+        return { success: false, message: "Offer not found." };
+      }
+    } catch (error) {
+      console.log(error);
+      return {
+        success: false,
+        message: "An error occurred while applying the offer.",
+      };
+    }
+  },
+
   getChartDetails: async () => {
     try {
       const orders = await Order.aggregate([
@@ -344,20 +480,26 @@ export default {
       formattedStartDate.setHours(0, 0, 0, 0); // Set time to the beginning of the day
       const formattedEndDate = new Date(endDate);
       formattedEndDate.setHours(23, 59, 59, 999); // Set time to the end of the day
-  
-      await Order.find({
-        orderDate: { $gte: formattedStartDate, $lte: formattedEndDate },
-        orderStatus: "delivered",
-      })
-        .lean()
-        .then((result) => {
-          console.log("orders in range", result);
-          resolve(result);
+
+      try {
+        const orders = await Order.find({
+          orderDate: { $gte: formattedStartDate, $lte: formattedEndDate },
+          orderStatus: "delivered",
         })
-        .catch((error) => {
-          reject(error);
-        });
+          .populate({
+            path: "user",
+            model: "User",
+            select: "username email phonenumber", // Specify the fields to select from the user
+          })
+          .lean();
+
+        console.log("Orders in range:", orders);
+        console.log("getAllDeliveredOrdersByDate completed successfully.");
+        resolve(orders);
+      } catch (error) {
+        console.error("Error in getAllDeliveredOrdersByDate:", error);
+        reject(error);
+      }
     });
-  }
-  
+  },
 };

@@ -14,6 +14,10 @@ const categorySchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  offerApplied:{
+    type: Boolean,
+    default: false,
+  }
 });
 
 const Category = mongoose.model("category", categorySchema);

@@ -1,0 +1,312 @@
+<html>
+
+<body>
+    <%- include('../partials/admin-header.ejs') %>
+        <link rel="stylesheet" href="/AddOnStyles/toastr.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        <!-- Toastr CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+        <!-- jQuery -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+        <!-- Toastr JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+        <style>
+            #toastr-container>.toast-error {
+                opacity: 0.9;
+                /* Adjust the opacity value as desired */
+                color: rgb(230, 90, 8);
+            }
+
+            #toastr-container>.toast-success {
+                opacity: 0.9;
+                /* Adjust the opacity value as desired */
+                color: green;
+                /* Set the text color to green */
+            }
+
+            #toastr-container>.toast-success .toast-message {
+                color: green;
+                /* Set the text color of the success message to green */
+            }
+        </style>
+        <div id="toastr-container"></div>
+
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Offer Management </h2>
+                    <p>Add, edit or delete Offers</p>
+                </div>
+                <!-- <div>
+                    <input type="text" placeholder="Search Categories" class="form-control bg-white">
+                </div> -->
+            </div>
+            <%= console.log(offers); %>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <form action="/admin/createOffer" id="addOfferForm" method="post">
+                                    <div class="mb-4">
+                                        <label for="product_name" class="form-label">Offer Title</label>
+                                        <input type="text" placeholder="Type here" name="offerTitle"
+                                            class="form-control" id="product_name" />
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label">Discount</label>
+                                        <input type="text" placeholder="Type here" name="discount" class="form-control"
+                                            id="product_description" pattern="[0-9]+(\.[0-9]+)?" required />
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="expires" class="form-label">Expires On</label>
+                                        <input type="date" name="expires" class="form-control" required />
+                                    </div>
+                                    <select name="category" class="form-select" required>
+                                        <option value="">Select a category</option>
+                                        <% categories.forEach(function(cat) { %>
+                                            <option value="<%= cat._id %>">
+                                                <%= cat.CategoryName %>
+                                            </option>
+                                            <% }); %>
+                                    </select>
+                                    <br>
+                                    <div class="d-grid">
+                                        <button class="btn btn-primary" type="submit">Create Offer</button>
+                                    </div>
+                                </form>
+                                <div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3"></div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">
+                                                    <!-- <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" />
+                                                </div> -->
+                                                </th>
+                                                <th>Offer Title</th>
+                                                <th>Discount</th>
+                                                <th>Category</th>
+                                                <th>Expire On</th>
+                                                <th class="text-end">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% offers.forEach(function(offer) { %>
+                                                <tr>
+                                                    <td class="text-center">
+                                                        <!-- <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" />
+                                                </div> -->
+                                                    </td>
+                                                    <td><b>
+                                                            <%= offer.offerTitle %>
+                                                        </b></td>
+                                                    <td><b>
+                                                            <%= offer.discount %>
+                                                        </b></td>
+                                                    <td><b>
+                                                            <%= offer.category %>
+                                                        </b></td>
+                                                    <td><b>
+                                                            <%= offer.endDate %>
+                                                        </b></td>
+                                                    <td class="text-end">
+                                                        <a href="/admin/deleteOffer/<%= offer._id %>"
+                                                            class="btn btn-danger rounded mt-15"
+                                                            style="margin-right: 10px;">Delete</a>
+
+                                                        <% if (offer.offerApplied) { %>
+                                                            <!-- Show Remove Offer button -->
+                                                            <a href="#"
+                                                                class="btn btn-facebook rounded mt-15 btn-remove-offer"
+                                                                data-offer-id="<%= offer._id %>">Remove Offer</a>
+                                                            <% } else { %>
+                                                                <!-- Show Apply Offer button -->
+                                                                <a href="#"
+                                                                    class="btn btn-success rounded mt-15 btn-offer"
+                                                                    data-offer-id="<%= offer._id %>">Apply Offer</a>
+                                                                <% } %>
+
+
+
+                                                    </td>
+                                                </tr>
+                                                <%})%>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div> <!-- .col// -->
+                        </div> <!-- .row // -->
+                    </div> <!-- card body .// -->
+                </div> <!-- card .// -->
+        </section> <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                        document.write(new Date().getFullYear())
+                    </script> © Outlooks - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+        </main>
+        <script src="/admin/js/vendors/jquery-3.6.0.min.js"></script>
+        <script src="/admin/js/vendors/bootstrap.bundle.min.js"></script>
+        <script src="/admin/js/vendors/select2.min.js"></script>
+        <script src="/admin/js/vendors/perfect-scrollbar.js"></script>
+        <script src="/admin/js/vendors/jquery.fullscreen.min.js"></script>
+        <!-- Main Script -->
+        <script src="/admin/js/main.js" type="text/javascript"></script>
+        <script>
+            $(document).ready(function () {
+                $('#addOfferForm').submit(function (event) {
+                    event.preventDefault();
+                    var formData = new FormData(this);
+                    var offerTitle = $('#product_name').val();
+                    var discount = $('#product_description').val();
+                    var expires = $('#expires').val();
+                    var category = $('#category').val();
+                    // Check if offer title contains blank spaces or numbers
+                    if (/\s/.test(offerTitle) || /\d/.test(offerTitle)) {
+                        toastr.error('Offer title should not contain blank spaces or numbers.', '', { "toastClass": "toast-error" });
+                        return;
+                    }
+                    // Check if discount is a number
+                    if (isNaN(discount)) {
+                        toastr.error('Discount must be a number.', '', { "toastClass": "toast-error" });
+                        return;
+                    }
+                    $.ajax({
+                        url: '/admin/createOffer',
+                        method: 'post',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            if (response.success) {
+                                toastr.success(response.message, '', { "toastClass": "toast-success" });
+
+                                $('#product_name').val('');
+                                $('#product_description').val('');
+                                $('#expires').val('');
+                                $('#category').val('');
+                            } else {
+                                toastr.success(response.message, '', { "toastClass": "toast-success" });
+                                // Additional actions upon error
+                            }
+                        },
+                        error: function () {
+                            toastr.error('Failed to create offer.', '', { "toastClass": "toast-error" });
+                        }
+                    });
+                });
+            });
+        </script>
+
+<script>
+    $(document).ready(function () {
+      $('.btn-delete').click(function (event) {
+        event.preventDefault();
+        var offerId = $(this).data('offer-id');
+  
+        $.ajax({
+          url: '/admin/deleteOffer/' + offerId,
+          method: 'get',
+          success: function (response) {
+            if (response) {
+              toastr.success(response.message, '', { "toastClass": "toast-success" });
+            } else {
+              toastr.error(response.message, '', { "toastClass": "toast-error" });
+            }
+            window.location.href = '/admin-offer-list';
+          },
+          error: function (xhr, status, error) {
+            var errorMessage = xhr.responseJSON.message || 'Failed to delete offer.';
+            toastr.error(errorMessage, '', { "toastClass": "toast-error" });
+            // Additional actions upon error
+          }
+        });
+      });
+    });
+  </script>
+  
+  
+
+
+
+
+
+        <script>
+            $(document).ready(function () {
+                $('.btn-offer').click(function (event) {
+                    event.preventDefault();
+                    var offerId = $(this).data('offer-id');
+
+                    $.ajax({
+                        url: '/admin/applyOffer/' + offerId,
+                        method: 'post',
+                        success: function (response) {
+                            // Handle success response
+                            if (response.success) {
+                                toastr.success(response.message, '', { "toastClass": "toast-success" });
+                                // Additional actions upon success
+                                location.reload();
+                            } else {
+                                toastr.error(response.message, '', { "toastClass": "toast-error" });
+                                // Additional actions upon error
+                            }
+                        },
+                        error: function () {
+                            // Handle error response
+                            toastr.error('Failed to apply offer.', '', { "toastClass": "toast-error" });
+                        }
+                    });
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('.btn-remove-offer').click(function (event) {
+                    event.preventDefault();
+                    var offerId = $(this).data('offer-id');
+
+                    $.ajax({
+                        url: '/admin/removeOffer/' + offerId,
+                        method: 'post',
+                        success: function (response) {
+                            // Handle success response
+                            if (response.success) {
+                                toastr.success(response.message, '', { "toastClass": "toast-success" });
+                                // Additional actions upon success
+                                location.reload();
+                            } else {
+                                toastr.error(response.message, '', { "toastClass": "toast-error" });
+                                // Additional actions upon error
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            // Handle error response
+                            var errorMessage = xhr.responseJSON.message || 'Failed to remove offer.';
+                            toastr.error(errorMessage, '', { "toastClass": "toast-error" });
+                        }
+                    });
+                });
+            });
+        </script>
+
+
+</body>
+
+</html>

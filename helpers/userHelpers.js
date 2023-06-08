@@ -126,6 +126,40 @@ export default {
       throw new Error("Failed to generate OTP for password");
     }
   },
+
+  generateOtpForSignup: async (phonenumber) => {
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    try {
+      let customer = await User.findOne({ phonenumber });
+      if (customer) {
+        // Show toastr message indicating phone number is already used with another account
+        return {
+          status: false,
+          message: "Phone number is already used with another account",
+        };
+      } else {
+        try {
+          await twilioFunctionsForpassword.generateOtpForPassword(phonenumber);
+          return { status: true, body: phonenumber };
+        } catch (error) {
+          // Check if the error is due to rate limiting (error code 20429)
+          if (error.code === 20429) {
+            console.log("Too many requests. Retrying after a delay...");
+            await delay(3000); // Add a delay of 3 seconds (adjust as needed)
+            return generateOtpForPassword(phonenumber); // Retry the request
+          } else {
+            console.error(error);
+            throw new Error("Failed to generate OTP for password");
+          }
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      throw new Error("Failed to generate OTP for password");
+    }
+  },
+
   addToCart: async (userId, productId) => {
     try {
       const product = await Product.findById(productId);
@@ -331,15 +365,26 @@ export default {
     const orderDate = () => {
       return new Date();
     };
-
+  
     try {
       let paymentMethod = order.payment_method;
       let status;
       let paymentStatus;
-
-      if (paymentMethod === "COD") {
+  
+      if (paymentMethod === "COD" || paymentMethod === "wallet") {
         status = "placed";
-        paymentStatus = "pending";
+        if (paymentMethod === "COD") {
+          paymentStatus = "pending";
+        } else {
+          paymentStatus = "paid";
+          const user = await User.findById(userId);
+          if (user.wallet >= totalAmount) {
+            user.wallet -= totalAmount;
+            await user.save();
+          } else {
+            throw new Error("Not enough money in your wallet");
+          }
+        }
       } else if (paymentMethod === "RazorPay") {
         status = "placed";
         paymentStatus = "paid";
@@ -347,16 +392,18 @@ export default {
         status = "pending";
         paymentStatus = "pending";
       }
-  let currentDate=new Date();
+      
+      let currentDate = new Date();
       let date = {
         month: currentDate.getMonth() + 1, // Adding 1 since getMonth() returns values from 0 to 11
         year: currentDate.getFullYear(),
-      }
+      };
+      
       let addressId = order.address_id;
       let orderedItems = cartItems.products;
-      let orderDate = new Date(date.year, date.month - 1); 
+      let orderDate = new Date(date.year, date.month - 1);
       console.log(orderedItems + "orderedItems");
-
+  
       // Create a new order document
       let ordered = new Order({
         user: userId,
@@ -370,35 +417,36 @@ export default {
         couponAmount: CouponAmount,
         realAmount: RealAmount,
       });
-
+  
       // Save the order to the database
       await ordered.save();
       console.log("uploaded to db");
-
+  
       // Update product quantities and delete the cart
       for (const item of orderedItems) {
         const productId = item.productId._id;
         const quantity = item.quantity;
-
+  
         // Find the product in the database
         const product = await Product.findById(productId);
-
+  
         // Decrease the product quantity by the ordered quantity
         product.productQuantity -= quantity;
-
+  
         // Save the updated product to the database
         await product.save();
       }
-
+  
       // Delete the user's cart
       await Cart.findOneAndDelete({ user: userId });
-
+  
       return { ordered, orderId: ordered._id };
     } catch (error) {
       console.error(error);
-      throw new Error("Failed to place the order");
+      throw new Error("Failed to place the order: " + error.message);
     }
   },
+  
   updatePaymentStatus: (orderId) => {
     return new Promise(async (resolve, reject) => {
       const order = await Order.findByIdAndUpdate(

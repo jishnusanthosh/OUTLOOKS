@@ -147,16 +147,14 @@
                                                                                     }) %>
                                                                             </td>
                                                                             <td>
-                                                                                <% if (orders[i].paymentMethod==='COD' )
-                                                                                    { %>
-                                                                                    <span
-                                                                                        class="badge bg-success">COD</span>
-                                                                                    <% } else if
-                                                                                        (orders[i].paymentMethod==='RazorPay'
-                                                                                        ) { %>
-                                                                                        <span
-                                                                                            class="badge bg-warning">RazorPay</span>
-                                                                                        <% } %>
+                                                                                <% if (orders[i].paymentMethod === 'COD') { %>
+                                                                                    <span class="badge bg-success">COD</span>
+                                                                                <% } else if (orders[i].paymentMethod === 'RazorPay') { %>
+                                                                                    <span class="badge bg-success">RazorPay</span>
+                                                                                <% } else if (orders[i].paymentMethod === 'wallet') { %>
+                                                                                    <span class="badge bg-success">Wallet</span>
+                                                                                <% } %>
+                                                                                
                                                                             </td>
                                                                             <td>
                                                                                 <% if (orders[i].orderStatus==='placed'

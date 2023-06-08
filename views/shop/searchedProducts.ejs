@@ -278,61 +278,91 @@
                         </div> -->
                         <!-- Fillter By Price -->
                         <div class="sidebar-widget price_range range mb-30">
+                            <!-- Sidebar content -->
                             <div class="widget-header position-relative mb-20 pb-10">
-                                <h5 class="widget-title mb-10">Fill by price</h5>
+                                <h5 class="widget-title mb-10">Filter</h5>
                                 <div class="bt-1 border-color-1"></div>
                             </div>
-                            <div class="price-filter">
-                                <div class="price-filter-inner">
-                                    <div id="slider-range"></div>
-                                    <div class="price_slider_amount">
-                                        <div class="label-input">
-                                            <span>Range:</span><input type="text" id="amount" name="price"
-                                                placeholder="Add Your Price" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="list-group">
+
+
+                            <!-- <div class="list-group">
                                 <div class="list-group-item mb-10 mt-10">
+                                    <label class="fw-900">Price Range:</label>
+                                    <div class="custome-checkbox">
+                                        <input class="form-check-input price-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox10" value="0-1000">
+                                        <label class="form-check-label"
+                                            for="exampleCheckbox10"><span>0-1000</span></label>
+                                        <br>
+                                        <input class="form-check-input price-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox12" value="1000-2500">
+                                        <label class="form-check-label"
+                                            for="exampleCheckbox12"><span>1000-2500</span></label>
+                                        <br>
+                                        <input class="form-check-input price-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox13" value="3000-5000">
+                                        <label class="form-check-label"
+                                            for="exampleCheckbox13"><span>2500-5000</span></label>
+                                        <br>
+                                        <input class="form-check-input price-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox14" value="5000-100000">
+                                        <label class="form-check-label"
+                                            for="exampleCheckbox14"><span>5000-100000</span></label>
+                                    </div>
+
                                     <label class="fw-900">Color</label>
                                     <div class="custome-checkbox">
-                                        <input class="form-check-input" type="checkbox" name="checkbox"
-                                            id="exampleCheckbox1" value="">
-                                        <label class="form-check-label" for="exampleCheckbox1"><span>Red
-                                                (56)</span></label>
+                                        <input class="form-check-input color-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox1" value="NAVY" disabled>
+                                        <label class="form-check-label" for="exampleCheckbox1"><span>NAVY</span></label>
                                         <br>
-                                        <input class="form-check-input" type="checkbox" name="checkbox"
-                                            id="exampleCheckbox2" value="">
-                                        <label class="form-check-label" for="exampleCheckbox2"><span>Green
-                                                (78)</span></label>
+                                        <input class="form-check-input color-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox2" value="LIGHT BLUE">
+                                        <label class="form-check-label" for="exampleCheckbox2"><span>LIGHT
+                                                BLUE</span></label>
                                         <br>
-                                        <input class="form-check-input" type="checkbox" name="checkbox"
-                                            id="exampleCheckbox3" value="">
-                                        <label class="form-check-label" for="exampleCheckbox3"><span>Blue
-                                                (54)</span></label>
+                                        <input class="form-check-input color-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox3" value="BEIGE">
+                                        <label class="form-check-label"
+                                            for="exampleCheckbox3"><span>BEIGE</span></label>
+                                        <br>
+                                        <input class="form-check-input color-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox4" value="MAROONED">
+                                        <label class="form-check-label" for="exampleCheckbox4"><span>MAROONED
+                                            </span></label>
+                                        <br>
+                                        <input class="form-check-input color-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox5" value="PINK">
+                                        <label class="form-check-label" for="exampleCheckbox5"><span>PINK</span></label>
+                                        <br>
+                                        <input class="form-check-input color-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox6" value="GREY">
+                                        <label class="form-check-label" for="exampleCheckbox6"><span>GREY</span></label>
                                     </div>
-                                    <label class="fw-900 mt-15">Item Condition</label>
+
+                                    <label class="fw-900 mt-15">Item Size</label>
                                     <div class="custome-checkbox">
-                                        <input class="form-check-input" type="checkbox" name="checkbox"
-                                            id="exampleCheckbox11" value="">
-                                        <label class="form-check-label" for="exampleCheckbox11"><span>New
-                                                (1506)</span></label>
+                                        <input class="form-check-input size-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox11" value="S">
+                                        <label class="form-check-label" for="exampleCheckbox11"><span>S</span></label>
                                         <br>
-                                        <input class="form-check-input" type="checkbox" name="checkbox"
-                                            id="exampleCheckbox21" value="">
-                                        <label class="form-check-label" for="exampleCheckbox21"><span>Refurbished
-                                                (27)</span></label>
+                                        <input class="form-check-input size-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox21" value="M">
+                                        <label class="form-check-label" for="exampleCheckbox21"><span>M</span></label>
                                         <br>
-                                        <input class="form-check-input" type="checkbox" name="checkbox"
-                                            id="exampleCheckbox31" value="">
-                                        <label class="form-check-label" for="exampleCheckbox31"><span>Used
-                                                (45)</span></label>
+                                        <input class="form-check-input size-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox31" value="L">
+                                        <label class="form-check-label" for="exampleCheckbox31"><span>L</span></label>
+                                        <br>
+                                        <input class="form-check-input size-checkbox" type="checkbox" name="checkbox"
+                                            id="exampleCheckbox41" value="XL">
+                                        <label class="form-check-label" for="exampleCheckbox41"><span>XL</span></label>
                                     </div>
+
                                 </div>
-                            </div>
-                            <a href="shop-grid-right.html" class="btn btn-sm btn-default"><i
-                                    class="fi-rs-filter mr-5"></i> Fillter</a>
+                            </div> -->
+                            <!-- <a href="#" class="btn btn-sm btn-default" id="filterButton"><i
+                                    class="fi-rs-filter mr-5"></i> Filter</a> -->
                         </div>
                         <!-- Product sidebar Widget -->
 

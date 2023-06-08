@@ -75,8 +75,15 @@ export default {
   },
 
   //signup
+
+  signupWithOtp: (req, res) => {
+    res.render("shop/userlogin/signupWithOtp.ejs");
+  },
+
+
   signUpPage: (req, res) => {
-    res.render("shop/userlogin/signup.ejs");
+    const phone = req.query.phone;
+    res.render("shop/userlogin/signup.ejs", { phone: phone });
   },
   getForgotPassword: (req, res) => {
     res.render("shop/userlogin/forgotPassword.ejs");
@@ -96,6 +103,42 @@ export default {
       }
     });
   },
+  generateOtpForSignup: async (req, res) => {
+    try {
+      const response = await userHelpers.generateOtpForSignup(req.body.phonenumber);
+      res.json(response);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ status: false });
+    }
+  },
+  verifyOtpForSignup: async (req, res) => {
+    console.log(req.body);
+    try {
+      const phonenumber = req.body.phonenumber;
+      const otp = req.body.otp;
+      console.log(phonenumber);
+      console.log(otp);
+  
+      const verificationChecks = await client.verify.v2.services("VA90f6a161ac014c889176b5d2e630bcde")
+        .verificationChecks.create({ to: `+91${phonenumber}`, code: otp });
+  
+      if (verificationChecks.status === "approved") {
+        // Redirect to the signUpPage
+        res.json({ status: "success" });
+      } else {
+        res.json({ status: "error" }); // Send error response as JSON object
+      }
+    } catch (err) {
+      console.error(err);
+      return res.render("catchError", {
+        message: err.message,
+      });
+    }
+  },
+  
+  
+  
 
   generateOtpForPassword: async (req, res) => {
     userHelpers
@@ -272,7 +315,7 @@ export default {
       );
 
       if (!cart) {
-        res.render("shop/emptyCart", { user, cartCount, allcategory });
+        res.render("shop/emptyCart", { user, cartCount, allcategory ,Coupons});
         return;
       }
 
@@ -484,35 +527,57 @@ export default {
   },
 
   placeOrderPost: async (req, res) => {
-    console.log(req.body + "placeOrderPost");
+    console.log(req.body.amount + "placeOrderPost");
     try {
       let userId = req.session.user._id;
+      let userDetails = await User.findById(req.session.user._id);
+      console.log(userDetails);
       const cartItems = await Cart.findOne({ user: req.session.user._id });
       const totalAmount = req.body.amount;
       const CouponAmount = parseInt(
         req.body.discountAmount.replace("Rs. ", "")
       );
       const RealAmount = req.body.subtotal;
-
-      if (req.body.payment_method === "COD") {
+  
+      let placeOrder; // Declare placeOrder variable
+  
+      if (
+        req.body.payment_method === "COD" ||
+        req.body.payment_method === "wallet"
+      ) {
         // Update product quantities
         const orderItems = cartItems.products;
-
-        const placeOrder = await userHelpers.placeOrder(
-          req.body,
-          totalAmount,
-          cartItems,
-          userId,
-          CouponAmount,
-          RealAmount
-        );
-
+  
+        if (req.body.payment_method === "COD") {
+          placeOrder = await userHelpers.placeOrder(
+            req.body,
+            totalAmount,
+            cartItems,
+            userId,
+            CouponAmount,
+            RealAmount
+          );
+        } else if (userDetails.wallet >= totalAmount) {
+          placeOrder = await userHelpers.placeOrder(
+            req.body,
+            totalAmount,
+            cartItems,
+            userId,
+            CouponAmount,
+            RealAmount
+          );
+          userDetails.wallet -= totalAmount;
+          await userDetails.save();
+        } else {
+          return res.json({ wallet_error: "Not enough money in your wallet" });
+        }
+  
         // Clear the user's cart
         await Cart.deleteMany({ user: userId });
-
+  
         return res.json({ cod_success: true, orderId: placeOrder.orderId });
       } else {
-        const placeOrder = await userHelpers.placeOrder(
+        placeOrder = await userHelpers.placeOrder(
           req.body,
           totalAmount,
           cartItems,
@@ -523,7 +588,7 @@ export default {
           totalAmount,
           userId
         );
-
+  
         res.json({ ...razorPayOrder, orderId: placeOrder.orderId });
         await Cart.deleteMany({ user: userId });
       }
@@ -532,6 +597,9 @@ export default {
       res.status(500).send("Failed to place the order: " + error.message);
     }
   },
+  
+  
+  
 
   verifyPaymentPost: async (req, res) => {
     const userId = req.session.user._id;
@@ -678,64 +746,54 @@ export default {
   },
 
   cancelOrderPost: async (req, res) => {
+    let userId = req.session.user._id;
     console.log(req.params.id);
     try {
       const order = await Orders.findOne({ _id: req.params.id });
-      if (!order) {
-        console.log("Order not found");
-        return res.redirect("/"); // Redirect to home page or handle the error as needed
-      }
-      if (order.orderStatus === "cancelled") {
-        console.log("Order already cancelled");
-        return res.redirect("/"); // Redirect to home page or handle the error as needed
-      }
-
+  
       // Get the canceled order's details
       const canceledItems = order.orderedItems;
-
+  
       // Update the product stock for each canceled item
       for (const item of canceledItems) {
         const product = await Products.findOne({ _id: item.productId });
-
+  
         // Increment the product stock by the canceled quantity
         product.productQuantity += item.quantity;
-
+  
         // Save the updated product
         await product.save();
       }
-
-      // Update the order status to "cancelled"
-      const cancelOrder = await Orders.updateOne(
-        { _id: req.params.id },
-        { orderStatus: "cancelled" }
-      );
-
-      if (cancelOrder.nModified === 0) {
-        console.log("Order not cancelled");
-        return res.status(400).json({ error: "Order cancellation failed" });
+  
+      if (order.orderStatus === "placed") {
+        // Store the order total amount in the user's wallet
+        // Set the order paymentStatus to "refund"
+        order.orderStatus = "cancelled";
+        await order.save();
+        
+        // Update the order document with the modified paymentStatus
       }
-
       // Check if paymentStatus is "paid"
       if (order.paymentStatus === "paid") {
         // Store the order total amount in the user's wallet
-        const user = await User.findOne({ _id: order.userId });
+        let user = await User.findById(req.session.user._id);
         user.wallet += order.totalAmount;
         await user.save();
-
+  
         // Set the order paymentStatus to "refund"
         order.paymentStatus = "refund";
         await order.save();
+        
+        // Update the order document with the modified paymentStatus
       }
-
+  
       res.redirect(`/viewOrderDetails/${req.params.id}`);
     } catch (error) {
       console.log(error);
-      res.render("catchError", {
-        message: error.message,
-        user: req.session.user,
-      });
     }
-  },
+  }
+  ,
+  
 
   applyCoupon: async (req, res) => {
     const subtotal = req.body.subtotal;

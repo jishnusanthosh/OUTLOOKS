@@ -37,11 +37,12 @@
             <div id="sales-report" class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover" id="sales-table">
+
                         <thead>
                             <tr>
                                 <th>No</th>
                                 <th scope="col">Order Id</th>
-                                <th scope="col">Customer</th>
+                                <th scope="col">Customer Name</th>
                                 <th scope="col">Order Date</th>
                                 <th scope="col">Payment Method</th>
                                 <th scope="col">Order Status</th>
@@ -49,6 +50,7 @@
                             </tr>
                         </thead>
                         <tbody id="defaultReport">
+
                             <% for(let i=0; i < sales.length; i++) { %>
                                 <tr>
                                     <td>
@@ -58,7 +60,7 @@
                                             <%= sales[i]._id %>
                                         </b></td>
                                     <td>
-                                        <%= sales[i].userDetails[0].name %>
+                                        <%= sales[i].userDetails[0].username %>
                                     </td>
                                     <td>
                                         <%= sales[i].orderDate %>
@@ -70,7 +72,7 @@
                                             <%= sales[i].orderStatus %>
                                         </span></td>
                                     <td>
-                                        <%= sales[i].totalAmount %>
+                                        Rs.<%= sales[i].totalAmount %>
                                     </td>
                                 </tr>
                                 <% } %>
@@ -89,6 +91,8 @@
         $('#date-wise-report').on('submit', function (e) {
             e.preventDefault();
             console.log("clicked");
+            var startDate = $('[name="startDate"]').val();
+            var endDate = $('[name="endDate"]').val();
 
             $.ajax({
                 url: '/admin/sales-report',
@@ -102,16 +106,17 @@
                 $('#sales-table').append('<tbody id="date-wise-report"></tbody>');
 
                 for (let i = 0; i < sales.length; i++) {
-                    console.log(sales[i]._id);
+
                     $('#sales-table').append(`
                 <tr>
-                    <td class="text-center">${i + 1}</td>
-                    <td class="text-center"><b>${sales[i]._id}</b></td>
-                    <td class="text-center">${sales[i].user}</td>
-                    <td class="text-center">${sales[i].orderDate}</td>
-                    <td class="text-center">${sales[i].paymentMethod}</td>
-                    <td class="text-center"><span class="badge rounded-pill alert-warning">${sales[i].orderStatus}</span></td>
-                    <td class="text-center">${sales[i].totalAmount}</td>
+                    <td>${i + 1}</td>
+                    <td><b>${sales[i]._id}</b></td>
+                    <td>${sales[i].user.username}</td>
+                   
+                    <td >${sales[i].orderDate}</td>
+                    <td >${sales[i].paymentMethod}</td>
+                    <td ><span class="badge rounded-pill alert-warning">${sales[i].orderStatus}</span></td>
+                    <td >${sales[i].totalAmount}</td>
                 </tr>
             `);
                 }
@@ -122,12 +127,14 @@
             e.preventDefault();
             console.log("pdf");
             let element = document.getElementById('sales-report');
-            const randomNumber = Math.floor(Math.random() * 10000);
-            console.log(randomNumber);
+            const startDate = $('[name="startDate"]').val();
+            const endDate = $('[name="endDate"]').val();
+            const filename = `sales-report_${startDate}_to_${endDate}.pdf`;
+            console.log(filename);
 
             var opt = {
                 margin: 0,
-                filename: `myfile${randomNumber}.pdf`,
+                filename: `sales-report_${startDate}_to_${endDate}.pdf`,
                 html2canvas: { scale: 10 },
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
             };
@@ -138,6 +145,8 @@
 
 
         function ExportToExcel() {
+            var startDate = document.getElementById('startDate');
+            var endDate = document.getElementById('endDate');
             var elt = document.getElementById('sales-table');
             var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
 
@@ -160,7 +169,27 @@
                 ws['!cols'][index] = width;
             });
 
-            XLSX.writeFile(wb, 'sales-table.xlsx');
+
+            var headers = [
+                'No',
+                'Order Id',
+                'Customer Name',
+                'Order Date',
+                'Payment Method',
+                'Order Status',
+                'Total Amount'
+            ];
+
+            var range = XLSX.utils.decode_range(ws['!ref']);
+            for (var C = range.s.c; C <= range.e.c; ++C) {
+                var cell_address = { c: C, r: 0 };
+                var cell_ref = XLSX.utils.encode_cell(cell_address);
+                if (!ws[cell_ref]) continue;
+                ws[cell_ref].v = headers[C];  // Assign the header for each column
+            }
+
+            XLSX.writeFile(wb, `sales-table_${startDate}_to_${endDate}.xlsx`);
+
         }
 
         $(document).ready(function () {
