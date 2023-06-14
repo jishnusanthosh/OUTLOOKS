@@ -29,7 +29,7 @@ export default {
       const allproducts = await Products.find();
       const allcategory = await Category.find();
       const products = await Products.find();
-      const Coupons= await Coupon.find()
+      const Coupons = await Coupon.find();
 
       if (req.session.user) {
         let cartCount = await userHelpers.getCartCount(req.session.user._id);
@@ -41,7 +41,7 @@ export default {
           cartCount,
           allcategory,
           products,
-          Coupons
+          Coupons,
         });
       } else {
         let cartCount = null;
@@ -51,7 +51,7 @@ export default {
           cartCount,
           allcategory,
           products,
-          Coupons
+          Coupons,
         });
       }
     } catch (error) {
@@ -80,7 +80,6 @@ export default {
     res.render("shop/userlogin/signupWithOtp.ejs");
   },
 
-
   signUpPage: (req, res) => {
     const phone = req.query.phone;
     res.render("shop/userlogin/signup.ejs", { phone: phone });
@@ -105,7 +104,9 @@ export default {
   },
   generateOtpForSignup: async (req, res) => {
     try {
-      const response = await userHelpers.generateOtpForSignup(req.body.phonenumber);
+      const response = await userHelpers.generateOtpForSignup(
+        req.body.phonenumber
+      );
       res.json(response);
     } catch (error) {
       console.error(error);
@@ -119,10 +120,11 @@ export default {
       const otp = req.body.otp;
       console.log(phonenumber);
       console.log(otp);
-  
-      const verificationChecks = await client.verify.v2.services("VA90f6a161ac014c889176b5d2e630bcde")
+
+      const verificationChecks = await client.verify.v2
+        .services("VA90f6a161ac014c889176b5d2e630bcde")
         .verificationChecks.create({ to: `+91${phonenumber}`, code: otp });
-  
+
       if (verificationChecks.status === "approved") {
         // Redirect to the signUpPage
         res.json({ status: "success" });
@@ -136,9 +138,6 @@ export default {
       });
     }
   },
-  
-  
-  
 
   generateOtpForPassword: async (req, res) => {
     userHelpers
@@ -308,14 +307,14 @@ export default {
       let cartCount = await userHelpers.getCartCount(req.session.user._id);
       let total = await userHelpers.getCartTotal(req.session.user);
       let allcategory = await Category.find();
-      const Coupons= await Coupon.find()
+      const Coupons = await Coupon.find();
 
       const cart = await Cart.findOne({ user: user._id }).populate(
         "products.productId"
       );
 
       if (!cart) {
-        res.render("shop/emptyCart", { user, cartCount, allcategory ,Coupons});
+        res.render("shop/emptyCart", { user, cartCount, allcategory, Coupons });
         return;
       }
 
@@ -327,7 +326,7 @@ export default {
         cartCount: cartCount ? cartCount : 0,
         total,
         allcategory,
-        Coupons
+        Coupons,
       });
     } catch (error) {
       console.error(error);
@@ -373,7 +372,7 @@ export default {
     let user = req.session.user || null;
     let userId = req.session.user || null;
     let allcategory = await Category.find();
-    const Coupons= await Coupon.find()
+    const Coupons = await Coupon.find();
     try {
       let cartCount = await userHelpers.getCartCount(userId);
 
@@ -384,7 +383,7 @@ export default {
           user,
           cartCount,
           allcategory,
-          Coupons
+          Coupons,
         });
       } else {
         res.redirect("/shop");
@@ -442,14 +441,18 @@ export default {
       const subtotal = await userHelpers.getCartTotal(req.session.user);
       let allcategory = await Category.find();
       let Addresses = await Address.find({ user: req.session.user._id });
-      const Coupons= await Coupon.find()
+      const Coupons = await Coupon.find();
 
       const cart = await Cart.findOne({ user: req.session.user._id }).populate(
         "products.productId"
       );
 
       if (!cart) {
-        res.render("shop/emptyCart", { user: req.session.user, allcategory,Coupons });
+        res.render("shop/emptyCart", {
+          user: req.session.user,
+          allcategory,
+          Coupons,
+        });
         return;
       }
 
@@ -465,7 +468,7 @@ export default {
           allcategory,
           Addresses,
           userDetails,
-          Coupons
+          Coupons,
         });
       } else {
         res.redirect("/shop/login");
@@ -481,7 +484,7 @@ export default {
     let userId = null;
     let cartCount = null;
     let allcategory = await Category.find();
-    const Coupons= await Coupon.find()
+    const Coupons = await Coupon.find();
 
     if (req.session.user) {
       userId = req.session.user._id;
@@ -495,7 +498,13 @@ export default {
         "category"
       );
       console.log(products);
-      res.render("shop/shop.ejs", { products, user, allcategory, cartCount,Coupons });
+      res.render("shop/shop.ejs", {
+        products,
+        user,
+        allcategory,
+        cartCount,
+        Coupons,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -538,16 +547,16 @@ export default {
         req.body.discountAmount.replace("Rs. ", "")
       );
       const RealAmount = req.body.subtotal;
-  
+
       let placeOrder; // Declare placeOrder variable
-  
+
       if (
         req.body.payment_method === "COD" ||
         req.body.payment_method === "wallet"
       ) {
         // Update product quantities
         const orderItems = cartItems.products;
-  
+
         if (req.body.payment_method === "COD") {
           placeOrder = await userHelpers.placeOrder(
             req.body,
@@ -571,10 +580,10 @@ export default {
         } else {
           return res.json({ wallet_error: "Not enough money in your wallet" });
         }
-  
+
         // Clear the user's cart
         await Cart.deleteMany({ user: userId });
-  
+
         return res.json({ cod_success: true, orderId: placeOrder.orderId });
       } else {
         placeOrder = await userHelpers.placeOrder(
@@ -588,7 +597,7 @@ export default {
           totalAmount,
           userId
         );
-  
+
         res.json({ ...razorPayOrder, orderId: placeOrder.orderId });
         await Cart.deleteMany({ user: userId });
       }
@@ -597,9 +606,6 @@ export default {
       res.status(500).send("Failed to place the order: " + error.message);
     }
   },
-  
-  
-  
 
   verifyPaymentPost: async (req, res) => {
     const userId = req.session.user._id;
@@ -644,10 +650,16 @@ export default {
     let orderId = req.params.id;
     const user = req.session.user;
     let allcategory = await Category.find();
-    const Coupons= await Coupon.find()
+    const Coupons = await Coupon.find();
 
     let cartCount = await userHelpers.getCartCount(req.session.user._id);
-    res.render("shop/orderPlaced", { user, cartCount, allcategory, orderId,Coupons });
+    res.render("shop/orderPlaced", {
+      user,
+      cartCount,
+      allcategory,
+      orderId,
+      Coupons,
+    });
   },
 
   getUserProfile: async (req, res) => {
@@ -661,7 +673,7 @@ export default {
       const address = await Address.find({ user: userId });
 
       const orders = await Orders.find({ user: userId });
-      const Coupons= await Coupon.find()
+      const Coupons = await Coupon.find();
 
       const response = await userHelpers.getUserDetails(userid);
 
@@ -672,7 +684,7 @@ export default {
           allcategory,
           address,
           orders,
-          Coupons
+          Coupons,
         });
       } else {
         res.redirect("/shop/login");
@@ -689,7 +701,7 @@ export default {
   viewOrderDetails: async (req, res) => {
     const orderId = req.params.id;
     console.log(orderId + " order id in view order details");
-    const Coupons= await Coupon.find()
+    const Coupons = await Coupon.find();
 
     const user = req.session.user;
     const order = await Orders.findOne({
@@ -741,7 +753,7 @@ export default {
       order,
       orderedItems,
       address,
-      Coupons
+      Coupons,
     });
   },
 
@@ -750,27 +762,27 @@ export default {
     console.log(req.params.id);
     try {
       const order = await Orders.findOne({ _id: req.params.id });
-  
+
       // Get the canceled order's details
       const canceledItems = order.orderedItems;
-  
+
       // Update the product stock for each canceled item
       for (const item of canceledItems) {
         const product = await Products.findOne({ _id: item.productId });
-  
+
         // Increment the product stock by the canceled quantity
         product.productQuantity += item.quantity;
-  
+
         // Save the updated product
         await product.save();
       }
-  
+
       if (order.orderStatus === "placed") {
         // Store the order total amount in the user's wallet
         // Set the order paymentStatus to "refund"
         order.orderStatus = "cancelled";
         await order.save();
-        
+
         // Update the order document with the modified paymentStatus
       }
       // Check if paymentStatus is "paid"
@@ -779,22 +791,19 @@ export default {
         let user = await User.findById(req.session.user._id);
         user.wallet += order.totalAmount;
         await user.save();
-  
+
         // Set the order paymentStatus to "refund"
         order.paymentStatus = "refund";
         await order.save();
-        
+
         // Update the order document with the modified paymentStatus
       }
-  
+
       res.redirect(`/viewOrderDetails/${req.params.id}`);
     } catch (error) {
       console.log(error);
     }
-  }
-  ,
-  
-
+  },
   applyCoupon: async (req, res) => {
     const subtotal = req.body.subtotal;
     const couponCode = req.body.couponCode;
@@ -826,7 +835,7 @@ export default {
     let userId = null;
     let cartCount = null;
     let allcategory = await Category.find();
-    const Coupons= await Coupon.find()
+    const Coupons = await Coupon.find();
 
     if (req.session.user) {
       userId = req.session.user._id;
@@ -841,7 +850,7 @@ export default {
         catId,
         allcategory,
         cartCount,
-        Coupons
+        Coupons,
       });
       console.log(products);
     } catch (err) {
@@ -851,6 +860,7 @@ export default {
 
   productFiltering: async (req, res) => {
     console.log(req.query);
+    console.log("==================");
     try {
       // Retrieve the filter parameters from the request query
       const { colors, sizes, prices } = req.query;

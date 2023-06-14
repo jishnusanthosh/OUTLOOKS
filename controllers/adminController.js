@@ -8,7 +8,7 @@ import User from "../models/userModels";
 import Product from "../models/productModels";
 import Order from "../models/orderModels";
 // import Address from "../models/addressModels";
-// import Coupon from "../models/couponModel";
+import Coupon from "../models/couponModel";
 import Category from "../models/categoryModels";
 
 dotenv.config();
@@ -439,6 +439,64 @@ export default {
       console.log(err);
     }
   },
+  deleteCoupon: async (req, res) => {
+    const couponId = req.params.id;
+    console.log(couponId);
+
+    try {
+      // Use the findByIdAndDelete method provided by Mongoose to delete the coupon
+      const coupon = await Coupon.findByIdAndDelete(couponId);
+
+      res.json({ success: true }); // Return a success response
+    } catch (error) {
+      res.json({ success: false }); // Return an error response
+    }
+  },
+  // Controller function to fetch coupon data
+  getCoupon: async (req, res) => {
+    const couponId = req.params.id;
+
+    try {
+      // Use the findById method provided by Mongoose to find the coupon by ID
+      const coupon = await Coupon.findById(couponId);
+
+      if (!coupon) {
+        // If coupon is not found, return a 404 error
+        return res
+          .status(404)
+          .json({ success: false, message: "Coupon not found" });
+      }
+
+      res.json({ success: true, data: coupon }); // Return the coupon data
+    } catch (error) {
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error" });
+    }
+  },
+
+  updateCoupon: async (req, res) => {
+    const couponId = req.params.id;
+    const updatedCouponData = req.body;
+
+    try {
+      // Use the findByIdAndUpdate method provided by Mongoose to update the coupon
+      const updatedCoupon = await Coupon.findByIdAndUpdate(
+        couponId,
+        updatedCouponData,
+        { new: true }
+      );
+
+      if (updatedCoupon) {
+        res.json({ success: true });
+      } else {
+        res.json({ success: false });
+      }
+    } catch (error) {
+      res.json({ success: false });
+    }
+  },
+
   GetOfferList: async (req, res) => {
     try {
       const categories = await Category.find();
@@ -480,11 +538,11 @@ export default {
     try {
       const offerId = req.params.id;
       const response = await adminHelper.postDeleteOffer(offerId);
-  
+
       if (response.success) {
-        res.json({message: "Offer deleted successfully."});
+        res.json({ message: "Offer deleted successfully." });
       } else {
-        res.json({message:"Please remove the offer before deleting it."});
+        res.json({ message: "Please remove the offer before deleting it." });
       }
     } catch (error) {
       console.error("Error deleting offer:", error);

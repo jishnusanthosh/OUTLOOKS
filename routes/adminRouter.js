@@ -11,7 +11,7 @@ const router = express.Router();
 //base route 
 
 router.get('/',isloggedInadmin,adminController.AdminHomePage);
-
+      
 router.get("/login",adminController.AdminloginPage);
 
 router.post("/login",adminController.AdminloginPost);
@@ -71,6 +71,16 @@ router.get("/getAddNewCoupon",isloggedInadmin,adminController.getAddNewCoupon)
 router.post("/addCouponPost",isloggedInadmin,adminController.addCouponPost)
 
 router.get("/admin-coupon-list",isloggedInadmin,adminController.GetCouponList)
+
+router.get("/DeleteCoupon/:id",isloggedInadmin,adminController.deleteCoupon)
+
+router.get('/GetCoupon/:id', isloggedInadmin, adminController.getCoupon);
+
+router.put('/UpdateCoupon/:id', isloggedInadmin, adminController.updateCoupon);
+
+
+
+
 
 //offer
 router.get("/admin-offer-list",isloggedInadmin,adminController.GetOfferList)

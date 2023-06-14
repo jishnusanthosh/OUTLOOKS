@@ -1,8 +1,31 @@
 <html>
 
 <body>
+    <style>
+        /* Customize modal styles */
+        .modal-header {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .modal-title {
+            color: #fff;
+        }
+
+        .modal-content label {
+            color: #333;
+        }
+    </style>
+
 
     <%- include('../partials/admin-header.ejs') %>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css" />
         <section class="content-main">
             <div class="content-header">
                 <a href="javascript:history.back()"><i class="material-icons md-arrow_back"></i> Go back </a>
@@ -36,58 +59,63 @@
                                         <th>Discount</th>
                                         <th>Max Discount</th>
                                         <th>Expiry Date</th>
-                                   
+
                                         <th class="text-end"> Action </th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <% let counter = 1; %>
-                                    <% for (let i = 0; i < coupons.length; i++) { %>
-                                        <tr>
-                                            <td><%= counter %></td>
-                                            <td width="40%">
-                                                <div class="info pl-3">
-                                                    <h6 class="mb-0 title">
-                                                        <h6><%= coupons[i].code %></h6>
-                                                    </h6>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="info">
-                                                    <h6 class="mb-0 title">
-                                                        <h6>Rs.<%= coupons[i].discount %></h6>
-                                                    </h6>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="info pl-3">
-                                                    <h6 class="mb-0 title">
-                                                        <h6>Rs.<%= coupons[i].maxdiscount %></h6>
-                                                    </h6>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="info pl-3">
-                                                    <h6 class="mb-0 title">
-                                                        <h6><%= coupons[i].expirationDate.toLocaleDateString() %></h6>
-                                                    </h6>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a href="">
-                                                    <button class="btn btn-info btn-sm rounded">Edit</button>
-                                                </a>
-                                                
-                                           
-                                                <a href="">
-                                                    <button class="btn  btn-sm rounded btn-danger">Delete</button>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        <% counter++; %>
-                                    <% } %>
+                                    <% let counter=1; %>
+                                        <% for (let i=0; i < coupons.length; i++) { %>
+                                            <tr>
+                                                <td>
+                                                    <%= counter %>
+                                                </td>
+                                                <td width="40%">
+                                                    <div class="info pl-3">
+                                                        <h6 class="mb-0 title">
+                                                            <h6>
+                                                                <%= coupons[i].code %>
+                                                            </h6>
+                                                        </h6>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="info">
+                                                        <h6 class="mb-0 title">
+                                                            <h6>Rs.<%= coupons[i].discount %>
+                                                            </h6>
+                                                        </h6>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="info pl-3">
+                                                        <h6 class="mb-0 title">
+                                                            <h6>Rs.<%= coupons[i].maxdiscount %>
+                                                            </h6>
+                                                        </h6>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="info pl-3">
+                                                        <h6 class="mb-0 title">
+                                                            <h6>
+                                                                <%= coupons[i].expirationDate.toLocaleDateString() %>
+                                                            </h6>
+                                                        </h6>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-info btn-sm rounded edit-button"
+                                                        data-coupon-id="<%= coupons[i].id %>">Edit</button>
+                                                    <button class="btn btn-danger btn-sm rounded delete-button"
+                                                        data-coupon-id="<%= coupons[i].id %>">Delete</button>
+
+                                                </td>
+                                            </tr>
+                                            <% counter++; %>
+                                                <% } %>
                                 </tbody>
-                                
+
                             </table> <!-- table-responsive.// -->
                         </div>
                     </div> <!-- card-body end// -->
@@ -102,8 +130,146 @@
                         </ul>
                     </nav>
                 </div>
+                <!-- Update Coupon Modal -->
+                <div class="modal fade" id="updateCouponModal" tabindex="-1" role="dialog"
+                    aria-labelledby="updateCouponModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="updateCouponModalLabel">Update Coupon</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="updateCouponForm">
+                                    <div class="form-group">
+                                        <label for="couponCode">Coupon Code</label>
+                                        <input type="text" class="form-control" id="couponCode" name="couponCode">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="discount">Discount</label>
+                                        <input type="number" class="form-control" id="discount" name="discount">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="maxDiscount">Max Discount</label>
+                                        <input type="number" class="form-control" id="maxDiscount" name="maxDiscount">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="expiryDate">Expiry Date</label>
+                                        <input type="date" class="form-control" id="expiryDate" name="expiryDate">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" id="updateCouponButton">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
         </section> <!-- content-main end// -->
         <%- include('../partials/admin-footer.ejs') %>
+
+
+            <script>
+                $(document).ready(function () {
+                    $('.delete-button').click(function () {
+                        var couponId = $(this).data('coupon-id');
+                        var deleteButton = $(this); // Store reference to 'this'
+
+                        $.ajax({
+                            url: '/admin/DeleteCoupon/' + couponId,
+                            type: 'get',
+
+                            success: function (result) {
+                                if (result.success) {
+                                    toastr.success('Coupon deleted successfully');
+                                    deleteButton.closest('tr').remove(); // Use the stored reference to 'this'
+                                } else {
+                                    toastr.error('Failed to delete coupon');
+                                }
+                            },
+                            error: function (error) {
+                                console.error('Failed to delete coupon', error);
+                            }
+                        });
+                    });
+                });
+
+
+            </script>
+
+
+            <script>
+                $('.edit-button').click(function () {
+                    var couponId = $(this).data('coupon-id');
+
+                    // Fetch the coupon data using the couponId, e.g., via AJAX or from an array
+                    $.ajax({
+                        url: '/admin/GetCoupon/' + couponId, // Replace with your endpoint to fetch the coupon data
+                        type: 'GET',
+                        success: function (response) {
+                            if (response.success) {
+                                var couponData = response.data;
+
+                                // Populate the modal fields with the fetched coupon data
+                                $('#couponCode').val(couponData.code);
+                                $('#discount').val(couponData.discount);
+                                $('#maxDiscount').val(couponData.maxDiscount);
+                                $('#expiryDate').val(couponData.expiryDate);
+
+                                // Set the coupon ID as a data attribute on the update button
+                                $('#updateCouponButton').data('coupon-id', couponId);
+
+                                // Show the modal
+                                $('#updateCouponModal').modal('show');
+                            } else {
+                                console.error('Failed to fetch coupon data');
+                            }
+                        },
+                        error: function (error) {
+                            console.error('Failed to fetch coupon data', error);
+                        }
+                    });
+                });
+
+                $('#updateCouponButton').click(function () {
+                    var couponId = $(this).data('coupon-id');
+
+                    // Gather the updated coupon data from the form
+                    var updatedCouponData = {
+                        code: $('#couponCode').val(),
+                        discount: $('#discount').val(),
+                        maxdiscount: $('#maxDiscount').val(),
+                        expirationDate: $('#expiryDate').val()
+                    };
+
+                    // Send the updated coupon data to the server via AJAX or your preferred method
+                    $.ajax({
+                        url: '/admin/UpdateCoupon/' + couponId, // Replace with your endpoint to update the coupon
+                        type: 'PUT',
+                        data: updatedCouponData,
+                        success: function (result) {
+                            if (result.success) {
+                                toastr.success('Coupon updated successfully');
+                                // Refresh the page or update the coupon details in the UI
+                            } else {
+                                toastr.error('Failed to update coupon');
+                            }
+                            $('#updateCouponModal').modal('hide');
+                        },
+                        error: function (error) {
+                            console.error('Failed to update coupon', error);
+                            toastr.error('An error occurred while updating the coupon');
+                            $('#updateCouponModal').modal('hide');
+                        }
+                    });
+                });
+
+
+            </script>
 
 
 
